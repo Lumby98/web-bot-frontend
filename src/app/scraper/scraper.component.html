@@ -1,0 +1,23 @@
+<p>scraper works!</p>
+
+<div>
+  <form [formGroup]="loginForm" (ngSubmit)="scrap()">
+   <div>
+    <label>
+     username:
+     <input type="text" formControlName="username">
+   </label>
+   </div>
+    <div>
+    <label>
+      password:
+      <input type="password" formControlName="password">
+    </label>
+    </div>
+    <div>
+    <button type="submit">scrap</button>
+    </div>
+  </form>
+</div>
+<h2>{{test}}</h2>
+
