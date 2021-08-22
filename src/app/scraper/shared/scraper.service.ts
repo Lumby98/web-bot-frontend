@@ -9,7 +9,7 @@ export class ScraperService {
 
   constructor(private http: HttpClient) { }
 
-  scrap(username: string, password: string): Observable<string> {
+  scrap(username: string, password: string): Observable<any> {
     return this.http.get<string>('http://localhost:3000/scrap?username=' + username + '&password=' + password);
   }
 }

@@ -9,7 +9,7 @@ import {ScraperService} from "./shared/scraper.service";
 })
 export class ScraperComponent implements OnInit {
   loginForm: FormGroup;
-  test: string = '';
+  test: any | undefined;
   constructor(private formBuilder: FormBuilder, private scraperService: ScraperService) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
