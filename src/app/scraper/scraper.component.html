@@ -1,23 +1,33 @@
-<p>scraper works!</p>
-
-<div>
-  <form [formGroup]="loginForm" (ngSubmit)="scrap()">
-   <div>
-    <label>
-     username:
-     <input type="text" formControlName="username">
-   </label>
-   </div>
-    <div>
-    <label>
-      password:
-      <input type="password" formControlName="password">
-    </label>
-    </div>
-    <div>
-    <button type="submit">scrap</button>
-    </div>
-  </form>
+<div fxLayout="column">
+<div  fxLayout="row" fxFlex="50" fxLayoutAlign="center center">
+  <mat-card fxFlex="50" [class.mat-elevation-z10]="true">
+    <mat-card-header fxLayoutAlign="center top">
+      <mat-card-title>scraper</mat-card-title>
+    </mat-card-header>
+    <mat-card-content fxLayoutAlign="center top">
+      <div>
+        <form [formGroup]="loginForm" (ngSubmit)="scrap()">
+          <div>
+            <mat-form-field appearance="standard">
+              <mat-label>username </mat-label>
+                <input type="email" matInput placeholder="pat@example.com" formControlName="username" required>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="standard">
+              <mat-label>password</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" required>
+            </mat-form-field>
+          </div>
+          <div fxLayoutAlign="center">
+            <button mat-raised-button color="primary" type="submit">scrape</button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+    <mat-card-footer>
+      <mat-label>{{test}}</mat-label>
+    </mat-card-footer>
+  </mat-card>
 </div>
-<h2>{{test}}</h2>
-
+</div>

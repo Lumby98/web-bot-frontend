@@ -10,11 +10,4 @@ export class AppComponent {
   title = 'web-bot-frontend';
   constructor(private router: Router) {
   }
-  toScraper() {
-    this.router.navigate(['/scraper']);
-  }
-
-  toHome() {
-    this.router.navigate(['/']);
-  }
 }

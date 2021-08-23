@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { ScraperRoutingModule } from './scraper-routing.module';
 import { ScraperComponent } from './scraper.component';
-import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import { ReactiveFormsModule } from "@angular/forms";
+import { SharedModule } from "../shared/shared.module";
+import {MatCardModule} from "@angular/material/card";
+import {MatInputModule} from "@angular/material/input";
+import {MatButtonModule} from "@angular/material/button";
 
 
 @NgModule({
@@ -13,7 +17,11 @@ import {FormControl, ReactiveFormsModule} from "@angular/forms";
   imports: [
     CommonModule,
     ScraperRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
   ]
 })
 export class ScraperModule {
