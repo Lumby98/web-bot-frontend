@@ -8,6 +8,7 @@ import { SharedModule } from "../shared/shared.module";
 import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
+import {MatProgressBarModule} from "@angular/material/progress-bar";
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import {MatButtonModule} from "@angular/material/button";
     MatCardModule,
     MatInputModule,
     MatButtonModule,
+    MatProgressBarModule,
   ]
 })
 export class ScraperModule {

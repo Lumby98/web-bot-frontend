@@ -26,7 +26,8 @@
       </div>
     </mat-card-content>
     <mat-card-footer>
-      <mat-label  *ngIf="test">{{test}}</mat-label>
+      <mat-progress-bar *ngIf="progressbar" mode="indeterminate"></mat-progress-bar>
+      <mat-label  *ngIf="test">{{test.message}}</mat-label>
     </mat-card-footer>
   </mat-card>
 </div>

@@ -11,6 +11,7 @@ export class ScraperComponent implements OnInit {
   loginForm: FormGroup;
   test: any | undefined;
   hide = true;
+  progressbar: boolean = false;
   constructor(private formBuilder: FormBuilder, private scraperService: ScraperService) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -32,11 +33,13 @@ export class ScraperComponent implements OnInit {
    if(this.loginForm.invalid) {
      return;
    }
+   this.progressbar = true;
    console.log(this.loginForm.value);
    this.scraperService.scrap(this.username?.value, this.password?.value).subscribe(status => {
      this.test = status
    });
    console.log(this.test);
+   this.progressbar = false;
 
   }
 }
