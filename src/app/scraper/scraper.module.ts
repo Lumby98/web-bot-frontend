@@ -9,12 +9,13 @@ import {MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
+import {ExcelServices} from "./shared/excel.service";
 
 
 @NgModule({
   declarations: [
     ScraperComponent
-  ],
+  ], providers:[ExcelServices],
   imports: [
     CommonModule,
     ScraperRoutingModule,
