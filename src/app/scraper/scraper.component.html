@@ -20,7 +20,8 @@
             </mat-form-field>
           </div>
           <div fxLayoutAlign="center">
-            <button mat-raised-button color="primary" type="submit">scrape</button>
+            <button mat-raised-button color="primary" type="submit" *ngIf="scrapeBool">Scrape</button>
+            <button mat-raised-button color="primary" (click)="downloadFile()" *ngIf="!scrapeBool">Create File</button>
           </div>
         </form>
       </div>

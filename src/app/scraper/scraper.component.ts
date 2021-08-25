@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
+import {ExcelServicesService} from "./shared/excel-services.service";
+import {ProductDTO} from "../shared/dto/product.dto";
 
 @Component({
   selector: 'app-scraper',
@@ -12,7 +14,8 @@ export class ScraperComponent implements OnInit {
   test: any | undefined;
   hide = true;
   progressbar: boolean = false;
-  constructor(private formBuilder: FormBuilder, private scraperService: ScraperService) {
+  scrapeBool = true;
+  constructor(private formBuilder: FormBuilder, private scraperService: ScraperService, private excelService: ExcelServicesService) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -20,10 +23,6 @@ export class ScraperComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
   }
 
   get username() { return this.loginForm.get('username'); }
@@ -40,6 +39,22 @@ export class ScraperComponent implements OnInit {
    });
    console.log(this.test);
    this.progressbar = false;
+   this.username?.reset();
+    this.password?.reset();
+   this.scrapeBool = false;
 
+  }
+
+  downloadFile() {
+    const products: ProductDTO[] = [];
+    this.scraperService.getProducts().subscribe(data => {
+      data.forEach(product => {
+        product as ProductDTO;
+        products.push(product);
+      });
+    });
+    console.log(products);
+    this.excelService.exportAsExcel(products, 'Products from Neskrid');
+    this.scrapeBool = true;
   }
 }
