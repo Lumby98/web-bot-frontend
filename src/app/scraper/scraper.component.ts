@@ -3,7 +3,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
 import {ProductDTO} from "../shared/dto/product.dto";
-import {Status} from "../shared/enum/status.enum";
 
 @Component({
   selector: 'app-scraper',
@@ -16,6 +15,8 @@ export class ScraperComponent implements OnInit {
   hide = true;
   progressbar: boolean = false;
   scrapeBool = true;
+  products: ProductDTO[] = [];
+  Sites: any = ['neskrid', 'other...'];
   constructor(private formBuilder: FormBuilder, private scraperService: ScraperService, private excelService: ExcelServices) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -47,7 +48,6 @@ export class ScraperComponent implements OnInit {
 
   }
 
-  products: ProductDTO[] = [];
   fillList()
   {
     this.scraperService.getProducts().subscribe(data => {
@@ -56,19 +56,14 @@ export class ScraperComponent implements OnInit {
       }
     });
     console.log(this.products)
+
   }
 
   downloadFile() {
-    /*const products: ProductDTO[] = [];
-    this.scraperService.getProducts().subscribe(data => {
-      for(const p of data) {
-        products.push(p);
-      }
-    });*/
     console.log(this.products);
     this.excelService.exportAsExcel(this.products, 'Products from Neskrid');
     this.scrapeBool = true;
-    this.products.filter(i => i.articleNo !== 'clear');
+    this.products = []
     console.log(this.products);
   }
 

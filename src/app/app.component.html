@@ -1,9 +1,12 @@
-<div>
-<mat-toolbar color="primary" fxLayoutGap="10px">
+<!-- Toolbar -->
+<mat-toolbar color="primary" class="app-header">
   <span>Web bot</span>
-  <button mat-button routerLink="/home">Home</button>
-   <button mat-button routerLink="/scraper">Scrapper</button>
+  <span class="nav-tool-items">
+    <a mat-button routerLink="/home">Home</a>
+    <a mat-button routerLink="/scraper">Data Collection</a>
+    <a mat-button routerLink="/login">Log In</a>
+    <a mat-button routerLink="/register">Create User</a>
+  </span>
 </mat-toolbar>
-  <router-outlet class="router-flex"></router-outlet>
-</div>
 
+<router-outlet></router-outlet>
