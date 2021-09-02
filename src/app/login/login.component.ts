@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../shared/service/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoginDto} from "../shared/dto/login.dto";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
-  constructor(private auth: AuthService,private formBuilder: FormBuilder) {
+  constructor(private auth: AuthService,private formBuilder: FormBuilder, private router: Router) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]

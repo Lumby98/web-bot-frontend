@@ -22,12 +22,11 @@ export class AuthService {
       .pipe(
         map(response => {
       const token = this.cookieService.get('Authentication');
-      const user: UserDto = response.dto;
-      console.log(token);
+      console.log(token + " hello");
+      console.log(response);
 
       if(token) {
-        console.log(response);
-        localStorage.setItem('currentUser', JSON.stringify(user));
+        localStorage.setItem('currentUser', JSON.stringify(response));
         return true;
       } else {
         throw new Error('wrong credentials (auth service)')
@@ -65,10 +64,8 @@ export class AuthService {
     const token = this.cookieService.get('Authentication');
 
     //checks if the token is set
-    if(token){
-      return true
-    }
+    return !!token;
 
-    return false;
+
   }
 }
