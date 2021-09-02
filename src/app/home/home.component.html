@@ -1,4 +1,4 @@
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="loggedIn">
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="loggedIn()">
 
   <mat-card class="box" [class.mat-elevation-z10]="true">
     <mat-card-header>
@@ -12,7 +12,7 @@
 
 </div>
 
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="!loggedIn">
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="!loggedIn()">
 
   <mat-card class="box" [class.mat-elevation-z10]="true">
     <mat-card-header>

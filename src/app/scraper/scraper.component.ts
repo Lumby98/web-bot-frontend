@@ -13,7 +13,6 @@ import {LoginDto} from "../shared/dto/login.dto";
 export class ScraperComponent implements OnInit {
   loginForm: FormGroup;
   test: any | undefined;
-  hide = true;
   progressbar: boolean = false;
   scrapeBool = true;
   products: ProductDTO[] = [];
@@ -21,7 +20,8 @@ export class ScraperComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private scraperService: ScraperService, private excelService: ExcelServices) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
+      site: ['', Validators.required]
     });
   }
 
@@ -30,11 +30,13 @@ export class ScraperComponent implements OnInit {
 
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
+  get site() {return this.loginForm.get('site'); }
 
   scrape(): void {
    if(this.loginForm.invalid) {
      return;
    }
+   const site = this.site?.value;
    this.progressbar = true;
    const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
    this.scraperService.scrap(dto).subscribe(status => {

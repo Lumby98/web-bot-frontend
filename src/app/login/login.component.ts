@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
+  error: string | undefined;
   constructor(private auth: AuthService,private formBuilder: FormBuilder, private router: Router) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -29,6 +30,14 @@ export class LoginComponent implements OnInit {
       return;
     }
     const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
-    this.auth.login(dto).subscribe();
+    this.auth.login(dto).subscribe(succes => {
+      this.router.navigate(['/home']);
+      this.error = undefined;
+    }, err => { this.error = err});
+
+  }
+
+  clearError() {
+    this.error = undefined;
   }
 }

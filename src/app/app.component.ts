@@ -10,12 +10,14 @@ import {UserDto} from "./shared/dto/user.dto";
 })
 export class AppComponent {
   title = 'web-bot-frontend';
-  loggedIn: any = false;
   constructor(private router: Router, private authService: AuthService) {
   }
 
   logout() {
-    this.loggedIn = false;
     this.authService.logout();
+  }
+
+  loggedIn() {
+    return this.authService.isAuthenticated();
   }
 }

@@ -7,7 +7,6 @@ import {AuthService} from "../shared/service/auth.service";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  loggedIn: any;
 
   constructor(private auth: AuthService) { }
 
@@ -15,7 +14,10 @@ export class HomeComponent implements OnInit {
   }
 
   logout() {
-    this.loggedIn = false;
     this.auth.logout();
+  }
+
+  loggedIn() {
+    return this.auth.isAuthenticated();
   }
 }
