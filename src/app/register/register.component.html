@@ -4,21 +4,21 @@
       <mat-card-title>Register</mat-card-title>
     </mat-card-header>
 
-    <form class="example-form">
+    <form class="example-form" [formGroup]="registerForm">
 
       <mat-card-content>
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Username">
+          <input matInput placeholder="Username" formControlName="username">
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Password">
+          <input matInput placeholder="Password" formControlName="password">
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
           <mat-label>Choose a role...</mat-label>
           <mat-select>
-            <mat-option [value]="roles" *ngFor="let roles of Roles">{{roles}}
+            <mat-option [value]="roles" *ngFor="let roles of Roles" formControlName="role">{{roles}}
             </mat-option>
           </mat-select>
         </mat-form-field>

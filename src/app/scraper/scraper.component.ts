@@ -31,7 +31,7 @@ export class ScraperComponent implements OnInit {
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
 
-  scrap(): void {
+  scrape(): void {
    if(this.loginForm.invalid) {
      return;
    }

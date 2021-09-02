@@ -1,3 +1,28 @@
-<div fxLayout="row" fxFlex fxLayoutAlign="center center">
-  <img src="assets/img/logo.png" alt="logo" width="300" height="450">
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="loggedIn">
+
+  <mat-card class="box" [class.mat-elevation-z10]="true">
+    <mat-card-header>
+      <mat-card-title>Web bot</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <button mat-stroked-button color="primary" class="btn-block" routerLink="/scraper">Data collection</button>
+      <button mat-stroked-button color="primary" class="btn-block" (click)="logout()">Log out</button>
+    </mat-card-content>
+  </mat-card>
+
 </div>
+
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="!loggedIn">
+
+  <mat-card class="box" [class.mat-elevation-z10]="true">
+    <mat-card-header>
+      <mat-card-title>Web bot</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <button mat-stroked-button color="primary" class="btn-block" routerLink="/login">Log In</button>
+    </mat-card-content>
+  </mat-card>
+
+</div>
+
+

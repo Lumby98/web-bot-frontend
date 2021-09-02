@@ -3,12 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import {HomeComponent} from "./home/home.component";
 import {LoginComponent} from "./login/login.component";
 import {RegisterComponent} from "./register/register.component";
+import {AuthGuard} from "./shared/guard/auth.guard";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
-  {path: 'scraper', loadChildren: () => import('./scraper/scraper.module').then(m => m.ScraperModule)},
+  {path: 'scraper', canActivate: [AuthGuard], loadChildren: () => import('./scraper/scraper.module').then(m => m.ScraperModule)},
   {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent},
+  {path: 'register', canActivate: [AuthGuard], component: RegisterComponent},
   {path: '**', redirectTo: 'home'}];
 
 @NgModule({

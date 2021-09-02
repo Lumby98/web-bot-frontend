@@ -10,6 +10,9 @@ import { HomeComponent } from './home/home.component';
 import {LoginComponent} from "./login/login.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import { RegisterComponent } from './register/register.component';
+import {CookieService} from "ngx-cookie-service";
+import {AuthGuard} from "./shared/guard/auth.guard";
+import {AuthService} from "./shared/service/auth.service";
 
 @NgModule({
   declarations: [
@@ -24,9 +27,9 @@ import { RegisterComponent } from './register/register.component';
     HttpClientModule,
     BrowserAnimationsModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [CookieService, AuthGuard, AuthService],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
