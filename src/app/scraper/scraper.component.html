@@ -24,10 +24,17 @@
 
       </mat-card-content>
       <div fxLayoutAlign="center top" fxLayoutGap="10px">
-        <button mat-stroked-button color="primary" type="submit">Scrape</button>
-        <button mat-stroked-button color="primary" (click)="downloadFile()" [disabled]="!products.length">Create File</button>
+        <button mat-stroked-button color="primary" type="submit">Get Data</button>
+        <button mat-stroked-button color="primary" (click)="fillList()">Create File</button>
       </div>
     </form>
+    <mat-card-footer>
+      <mat-progress-bar mode="indeterminate" *ngIf="progressbar"></mat-progress-bar>
+      <mat-error *ngIf="error">
+        <button mat-icon-button color="warn" (click)="clearError()">x</button>
+        {{error}}
+      </mat-error>
+    </mat-card-footer>
   </mat-card>
 </div>
 

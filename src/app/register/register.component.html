@@ -24,9 +24,13 @@
         </mat-form-field>
 
       </mat-card-content>
-
       <button mat-stroked-button color="accent" class="btn-block" type="submit">Register</button>
-
+      <mat-card-footer>
+        <mat-error *ngIf="error">
+          <button mat-icon-button color="warn" (click)="clearError()">x</button>
+          {{error}}
+        </mat-error>
+      </mat-card-footer>
     </form>
   </mat-card>
 </div>

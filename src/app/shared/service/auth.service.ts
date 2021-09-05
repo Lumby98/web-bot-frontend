@@ -16,7 +16,11 @@ export class AuthService {
               ) { }
 
   login(login: LoginDto): Observable<boolean> {
-    return this.http.post<any>(environment.apiUrl + '/authentication/log-in', login, {observe: "response", withCredentials: true}).pipe(
+    return this.http
+      .post<any>(environment.apiUrl + '/authentication/log-in',
+        login, {observe: "response", withCredentials: true}
+      )
+      .pipe(
       map(response => {
         const token = this.doesHttpOnlyCookieExist('Authentication');
         console.log(token + " hello");
@@ -41,7 +45,12 @@ export class AuthService {
   }
 
   register(registerDto: RegisterDto): Observable<boolean>{
-    return this.http.post<any>(environment.apiUrl + '/authentication/register', registerDto, {withCredentials: true})
+    return this.http
+      .post<any>(
+        environment.apiUrl + '/authentication/register',
+        registerDto,
+        {withCredentials: true}
+      )
       .pipe(
         map(response => {
           const user = localStorage.getItem('currentUser')
@@ -72,7 +81,16 @@ export class AuthService {
       console.log(user);
       localStorage.removeItem('currentUser');
       m = JSON.parse(user);
-      this.http.post(environment.apiUrl + '/authentication/log-out', user, {withCredentials: true}).pipe(take(1)).subscribe(response => {
+      this.http
+        .post(
+          environment.apiUrl + '/authentication/log-out',
+          user,
+          {withCredentials: true}
+        )
+        .pipe(
+          take(1)
+        )
+        .subscribe(response => {
         console.log(response);
       });
     }

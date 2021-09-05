@@ -10,14 +10,21 @@ import {UserDto} from "./shared/dto/user.dto";
 })
 export class AppComponent {
   title = 'web-bot-frontend';
+  username: string | undefined;
   constructor(private router: Router, private authService: AuthService) {
   }
 
   logout() {
+    this.username = undefined;
     this.authService.logout();
   }
 
   loggedIn() {
+    const user = localStorage.getItem('currentUser')
+    if(user) {
+      const m = JSON.parse(user);
+      this.username = m.body.username;
+    }
     return this.authService.isAuthenticated();
   }
 }

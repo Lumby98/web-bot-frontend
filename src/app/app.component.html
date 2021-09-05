@@ -4,12 +4,13 @@
   <span class="nav-tool-items">
     <a mat-button routerLink="/home">Home</a>
     <a mat-button routerLink="/scraper">Data Collection</a>
+    <a mat-button routerLink="/user-list">Users</a>
   </span>
   <span class="fill-remaining-space"></span>
   <span>
+    <a mat-button routerLink="/user" *ngIf="loggedIn()">Hi {{username}}!</a>
     <a mat-button routerLink="/login" *ngIf="!loggedIn()">Log In</a>
     <a mat-button (click)="logout()" *ngIf="loggedIn()">Log out</a>
-    <a mat-button routerLink="/register" *ngIf="loggedIn()">Create User</a>
   </span>
 </mat-toolbar>
 

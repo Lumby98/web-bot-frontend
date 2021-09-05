@@ -35,6 +35,7 @@ import {MatBadgeModule} from "@angular/material/badge";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ReactiveFormsModule} from "@angular/forms";
+import {MatDialogModule} from "@angular/material/dialog";
 
 const materialModules = [
   CdkTreeModule,
@@ -43,6 +44,7 @@ const materialModules = [
   MatCardModule,
   MatCheckboxModule,
   MatChipsModule,
+  MatDialogModule,
   MatDividerModule,
   MatExpansionModule,
   MatIconModule,

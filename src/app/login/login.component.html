@@ -19,6 +19,7 @@
     </form>
     <mat-card-footer>
       <mat-error *ngIf="error">
+        <button mat-icon-button color="warn" (click)="clearError()">x</button>
         {{error}}
       </mat-error>
     </mat-card-footer>

@@ -4,6 +4,7 @@ import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
 import {ProductDTO} from "../shared/dto/product.dto";
 import {LoginDto} from "../shared/dto/login.dto";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-scraper',
@@ -12,10 +13,9 @@ import {LoginDto} from "../shared/dto/login.dto";
 })
 export class ScraperComponent implements OnInit {
   loginForm: FormGroup;
-  test: any | undefined;
+  error: any | undefined;
   progressbar: boolean = false;
   scrapeBool = true;
-  products: ProductDTO[] = [];
   Sites: any = ['neskrid', 'other...'];
   constructor(private formBuilder: FormBuilder, private scraperService: ScraperService, private excelService: ExcelServices) {
     this.loginForm = this.formBuilder.group({
@@ -33,40 +33,49 @@ export class ScraperComponent implements OnInit {
   get site() {return this.loginForm.get('site'); }
 
   scrape(): void {
-   if(this.loginForm.invalid) {
-     return;
+
+   try {
+     if(this.loginForm.invalid) {
+       throw new Error('missing information');
+     }
+     const site = this.site?.value;
+     this.progressbar = true;
+     const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
+     this.scraperService.scrap(dto).subscribe(status => {
+       this.error = status.message;
+       this.progressbar = false;
+       console.log(status);
+     });
+     console.log(this.error);
+     this.username?.reset();
+     this.password?.reset();
+     this.scrapeBool = false;
+   } catch (err) {
+     this.error = err.message;
+     this.progressbar = false;
    }
-   const site = this.site?.value;
-   this.progressbar = true;
-   const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
-   this.scraperService.scrap(dto).subscribe(status => {
-     this.test = status
-   });
-   console.log(this.test);
-   this.fillList();
-   this.progressbar = false;
-   this.username?.reset();
-    this.password?.reset();
-   this.scrapeBool = false;
   }
 
   fillList()
   {
     this.scraperService.getProducts().subscribe(data => {
+      const products = []
       for(const p of data) {
-        this.products.push(p);
+        products.push(p);
       }
+      this.downloadFile(products);
     });
-    console.log(this.products)
 
   }
 
-  downloadFile() {
-    console.log(this.products);
-    this.excelService.exportAsExcel(this.products, 'Products from Neskrid');
+  downloadFile(products: ProductDTO[]) {
+    console.log(products);
+    this.excelService.exportAsExcel(products, 'Products from Neskrid');
     this.scrapeBool = true;
-    this.products = []
-    console.log(this.products);
+    console.log(products);
   }
 
+  clearError() {
+    this.error = undefined;
+  }
 }
