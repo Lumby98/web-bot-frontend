@@ -8,7 +8,7 @@
   </span>
   <span class="fill-remaining-space"></span>
   <span>
-    <a mat-button routerLink="/user" *ngIf="loggedIn()">Hi {{username}}!</a>
+    <a mat-button (click)="goToUser()" *ngIf="loggedIn()">Hi {{username}}!</a>
     <a mat-button routerLink="/login" *ngIf="!loggedIn()">Log In</a>
     <a mat-button (click)="logout()" *ngIf="loggedIn()">Log out</a>
   </span>

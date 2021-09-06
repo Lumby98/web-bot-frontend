@@ -40,8 +40,10 @@ export class UserDetailComponent implements OnInit {
   ngOnInit(): void {
       if (this.editUser.admin == 1) {
         this.admin = 'yes'
+      } else {
+        this.admin = 'no'
       }
-      this.admin = 'no'
+
   }
 
   removeUser(user: UserDto) {

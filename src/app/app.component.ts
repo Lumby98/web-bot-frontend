@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
 import {AuthService} from "./shared/service/auth.service";
+import {UserService} from "./user/shared/user.service";
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import {AuthService} from "./shared/service/auth.service";
 export class AppComponent {
   username: string | undefined;
   error: any
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService, private userService: UserService) {
   }
 
   logout() {
@@ -28,5 +29,14 @@ export class AppComponent {
       this.username = m.body.username;
     }
     return this.authService.isAuthenticated();
+  }
+
+  goToUser() {
+    const user = localStorage.getItem('currentUser')
+    if(user) {
+      const  m = JSON.parse(user);
+      this.userService.showUser = m.body;
+      this.router.navigate(['/user-detail'])
+    }
   }
 }

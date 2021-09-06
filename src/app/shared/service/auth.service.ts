@@ -100,11 +100,8 @@ export class AuthService {
   }
 
   isAuthenticated() {
-    //get the authentication token from cookie
-    const token = this.doesHttpOnlyCookieExist('Authentication');
-
     //checks if the token is set
-    return !!token;
+    return this.doesHttpOnlyCookieExist('Authentication');
 
 
   }
