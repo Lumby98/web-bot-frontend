@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ProductDTO} from "../../shared/dto/product.dto";
 import {environment} from "../../../environments/environment";
-import {LoginDto} from "../../shared/dto/login.dto";
 import {map, timeout} from "rxjs/operators";
+import {ScrapeDto} from "../../shared/dto/scrape.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +14,10 @@ export class ScraperService {
 
   constructor(private http: HttpClient) { }
 
-  public scrap(loginDto: LoginDto): Observable<any> {
+  public scrap(scrapeDto: ScrapeDto): Observable<any> {
     return this.http
       .post<string>(
-        environment.apiUrl + '/scraper/scrape', loginDto,
+        environment.apiUrl + '/scraper/scrape', scrapeDto,
         {withCredentials: true}
       )
       .pipe(

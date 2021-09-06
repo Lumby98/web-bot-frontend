@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
 import {ProductDTO} from "../shared/dto/product.dto";
-import {LoginDto} from "../shared/dto/login.dto";
+import {ScrapeDto} from "../shared/dto/scrape.dto";
 
 @Component({
   selector: 'app-scraper',
@@ -41,7 +41,12 @@ export class ScraperComponent implements OnInit {
      }
      const site = this.site?.value;
      this.progressbar = true;
-     const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
+     const dto: ScrapeDto = {
+       username: this.username?.value,
+       password: this.password?.value,
+       website: site
+     }
+
      this.scraperService.scrap(dto).subscribe(status => {
        this.error = status.message;
        this.progressbar = false;
