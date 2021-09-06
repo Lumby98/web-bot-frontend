@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {ProductDTO} from "../../shared/dto/product.dto";
 import {environment} from "../../../environments/environment";
 import {LoginDto} from "../../shared/dto/login.dto";
-import {timeout} from "rxjs/operators";
+import {map, timeout} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,8 @@ export class ScraperService {
         {withCredentials: true}
       )
       .pipe(
-        timeout(this.timeout)
+        timeout(this.timeout),
+        map(response => { return response} ),
       );
   }
 

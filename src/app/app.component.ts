@@ -9,7 +9,6 @@ import {UserDto} from "./shared/dto/user.dto";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'web-bot-frontend';
   username: string | undefined;
   constructor(private router: Router, private authService: AuthService) {
   }

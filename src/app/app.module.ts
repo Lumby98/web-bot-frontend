@@ -14,8 +14,6 @@ import {AuthGuard} from "./shared/guard/auth.guard";
 import {AuthService} from "./shared/service/auth.service";
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
-import {ConfirmDialogComponent} from "./shared/confirm-dialog/confirm-dialog.component";
-import {ConfirmDialogModule} from "./shared/confirm-dialog/confirm-dialog.module";
 
 @NgModule({
   declarations: [
@@ -25,7 +23,6 @@ import {ConfirmDialogModule} from "./shared/confirm-dialog/confirm-dialog.module
     RegisterComponent,
     UserListComponent,
     UserDetailComponent,
-    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +31,6 @@ import {ConfirmDialogModule} from "./shared/confirm-dialog/confirm-dialog.module
     BrowserAnimationsModule,
     SharedModule,
     ReactiveFormsModule,
-    ConfirmDialogModule,
   ],
   providers: [
     AuthGuard,
