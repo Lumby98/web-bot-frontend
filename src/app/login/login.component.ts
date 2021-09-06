@@ -14,7 +14,9 @@ export class LoginComponent implements OnInit {
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
   error: string | undefined;
+  hide: any;
   constructor(private auth: AuthService,private formBuilder: FormBuilder, private router: Router) {
+    this.hide = true;
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]

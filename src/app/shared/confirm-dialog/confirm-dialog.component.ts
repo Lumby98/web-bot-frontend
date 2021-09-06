@@ -1,6 +1,7 @@
-import {Component, HostListener, Inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostListener, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styles: [`
@@ -10,13 +11,10 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
   .header::first-letter, .dialog-message::first-letter {
       text-transform: uppercase;
   }
-  .btn-cancel {
-      background-color: red;
-      color: #fff;
-  }
 `]
 
 })
+
 export class ConfirmDialogComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
     cancelText: string,

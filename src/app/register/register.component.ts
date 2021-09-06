@@ -16,8 +16,9 @@ export class RegisterComponent implements OnInit {
   get role() { return this.registerForm.get('role'); }
   error: any | undefined;
   Roles: any = ["Standard", "Admin"];
+  hide: any;
   constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router) {
-
+    this.hide = true;
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],

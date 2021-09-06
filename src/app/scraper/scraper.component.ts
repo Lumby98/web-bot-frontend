@@ -4,7 +4,6 @@ import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
 import {ProductDTO} from "../shared/dto/product.dto";
 import {LoginDto} from "../shared/dto/login.dto";
-import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-scraper',
@@ -17,7 +16,9 @@ export class ScraperComponent implements OnInit {
   progressbar: boolean = false;
   scrapeBool = true;
   Sites: any = ['neskrid', 'other...'];
+  hide: boolean;
   constructor(private formBuilder: FormBuilder, private scraperService: ScraperService, private excelService: ExcelServices) {
+    this.hide = true
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
