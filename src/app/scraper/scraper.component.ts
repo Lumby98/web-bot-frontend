@@ -4,6 +4,7 @@ import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
 import {ProductDTO} from "../shared/dto/product.dto";
 import {LoginDto} from "../shared/dto/login.dto";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-scraper',

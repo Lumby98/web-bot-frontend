@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {ProductDTO} from "../../shared/dto/product.dto";
 import {environment} from "../../../environments/environment";
 import {LoginDto} from "../../shared/dto/login.dto";
-import {map, timeout} from "rxjs/operators";
+import {catchError, map, timeout} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,8 @@ export class ScraperService {
       .pipe(
         timeout(this.timeout),
         map(response => { return response} ),
+        catchError( () => { throw new Error('timeout exceed, im still getting the data,' +
+          ' but i cannot tell you when im done')})
       );
   }
 
