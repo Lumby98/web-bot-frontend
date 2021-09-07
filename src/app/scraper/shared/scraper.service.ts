@@ -14,7 +14,7 @@ export class ScraperService {
 
   constructor(private http: HttpClient) { }
 
-  public scrap(loginDto: LoginDto): Observable<any> {
+  public scrape(loginDto: LoginDto): Observable<any> {
     return this.http
       .post<string>(
         environment.apiUrl + '/scraper/scrape', loginDto,

@@ -43,7 +43,7 @@ export class ScraperComponent implements OnInit {
      const site = this.site?.value;
      this.progressbar = true;
      const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
-     this.scraperService.scrap(dto).subscribe(status => {
+     this.scraperService.scrape(dto).subscribe(status => {
        this.error = status.message;
        this.progressbar = false;
        console.log(status);
