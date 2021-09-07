@@ -17,7 +17,11 @@ export class ScraperComponent implements OnInit {
   scrapeBool = true;
   Sites: any = ['neskrid', 'other...'];
   hide: boolean;
-  constructor(private formBuilder: FormBuilder, private scraperService: ScraperService, private excelService: ExcelServices) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private scraperService: ScraperService,
+    private excelService: ExcelServices)
+  {
     this.hide = true
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
