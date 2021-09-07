@@ -4,7 +4,6 @@ import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
 import {ProductDTO} from "../shared/dto/product.dto";
 import {LoginDto} from "../shared/dto/login.dto";
-import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-scraper',
@@ -14,6 +13,7 @@ import {catchError} from "rxjs/operators";
 export class ScraperComponent implements OnInit {
   loginForm: FormGroup;
   error: any | undefined;
+  succes: any | undefined;
   progressbar: boolean = false;
   scrapeBool = true;
   Sites: any = ['neskrid', 'other...'];
@@ -34,7 +34,7 @@ export class ScraperComponent implements OnInit {
   get password() { return this.loginForm.get('password'); }
   get site() {return this.loginForm.get('site'); }
 
-  scrape(): void {
+  async scrape(): Promise<void> {
 
    try {
      if(this.loginForm.invalid) {
@@ -43,11 +43,15 @@ export class ScraperComponent implements OnInit {
      const site = this.site?.value;
      this.progressbar = true;
      const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
-     this.scraperService.scrape(dto).subscribe(status => {
-       this.error = status.message;
+      await this.scraperService.scrape(dto).subscribe(status => {
+       this.succes = status.message;
        this.progressbar = false;
        console.log(status);
-     });
+     }, error => {
+        this.error = error.message;
+        this.progressbar = false;
+        throw Error(error);
+      });
      console.log(this.error);
      this.username?.reset();
      this.password?.reset();
@@ -79,5 +83,9 @@ export class ScraperComponent implements OnInit {
 
   clearError() {
     this.error = undefined;
+  }
+
+  clearSucces() {
+    this.succes = undefined;
   }
 }
