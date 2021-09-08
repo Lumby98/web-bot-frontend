@@ -4,7 +4,7 @@ import {Observable} from "rxjs";
 import {ProductDTO} from "../../shared/dto/product.dto";
 import {environment} from "../../../environments/environment";
 import {LoginDto} from "../../shared/dto/login.dto";
-import {timeout} from "rxjs/operators";
+import {catchError, map, timeout} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -19,9 +19,12 @@ export class ScraperService {
       .post<string>(
         environment.apiUrl + '/scraper/scrape', loginDto,
         {withCredentials: true}
-      )
-      .pipe(
-        timeout(this.timeout)
+      ).pipe(
+        timeout(this.timeout),
+        map(response => { return response}),
+        catchError(err => { throw new Error(
+          'Could not get data'
+        )})
       );
   }
 

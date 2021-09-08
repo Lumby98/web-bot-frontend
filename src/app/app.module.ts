@@ -25,7 +25,6 @@ import {ConfirmDialogModule} from "./shared/confirm-dialog/confirm-dialog.module
     RegisterComponent,
     UserListComponent,
     UserDetailComponent,
-    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +33,6 @@ import {ConfirmDialogModule} from "./shared/confirm-dialog/confirm-dialog.module
     BrowserAnimationsModule,
     SharedModule,
     ReactiveFormsModule,
-    ConfirmDialogModule,
   ],
   providers: [
     AuthGuard,
