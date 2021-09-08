@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {SharedModule} from "./shared/shared.module";
 import { HomeComponent } from './home/home.component';
@@ -15,6 +15,10 @@ import {AuthService} from "./shared/service/auth.service";
 import { UserListComponent } from './user/user-list/user-list.component';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import {ConfirmDialogService} from "./shared/confirm-dialog/confirm-dialog.service";
+import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
+import {environment} from "../environments/environment";
+
+const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: ['websocket'], upgrade: false}};
 
 @NgModule({
   declarations: [
@@ -32,6 +36,7 @@ import {ConfirmDialogService} from "./shared/confirm-dialog/confirm-dialog.servi
     BrowserAnimationsModule,
     SharedModule,
     ReactiveFormsModule,
+    SocketIoModule.forRoot(config)
   ],
   providers: [
     AuthGuard,

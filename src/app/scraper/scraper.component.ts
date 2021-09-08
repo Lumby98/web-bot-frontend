@@ -1,16 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
 import {ProductDTO} from "../shared/dto/product.dto";
 import {LoginDto} from "../shared/dto/login.dto";
+import {take, timeout} from "rxjs/operators";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-scraper',
   templateUrl: './scraper.component.html',
   styleUrls: ['./scraper.component.scss']
 })
-export class ScraperComponent implements OnInit {
+export class ScraperComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   error: any | undefined;
   succes: any | undefined;
@@ -18,6 +20,7 @@ export class ScraperComponent implements OnInit {
   scrapeBool = true;
   Sites: any = ['neskrid', 'other...'];
   hide: boolean;
+  errorSubscribtion: Subscription | undefined;
   constructor(private formBuilder: FormBuilder, private scraperService: ScraperService, private excelService: ExcelServices) {
     this.hide = true
     this.loginForm = this.formBuilder.group({
@@ -28,13 +31,15 @@ export class ScraperComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.errorSubscribtion = this.scraperService.listenForError().subscribe(err => {this.error = err});
   }
+
 
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
   get site() {return this.loginForm.get('site'); }
 
-  async scrape(): Promise<void> {
+  scrape() {
 
    try {
      if(this.loginForm.invalid) {
@@ -43,8 +48,8 @@ export class ScraperComponent implements OnInit {
      const site = this.site?.value;
      this.progressbar = true;
      const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
-      await this.scraperService.scrape(dto).subscribe(status => {
-       this.succes = status.message;
+     this.scraperService.listenForScrape(dto).pipe(take(1), timeout(1000)).subscribe(status => {
+       this.succes = status;
        this.progressbar = false;
        console.log(status);
      }, error => {
@@ -87,5 +92,9 @@ export class ScraperComponent implements OnInit {
 
   clearSucces() {
     this.succes = undefined;
+  }
+
+  ngOnDestroy(): void {
+    this.errorSubscribtion?.unsubscribe();
   }
 }

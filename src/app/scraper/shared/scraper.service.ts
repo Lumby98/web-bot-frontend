@@ -5,6 +5,7 @@ import {ProductDTO} from "../../shared/dto/product.dto";
 import {environment} from "../../../environments/environment";
 import {LoginDto} from "../../shared/dto/login.dto";
 import {catchError, map, timeout} from "rxjs/operators";
+import {Socket} from "ngx-socket-io";
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import {catchError, map, timeout} from "rxjs/operators";
 export class ScraperService {
   timeout = 300000; //5min in milliseconds
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private socket: Socket) { }
 
   public scrape(loginDto: LoginDto): Observable<any> {
     try {
@@ -35,6 +36,16 @@ export class ScraperService {
       throw new Error(err);
     }
 
+  }
+
+  public listenForScrape(loginDto: LoginDto): Observable<string> {
+    this.socket.emit('startScrape', loginDto);
+
+    return this.socket.fromEvent<string>('completedScrape');
+  }
+
+  public listenForError(): Observable<string> {
+    return this.socket.fromEvent<string>('error')
   }
 
   public getProducts(): Observable<ProductDTO[]> {
