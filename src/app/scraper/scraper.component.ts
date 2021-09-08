@@ -48,7 +48,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
      const site = this.site?.value;
      this.progressbar = true;
      const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
-     this.scraperService.listenForScrape(dto).pipe(take(1), timeout(1000)).subscribe(status => {
+     this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
        this.succes = status;
        this.progressbar = false;
        console.log(status);
