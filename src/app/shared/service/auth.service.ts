@@ -72,12 +72,11 @@ export class AuthService {
     }));
   }
 
-  logout(){
+  logout(): Observable<boolean>{
     //get user from local storage
     const user = localStorage.getItem('currentUser');
     let m: UserDto
-    if(user)
-    {
+    if(user) {
       console.log(user);
       localStorage.removeItem('currentUser');
       m = JSON.parse(user);
@@ -91,10 +90,13 @@ export class AuthService {
           take(1)
         )
         .subscribe(response => {
-        console.log(response);
-      });
+          console.log(response);
+          return true;
+        });
     }
-    return false;
+    throw new Error('failed to logout')
+
+
   }
 
   isAuthenticated() {

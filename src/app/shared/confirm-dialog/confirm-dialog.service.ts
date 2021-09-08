@@ -25,7 +25,7 @@ export class ConfirmDialogService {
     if(this.dialogRef)
     {
       return this.dialogRef.afterClosed().pipe(take(1), map(res => {
-          return res;
+        return res;
         }
       ));
     }

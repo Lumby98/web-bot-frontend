@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit,} from '@angular/core';
 import {UserDto} from "../../shared/dto/user.dto";
 import {UserService} from "../shared/user.service";
 import {take} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-list',
@@ -11,7 +12,7 @@ import {take} from "rxjs/operators";
 export class UserListComponent implements OnInit {
   typeofUsers: UserDto[] | undefined
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.userService.getUsers().pipe(take(1)).subscribe( succes => {
@@ -19,4 +20,8 @@ export class UserListComponent implements OnInit {
     });
   }
 
+  goToUser(user: UserDto) {
+    this.userService.showUser = user;
+    this.router.navigate(['/user-detail']);
+  }
 }
