@@ -1,22 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
 import {ProductDTO} from "../shared/dto/product.dto";
 import {ScrapeDto} from "../shared/dto/scrape.dto";
+import {LoginDto} from "../shared/dto/login.dto";
+import {take, timeout} from "rxjs/operators";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-scraper',
   templateUrl: './scraper.component.html',
   styleUrls: ['./scraper.component.scss']
 })
-export class ScraperComponent implements OnInit {
+export class ScraperComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
   error: any | undefined;
+  succes: any | undefined;
   progressbar: boolean = false;
   scrapeBool = true;
   Sites: any = ['neskrid', 'other...'];
   hide: boolean;
+  errorSubscribtion: Subscription | undefined;
   constructor(private formBuilder: FormBuilder, private scraperService: ScraperService, private excelService: ExcelServices) {
     this.hide = true
     this.loginForm = this.formBuilder.group({
@@ -27,13 +32,15 @@ export class ScraperComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.errorSubscribtion = this.scraperService.listenForError().subscribe(err => {this.error = err});
   }
+
 
   get username() { return this.loginForm.get('username'); }
   get password() { return this.loginForm.get('password'); }
   get site() {return this.loginForm.get('site'); }
 
-  scrape(): void {
+  scrape() {
 
    try {
      if(this.loginForm.invalid) {
@@ -41,17 +48,16 @@ export class ScraperComponent implements OnInit {
      }
      const site = this.site?.value;
      this.progressbar = true;
-     const dto: ScrapeDto = {
-       username: this.username?.value,
-       password: this.password?.value,
-       website: site
-     }
-
-     this.scraperService.scrap(dto).subscribe(status => {
-       this.error = status.message;
+     const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
+     this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
+       this.succes = status;
        this.progressbar = false;
        console.log(status);
-     });
+     }, error => {
+        this.error = error.message;
+        this.progressbar = false;
+        throw Error(error);
+      });
      console.log(this.error);
      this.username?.reset();
      this.password?.reset();
@@ -83,5 +89,13 @@ export class ScraperComponent implements OnInit {
 
   clearError() {
     this.error = undefined;
+  }
+
+  clearSucces() {
+    this.succes = undefined;
+  }
+
+  ngOnDestroy(): void {
+    this.errorSubscribtion?.unsubscribe();
   }
 }
