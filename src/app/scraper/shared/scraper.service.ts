@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ProductDTO} from "../../shared/dto/product.dto";
+import {NeskridDto} from "../../shared/dto/neskrid.dto";
 import {environment} from "../../../environments/environment";
 import {ScrapeDto} from "../../shared/dto/scrape.dto";
 import {LoginDto} from "../../shared/dto/login.dto";
 import {catchError, map, timeout} from "rxjs/operators";
 import {Socket} from "ngx-socket-io";
+import {HultaforsDto} from "../../shared/dto/hultafors.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,15 @@ export class ScraperService {
 
   constructor(private http: HttpClient, private socket: Socket) { }
 
-  public scrape(loginDto: LoginDto): Observable<any> {
+  /**
+   * contacts the backend to start scraping with http requests
+   * @param dto
+   */
+  public scrape(dto: ScrapeDto): Observable<any> {
     try {
       return this.http
         .post(
-          environment.apiUrl + '/scraper/scrape', loginDto,
+          environment.apiUrl + '/scraper/scrape', dto,
           {withCredentials: true}
         )
         .pipe(
@@ -39,22 +44,43 @@ export class ScraperService {
 
   }
 
-  public listenForScrape(loginDto: LoginDto): Observable<string> {
-    this.socket.emit('startScrape', loginDto);
+  /**
+   * contacts the backend to start scraping with socket communication
+   * @param dto
+   */
+  public listenForScrape(dto: ScrapeDto): Observable<string> {
+    this.socket.emit('startScrape', dto);
 
     return this.socket.fromEvent<string>('completedScrape');
   }
 
+  /**
+   * socket event listing for error messages
+   */
   public listenForError(): Observable<string> {
     return this.socket.fromEvent<string>('error')
   }
 
-  public getProducts(): Observable<ProductDTO[]> {
+  /**
+   * get all products for Neskrid
+   */
+  public getNeskridProducts(): Observable<NeskridDto[]> {
 
     return this.http
-      .get<ProductDTO[]>(
-        environment.apiUrl + '/scraper/',
+      .get<NeskridDto[]>(
+        environment.apiUrl + '/scraper/neskrid',
         {withCredentials: true});
 
+  }
+
+  /**
+   * get all products for hultafors
+   */
+  public getHultaforsProducts(): Observable<HultaforsDto[]> {
+
+    return this.http.get<HultaforsDto[]>(
+      environment.apiUrl + '/scraper/hultafors',
+      {withCredentials: true}
+    )
   }
 }

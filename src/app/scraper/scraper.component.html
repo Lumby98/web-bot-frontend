@@ -4,7 +4,7 @@
       <mat-card-title>Data collection</mat-card-title>
     </mat-card-header>
 
-    <form class="example-form" [formGroup]="loginForm" (ngSubmit)="scrape()">
+    <form class="example-form" [formGroup]="scraperForm" (ngSubmit)="scrape()">
       <mat-card-content>
         <mat-form-field class="example-full-width">
           <input matInput placeholder="Username" formControlName="username">
@@ -17,8 +17,8 @@
 
         <mat-form-field class="example-full-width">
           <mat-label>Choose Site...</mat-label>
-          <mat-select formControlName="site">
-            <mat-option [value]="Sites" *ngFor="let site of Sites">{{site}}
+          <mat-select formControlName="site" (selectionChange)="selectChangeHandler($event)">
+            <mat-option *ngFor="let site of sites" [value]="site">{{site}}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -27,7 +27,7 @@
       <mat-card-actions>
         <div fxLayoutAlign="center top" fxLayoutGap="10px">
           <button mat-stroked-button color="primary" type="submit">Get Data</button>
-          <button mat-stroked-button color="primary" (click)="fillList()">Create File</button>
+          <button mat-stroked-button color="primary" type="button" (click)="fillList()">Create File</button>
         </div>
       </mat-card-actions>
     </form>
