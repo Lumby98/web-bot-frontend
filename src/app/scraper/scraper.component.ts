@@ -2,11 +2,10 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "./shared/excel.service";
-import {NeskridDto} from "../shared/dto/neskrid.dto";
 import {ScrapeDto} from "../shared/dto/scrape.dto";
-import {LoginDto} from "../shared/dto/login.dto";
-import {take, timeout} from "rxjs/operators";
+import {take} from "rxjs/operators";
 import {Subscription} from "rxjs";
+import {HultaforsDto} from "../shared/dto/hultafors.dto";
 
 @Component({
   selector: 'app-scraper',
@@ -18,10 +17,13 @@ export class ScraperComponent implements OnInit, OnDestroy {
   error: any | undefined;
   succes: any | undefined;
   progressbar: boolean = false;
+  hide: boolean;
+  hidden: boolean = true;
+  errorSubscription: Subscription | undefined;
+  data: HultaforsDto[] = [];
   sites: any = ['Neskrid', 'Hultafors'];
   selectedSite = '';
-  hide: boolean;
-  errorSubscription: Subscription | undefined;
+
   constructor(private formBuilder: FormBuilder,
               private scraperService: ScraperService,
               private excelService: ExcelServices) {
@@ -37,8 +39,12 @@ export class ScraperComponent implements OnInit, OnDestroy {
     this.errorSubscription = this.scraperService.listenForError().subscribe(err => {
       this.error = err;
       this.progressbar = false;});
+    this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
+      for (const p of products) {
+        this.data.push(p);
+      }
+    });
   }
-
 
   get username() { return this.scraperForm.get('username'); }
   get password() { return this.scraperForm.get('password'); }
@@ -48,7 +54,6 @@ export class ScraperComponent implements OnInit, OnDestroy {
    * @param event
    */
   selectChangeHandler (event: any) {
-    console.log(event.value);
     this.selectedSite = event.value;
   }
 
@@ -71,6 +76,13 @@ export class ScraperComponent implements OnInit, OnDestroy {
      //calls the scraper service to contact the backend
      this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
        this.succes = status;
+       if(dto.website == 'Hultafors') {
+         this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
+           for (const p of products) {
+             this.data.push(p);
+           }
+         });
+       }
        this.progressbar = false;
      }, error => {
         this.error = error.message;
@@ -103,13 +115,9 @@ export class ScraperComponent implements OnInit, OnDestroy {
         this.downloadFile(products);
       });
     } else {
-      this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(data => {
-        const products = [];
-        for (const p of data) {
-          products.push(p);
-        }
-        this.downloadFile(products);
-      });
+        const table = document.getElementById("hultaforsTable");
+        this.downloadFile(table);
+
     }
 
   }
@@ -118,11 +126,11 @@ export class ScraperComponent implements OnInit, OnDestroy {
    * creates an excel file to download
    * @param products
    */
-  downloadFile(products: any[]) {
+  downloadFile(products: any) {
     if (this.selectedSite == 'Neskrid') {
-      this.excelService.exportAsExcel(products, 'Products from Neskrid');
+      this.excelService.exportAsExcelNeskrid(products, 'Products from Neskrid');
     } else {
-      this.excelService.exportAsExcel(products, 'Products from Hultafors');
+      this.excelService.exportAsExcelHultafos(products, 'Products from Hultafors');
     }
   }
 

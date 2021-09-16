@@ -10,6 +10,11 @@ body {
   background: #e2e2e2;
 }
 
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
 .app-header {
   justify-content: space-between;
   position: fixed;

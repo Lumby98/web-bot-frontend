@@ -5,6 +5,7 @@ import {UserDto} from "../../shared/dto/user.dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {EditUserDto} from "../../shared/dto/edit-user.dto";
+import {SharedService} from "../../shared/service/shared.service";
 
 @Component({
   selector: 'app-user-detail',
@@ -26,7 +27,8 @@ export class UserDetailComponent implements OnInit {
     private dialogService: ConfirmDialogService,
     private userService: UserService,
     private formBuilder: FormBuilder,
-    private router: Router) {
+    private router: Router,
+    public sharedService: SharedService) {
 
     this.hide = true;
     this.editUser = this.userService.showUser;
@@ -47,6 +49,11 @@ export class UserDetailComponent implements OnInit {
   }
 
   removeUser(user: UserDto) {
+    if (this.sharedService.user?.username == this.editUser.username) {
+      this.error = 'cannot delete yourself'
+      return;
+    }
+
     const options = {title: 'Remove user?',
       message: 'Removing a user is permanent and they cannot be restored',
       cancelText: 'Cancel',
@@ -96,9 +103,17 @@ export class UserDetailComponent implements OnInit {
 
   }
 
-  editStart() {
+  editStart(): void {
+    const current = this.sharedService.user;
+    console.log('method called')
+    console.log(current)
+    console.log(this.editUser)
+    if (current?.username == this.editUser.username || current?.admin == 1) {
       this.username?.setValue(this.editUser.username);
       this.role?.setValue(this.Roles[this.editUser.admin])
-    this.edit = true;
+      this.edit = true;
+      return;
+    }
+    this.error = "unauthorised: cannot edit a user that isn't yourself, user";
   }
 }

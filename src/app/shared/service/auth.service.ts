@@ -3,7 +3,7 @@ import {LoginDto} from "../dto/login.dto";
 import {RegisterDto} from "../dto/register.dto";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {catchError, map, take} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 import {environment} from "../../../environments/environment";
 import {UserDto} from "../dto/user.dto";
 
@@ -12,8 +12,7 @@ import {UserDto} from "../dto/user.dto";
 })
 export class AuthService {
 
-  constructor(private http: HttpClient,
-              ) { }
+  constructor(private http: HttpClient ) { }
 
   login(login: LoginDto): Observable<boolean> {
     return this.http
@@ -23,7 +22,6 @@ export class AuthService {
       .pipe(
       map(response => {
         const token = this.doesHttpOnlyCookieExist('Authentication');
-        console.log(token + " hello");
         if(token) {
           localStorage.setItem('currentUser', JSON.stringify(response));
           return true;
@@ -52,7 +50,7 @@ export class AuthService {
         {withCredentials: true}
       )
       .pipe(
-        map(response => {
+        map(() => {
           const user = localStorage.getItem('currentUser')
           let m: any
           if(user){
@@ -73,30 +71,31 @@ export class AuthService {
   }
 
   logout(): Observable<boolean>{
-    //get user from local storage
-    const user = localStorage.getItem('currentUser');
-    let m: UserDto
-    if(user) {
-      console.log(user);
-      localStorage.removeItem('currentUser');
+    try {
+      const user = localStorage.getItem('currentUser');
+      let m: UserDto
+      if(!user) {
+        throw new Error('could not logout');
+      }
       m = JSON.parse(user);
-      this.http
+      localStorage.removeItem('currentUser');
+      return this.http
         .post(
           environment.apiUrl + '/authentication/log-out',
-          user,
+          m,
           {withCredentials: true}
         )
         .pipe(
-          take(1)
-        )
-        .subscribe(response => {
-          console.log(response);
-          return true;
-        });
+          map(() => {
+            return true;
+          }), catchError(err => {
+            throw err
+          })
+        );
+
+    } catch (err) {
+      throw err;
     }
-    throw new Error('failed to logout')
-
-
   }
 
   isAuthenticated() {

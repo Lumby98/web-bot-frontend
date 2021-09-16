@@ -45,5 +45,58 @@
   </mat-card>
 </div>
 
+<div *ngIf="data.length > 1" [hidden]="hidden">
+  <table id="hultaforsTable">
+    <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>sizes</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>dates</th>
+    </tr>
+    <tr>
+      <th>article number</th>
+      <th>article name</th>
+      <th></th>
+      <th *ngFor="let size of data[0].sizes">{{size.size}}</th>
+      <th></th>
+      <th *ngFor="let size of data[0].sizes">{{size.size}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let product of data">
+      <td>{{product.articleNumber}}</td>
+      <td>{{product.articleName}}</td>
+      <td></td>
+      <td *ngFor="let size of product.sizes">{{size.status}}</td>
+      <td></td>
+      <td *ngFor="let size of product.sizes">{{size.date}}</td>
+
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
 
 

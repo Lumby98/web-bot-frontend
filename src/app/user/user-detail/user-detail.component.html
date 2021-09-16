@@ -20,13 +20,25 @@
         </mat-list-item>
       </mat-list>
 
-      <mat-list-item role="listitem" fxLayoutAlign="center center">
-        <div fxLayoutGap="10px">
-          <button mat-raised-button color="primary" (click)="editStart()">Edit</button>
-          <button mat-raised-button color="warn" (click)="removeUser(editUser)">Remove</button>
-        </div>
-      </mat-list-item>
     </mat-card-content>
+
+    <mat-card-actions>
+
+        <div fxLayoutGap="10px" fxLayoutAlign="center center">
+          <button mat-raised-button color="primary" (click)="editStart()">Edit</button>
+          <button mat-raised-button color="warn" (click)="removeUser(editUser)" *ngIf="sharedService.user?.admin == 1">Remove</button>
+        </div>
+
+    </mat-card-actions>
+
+    <mat-card-footer>
+
+      <mat-error *ngIf="error">
+        <button mat-icon-button color="warn" (click)="clearError()">x</button>
+        {{error}}
+      </mat-error>
+
+    </mat-card-footer>
 
   </mat-card>
 </div>
