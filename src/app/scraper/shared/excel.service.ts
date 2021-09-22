@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as XLSX from 'XLSX';
+import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import {HultaforsDto} from "../../shared/dto/hultafors.dto";
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
