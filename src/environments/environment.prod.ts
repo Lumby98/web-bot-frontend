@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://46.101.165.115:3000'
+  apiUrl: 'https://webbot.ortowear.com:3000'
 };
