@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import {HultaforsDto} from "../../shared/dto/hultafors.dto";
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
 @Injectable({
@@ -30,7 +29,8 @@ export class ExcelServices {
    */
   private static saveAsExcelFile(buffer: any, fileName: string): void {
     const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
-    FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
+    const date: string = new Date().toLocaleDateString();
+    FileSaver.saveAs(data, fileName + '_export_' + date + EXCEL_EXTENSION);
   }
 
   /**
@@ -60,4 +60,6 @@ export class ExcelServices {
     }
     return buf;
   }
+
+  public readExcel() {}
 }

@@ -18,7 +18,7 @@
         <mat-form-field class="example-full-width">
           <mat-label>Choose Site...</mat-label>
           <mat-select formControlName="site" (selectionChange)="selectChangeHandler($event)">
-            <mat-option *ngFor="let site of sites" [value]="site">{{site}}
+            <mat-option *ngFor="let site of sites" [value]="site">{{site.name}} -- {{site.lastScraped}}
             </mat-option>
           </mat-select>
         </mat-form-field>

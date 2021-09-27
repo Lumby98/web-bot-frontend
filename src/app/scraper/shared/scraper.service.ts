@@ -4,10 +4,11 @@ import {Observable} from "rxjs";
 import {NeskridDto} from "../../shared/dto/neskrid.dto";
 import {environment} from "../../../environments/environment";
 import {ScrapeDto} from "../../shared/dto/scrape.dto";
-import {LoginDto} from "../../shared/dto/login.dto";
 import {catchError, map, timeout} from "rxjs/operators";
 import {Socket} from "ngx-socket-io";
 import {HultaforsDto} from "../../shared/dto/hultafors.dto";
+import {SiteDto} from "../../shared/dto/site.dto";
+import {ReturnStrapeDto} from "../../shared/dto/return-strape.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -48,10 +49,10 @@ export class ScraperService {
    * contacts the backend to start scraping with socket communication
    * @param dto
    */
-  public listenForScrape(dto: ScrapeDto): Observable<string> {
+  public listenForScrape(dto: ScrapeDto): Observable<ReturnStrapeDto> {
     this.socket.emit('startScrape', dto);
 
-    return this.socket.fromEvent<string>('completedScrape');
+    return this.socket.fromEvent<ReturnStrapeDto>('completedScrape');
   }
 
   /**
@@ -82,5 +83,11 @@ export class ScraperService {
       environment.apiUrl + '/scraper/hultafors',
       {withCredentials: true}
     )
+  }
+
+  getSites() {
+    return this.http.get<SiteDto[]>(
+      environment.apiUrl + '/scraper/sites',
+      {withCredentials: true});
   }
 }

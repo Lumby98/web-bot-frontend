@@ -1,11 +1,13 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
-import {ExcelServices} from "./shared/excel.service";
+import {ExcelServices} from "../shared/service/excel.service";
 import {ScrapeDto} from "../shared/dto/scrape.dto";
-import {take} from "rxjs/operators";
+import {catchError, take} from "rxjs/operators";
 import {Subscription} from "rxjs";
 import {HultaforsDto} from "../shared/dto/hultafors.dto";
+import {SiteDto} from "../shared/dto/site.dto";
+import {MatSelectChange} from "@angular/material/select";
 
 @Component({
   selector: 'app-scraper',
@@ -21,8 +23,8 @@ export class ScraperComponent implements OnInit, OnDestroy {
   hidden: boolean = true;
   errorSubscription: Subscription | undefined;
   data: HultaforsDto[] = [];
-  sites: any = ['Neskrid', 'Hultafors'];
-  selectedSite = '';
+  sites: SiteDto[] = [];
+  selectedSite: SiteDto| undefined;
 
   constructor(private formBuilder: FormBuilder,
               private scraperService: ScraperService,
@@ -44,6 +46,14 @@ export class ScraperComponent implements OnInit, OnDestroy {
         this.data.push(p);
       }
     });
+    this.scraperService.getSites().pipe(take(1)).subscribe( sites => {
+      for (const s of sites) {
+        this.sites.push(s);
+      }
+      if (this.sites.length < 1) {
+        this.sites = [{name: 'Hultafors', lastScraped: 'N/A'}, {name: 'Neskrid', lastScraped: 'N/A'}];
+      }
+    })
   }
 
   get username() { return this.scraperForm.get('username'); }
@@ -53,7 +63,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
    * gets the selected value of the dropdown menu
    * @param event
    */
-  selectChangeHandler (event: any) {
+  selectChangeHandler(event: MatSelectChange) {
     this.selectedSite = event.value;
   }
 
@@ -71,11 +81,12 @@ export class ScraperComponent implements OnInit, OnDestroy {
      const dto: ScrapeDto = {
        username: this.username?.value,
        password: this.password?.value,
-       website: this.selectedSite
+       website: this.selectedSite.name
      }
      //calls the scraper service to contact the backend
      this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
-       this.succes = status;
+       this.succes = status.message;
+       this.sites = status.sites;
        if(dto.website == 'Hultafors') {
          this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
            for (const p of products) {
@@ -106,7 +117,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
       throw new Error('Please select which source you want to get data from')
     }
 
-    if (this.selectedSite == 'Neskrid') {
+    if (this.selectedSite.name == 'Neskrid') {
       this.scraperService.getNeskridProducts().pipe(take(1)).subscribe(data => {
         const products = [];
         for (const p of data) {
@@ -127,7 +138,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
    * @param products
    */
   downloadFile(products: any) {
-    if (this.selectedSite == 'Neskrid') {
+    if (this.selectedSite?.name == 'Neskrid') {
       this.excelService.exportAsExcelNeskrid(products, 'Products from Neskrid');
     } else {
       this.excelService.exportAsExcelHultafos(products, 'Products from Hultafors');
