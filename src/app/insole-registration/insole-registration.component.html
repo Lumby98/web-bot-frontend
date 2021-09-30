@@ -1,0 +1,21 @@
+<div class="customCard-wrapper" fxLayout="row" fxLayoutAlign="center center">
+
+  <mat-card class="box" [class.mat-elevation-z10]="true">
+    <mat-card-header fxLayoutAlign="center center">
+      <mat-card-title>Insole Registration</mat-card-title>
+    </mat-card-header>
+    <mat-card-actions>
+      <div>
+        <div fxLayoutGap="10px" fxLayoutAlign="center center">
+          <input #excelInput hidden="true" type="file" onclick="this.value=null" (change)="excelInputChange($event)"
+                 accept=".xlsx"/>
+          <button mat-flat-button color="primary" (click)="excelInput.click()">Choose Spreadsheet File (excel)</button>
+        </div>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+
+</div>
+
+
+

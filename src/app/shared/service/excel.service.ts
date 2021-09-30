@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
+import {InsoleFromSheetDto} from "../dto/insole-from-sheet.dto";
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
 @Injectable({
@@ -61,5 +62,34 @@ export class ExcelServices {
     return buf;
   }
 
-  public readExcel() {}
+  /**
+   * gets data from an uploaded excel sheet and returns list of orders
+   * @param fileToUpload
+   */
+  fileUpload(fileToUpload: File) {
+    let fileReader = new FileReader();
+    fileReader.onload = () => {
+      let arrayBuffer: any;
+      arrayBuffer = fileReader.result;
+      const data = new Uint8Array(arrayBuffer);
+      const arr = [];
+      for (let i = 0; i != data.length; ++i) {
+        arr[i] = String.fromCharCode(data[i]);
+      }
+      const bsrt = arr.join('');
+      const workbook = XLSX.read(bsrt, {type: "binary"});
+      const first_sheet_name = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[first_sheet_name];
+      const fileArr = XLSX.utils.sheet_to_json(worksheet, {raw: true});
+      fileArr.length = fileArr.length - 9;
+      fileArr.shift();
+      fileArr.shift();
+      let insoles: InsoleFromSheetDto[] = [];
+      Object.assign(insoles, JSON.parse(JSON.stringify(fileArr)));
+      console.log(fileArr);
+      console.log('insoles');
+      console.log(insoles);
+    }
+    fileReader.readAsArrayBuffer(fileToUpload);
+  }
 }

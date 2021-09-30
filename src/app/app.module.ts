@@ -17,6 +17,7 @@ import { UserDetailComponent } from './user/user-detail/user-detail.component';
 import {ConfirmDialogService} from "./shared/confirm-dialog/confirm-dialog.service";
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {environment} from "../environments/environment";
+import { InsoleRegistrationComponent } from './insole-registration/insole-registration.component';
 
 const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: ['websocket'], upgrade: false}};
 
@@ -28,6 +29,7 @@ const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: [
     RegisterComponent,
     UserListComponent,
     UserDetailComponent,
+    InsoleRegistrationComponent,
   ],
   imports: [
     BrowserModule,
