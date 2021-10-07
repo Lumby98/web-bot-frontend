@@ -81,7 +81,8 @@ export class InsoleRegistrationComponent implements OnInit {
       this.fileName = undefined;
       this.succes = succes;
     }, error => {
-      this.error = error;
+      this.error = error.message;
+      this.progressbar = false;
       this.fileName = undefined;
       this.insoles = undefined;
     });
