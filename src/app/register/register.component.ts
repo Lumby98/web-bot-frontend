@@ -29,6 +29,9 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * handles registration of a user
+   */
   register() {
     if(this.registerForm.invalid){
       this.error = 'missing user information'
@@ -53,6 +56,9 @@ export class RegisterComponent implements OnInit {
     }, err => { this.error = err});
   }
 
+  /**
+   * clears error messages
+   */
   clearError() {
     this.error = undefined;
   }

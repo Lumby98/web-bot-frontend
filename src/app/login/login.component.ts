@@ -26,6 +26,9 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * handles login
+   */
   login() {
     if(this.loginForm.invalid)
     {

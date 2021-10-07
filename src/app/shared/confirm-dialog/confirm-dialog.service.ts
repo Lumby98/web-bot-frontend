@@ -11,6 +11,10 @@ export class ConfirmDialogService {
 
   dialogRef: MatDialogRef<ConfirmDialogComponent> | undefined;
 
+  /**
+   * opens confirmation dialog
+   * @param options
+   */
   public open(options: { title: any; message: any; cancelText: any; confirmText: any; }) {
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
@@ -21,6 +25,10 @@ export class ConfirmDialogService {
       }
     });
   }
+
+  /**
+   * send a trigger to know that confirm has been pressed
+   */
   public confirmed(): Observable<any> {
     if(this.dialogRef)
     {

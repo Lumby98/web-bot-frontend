@@ -4,15 +4,17 @@
     <mat-card-header>
       <mat-card-title>Web bot</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content class="mt-10">
       <div>
         <div fxLayoutGap="10px" fxLayoutAlign="center bottom">
           <button mat-stroked-button color="primary"  class="btn-block" routerLink="/login" *ngIf="!loggedIn()">Log In</button>
-          <button mat-stroked-button color="primary"  class="btn-block" routerLink="/scraper" *ngIf="loggedIn()">Data collection</button>
-          <button mat-stroked-button color="primary"  class="btn-block" routerLink="/user-list" *ngIf="loggedIn()">users</button>
+          <button mat-stroked-button color="primary"  class="btn-block" routerLink="/data-collection" *ngIf="loggedIn()">Data collection</button>
+          <button *ngIf="loggedIn()" class="btn-block" color="primary" mat-stroked-button
+                  routerLink="/user-list">users</button>
         </div>
-        <div fxLayoutAlign="center center">
+        <div class="mt-10" fxLayoutAlign="center center" fxLayoutGap="10px" >
           <button mat-stroked-button color="primary" class="btn-block" (click)="logout()" *ngIf="loggedIn()">Log out</button>
+          <button mat-stroked-button color="primary"  class="btn-block" routerLink="/user-list" *ngIf="loggedIn()">Insole Registration</button>
         </div>
       </div>
     </mat-card-content>

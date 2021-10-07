@@ -1,21 +1,21 @@
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="!edit">
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="!edit && chosenUser" >
   <mat-card class="box" [class.mat-elevation-z10]="true">
     <mat-card-header>
-      <mat-card-title>user: {{editUser.username}}</mat-card-title>
+      <mat-card-title>User: {{chosenUser.username}}</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
 
       <mat-list role="list">
-        <mat-list-item role="listitem">id: {{editUser.id}}
+        <mat-list-item role="listitem">Id: {{chosenUser.id}}
           <mat-divider></mat-divider>
         </mat-list-item>
 
-        <mat-list-item role="listitem">username: {{editUser.username}}
+        <mat-list-item role="listitem">Username: {{chosenUser.username}}
           <mat-divider></mat-divider>
         </mat-list-item>
 
-        <mat-list-item role="listitem">admin: {{admin}}
+        <mat-list-item role="listitem">Admin: {{admin}}
           <mat-divider></mat-divider>
         </mat-list-item>
       </mat-list>
@@ -25,8 +25,8 @@
     <mat-card-actions>
 
         <div fxLayoutGap="10px" fxLayoutAlign="center center">
-          <button mat-raised-button color="primary" (click)="editStart()">Edit</button>
-          <button mat-raised-button color="warn" (click)="removeUser(editUser)" *ngIf="sharedService.user?.admin == 1">Remove</button>
+          <button mat-raised-button color="primary" (click)="editStart()" *ngIf="currentUser?.admin == 1">Edit</button>
+          <button mat-raised-button color="warn" (click)="removeUser()" *ngIf="currentUser?.admin == 1">Remove</button>
         </div>
 
     </mat-card-actions>
@@ -43,7 +43,7 @@
   </mat-card>
 </div>
 
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="edit">
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="edit && chosenUser">
   <mat-card class="box" [class.mat-elevation-z10]="true">
     <mat-card-header>
       <mat-card-title>Update User</mat-card-title>
@@ -63,7 +63,7 @@
 
         <mat-form-field class="example-full-width">
           <mat-label>Choose a role...</mat-label>
-          <mat-select formControlName="role" value="{{editUser.admin}}">
+          <mat-select formControlName="role" value="{{chosenUser.admin}}">
             <mat-option value="{{Roles[0]}}">Standard</mat-option>
             <mat-option value="{{Roles[1]}}">Admin</mat-option>
           </mat-select>
@@ -83,4 +83,3 @@
     </form>
   </mat-card>
 </div>
-

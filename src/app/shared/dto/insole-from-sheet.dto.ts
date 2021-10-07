@@ -1,4 +1,4 @@
 export interface InsoleFromSheetDto {
-  orderNumber: number,
-  registrationCode: number
+  orderNumber: string,
+  registrationCode: string
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../shared/service/auth.service";
-import {SharedService} from "../shared/service/shared.service";
 import {take} from "rxjs/operators";
+import {UserDto} from "../shared/dto/user.dto";
 
 @Component({
   selector: 'app-home',
@@ -9,17 +9,28 @@ import {take} from "rxjs/operators";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
-  constructor(private auth: AuthService, public sharedService: SharedService) { }
-
-  ngOnInit(): void {
+  currentUser: UserDto | undefined;
+  constructor(private auth: AuthService) {
+    const user = localStorage.getItem('currentUser')
+    if (user) {
+      this.currentUser = JSON.parse(user);
+    }
   }
 
+  ngOnInit(): void {
+
+  }
+
+  /**
+   * logs out a user
+   */
   logout() {
-    this.sharedService.user = undefined;
     this.auth.logout().pipe(take(1)).subscribe();
   }
 
+  /**
+   * checks if a user is logged in
+   */
   loggedIn() {
     return this.auth.isAuthenticated();
   }

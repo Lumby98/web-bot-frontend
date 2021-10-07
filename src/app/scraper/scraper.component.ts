@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "../shared/service/excel.service";
 import {ScrapeDto} from "../shared/dto/scrape.dto";
-import {catchError, take} from "rxjs/operators";
+import {take} from "rxjs/operators";
 import {Subscription} from "rxjs";
 import {HultaforsDto} from "../shared/dto/hultafors.dto";
 import {SiteDto} from "../shared/dto/site.dto";
@@ -86,7 +86,15 @@ export class ScraperComponent implements OnInit, OnDestroy {
      //calls the scraper service to contact the backend
      this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
        this.succes = status.message;
-       this.sites = status.sites;
+       if(status.sites.length < 2) {
+         let updateSite = this.sites.find(e => e.name === status.sites[0].name);
+         if (updateSite) {
+           let index = this.sites.indexOf(updateSite);
+           this.sites[index] = status.sites[0];
+         }
+       } else {
+         this.sites = status.sites;
+       }
        if(dto.website == 'Hultafors') {
          this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
            for (const p of products) {

@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
 })
 export class UserListComponent implements OnInit {
   typeofUsers: UserDto[] | undefined
+  currentUser: UserDto | undefined
 
   constructor(private userService: UserService, private router: Router) { }
 
@@ -18,10 +19,19 @@ export class UserListComponent implements OnInit {
     this.userService.getUsers().pipe(take(1)).subscribe( succes => {
       this.typeofUsers = succes;
     });
+
+    const u = localStorage.getItem('currentUser');
+    if(u) {
+      const m = JSON.parse(u);
+      this.currentUser = m.body;
+    }
   }
 
+  /**
+   * navigates to user-detail for the chosen user
+   * @param user
+   */
   goToUser(user: UserDto) {
-    this.userService.showUser = user;
     this.router.navigate(['/user-detail']);
   }
 }

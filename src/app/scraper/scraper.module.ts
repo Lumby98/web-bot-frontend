@@ -10,7 +10,8 @@ import {ExcelServices} from "../shared/service/excel.service";
 @NgModule({
   declarations: [
     ScraperComponent
-  ], providers:[ExcelServices],
+  ],
+  providers:[ExcelServices],
   imports: [
     CommonModule,
     ScraperRoutingModule,

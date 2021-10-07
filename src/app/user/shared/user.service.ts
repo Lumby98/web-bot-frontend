@@ -9,10 +9,12 @@ import {EditUserDto} from "../../shared/dto/edit-user.dto";
   providedIn: 'root'
 })
 export class UserService {
-  showUser: UserDto = {id: 0, username: 'placeholder', admin: 0}
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * calls the api the get all users
+   */
   getUsers(): Observable<UserDto[]> {
     return this.http
       .get<UserDto[]>(
@@ -20,6 +22,10 @@ export class UserService {
         {withCredentials: true});
   }
 
+  /**
+   * calls the api to remove a user
+   * @param user
+   */
   removeUser(user: UserDto) {
     return this.http
       .delete(
@@ -27,10 +33,19 @@ export class UserService {
         {withCredentials: true});
   }
 
-  editUser(user: EditUserDto) {
+  /**
+   * calls the api to edit a user
+   * @param username
+   * @param user
+   */
+  editUser(username: string, user: EditUserDto) {
     return this.http.patch(
-      environment.apiUrl + '/user/' + user.username,
+      environment.apiUrl + '/user/' + username,
       user,
       {withCredentials: true})
+  }
+
+  userById(id: number): Observable<UserDto> {
+    return this.http.get<UserDto>(environment.apiUrl + /user/ + id, {withCredentials: true})
   }
 }

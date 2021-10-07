@@ -66,8 +66,9 @@ export class ExcelServices {
    * gets data from an uploaded excel sheet and returns list of orders
    * @param fileToUpload
    */
-  fileUpload(fileToUpload: File) {
+  fileUpload(fileToUpload: File): InsoleFromSheetDto[] {
     let fileReader = new FileReader();
+    const insoles: InsoleFromSheetDto[] = []
     fileReader.onload = () => {
       let arrayBuffer: any;
       arrayBuffer = fileReader.result;
@@ -82,14 +83,27 @@ export class ExcelServices {
       const worksheet = workbook.Sheets[first_sheet_name];
       const fileArr = XLSX.utils.sheet_to_json(worksheet, {raw: true});
       fileArr.length = fileArr.length - 9;
-      fileArr.shift();
-      fileArr.shift();
-      let insoles: InsoleFromSheetDto[] = [];
-      Object.assign(insoles, JSON.parse(JSON.stringify(fileArr)));
-      console.log(fileArr);
-      console.log('insoles');
-      console.log(insoles);
+      const parseArr = JSON.parse(JSON.stringify(fileArr));
+      parseArr.shift();
+      parseArr.shift();
+
+      for (let element of parseArr) {
+        const keys = Object.keys(element);
+        const orderNumber = keys.find(v => { return v === '__EMPTY'});
+        const registrationCode = keys.find(v => { return v === '__EMPTY_5'});
+        if(orderNumber && registrationCode) {
+          const insole: InsoleFromSheetDto = {
+            orderNumber: element[orderNumber],
+            registrationCode: element[orderNumber]
+          };
+          insoles.push(insole);
+        }
+      }
+      return insoles;
     }
+
+
     fileReader.readAsArrayBuffer(fileToUpload);
+    return insoles;
   }
 }

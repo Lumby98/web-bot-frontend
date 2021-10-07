@@ -5,14 +5,14 @@
     </mat-card-header>
     <mat-card-content>
       <mat-selection-list #users [multiple]="false">
-        <mat-list-option *ngFor="let user of typeofUsers" [value]="user"  (click)="goToUser(user)">
+        <mat-list-option *ngFor="let user of typeofUsers" [value]="user"  routerLink="/user-detail/{{user.id}}">
           {{user.username}}
           <mat-divider [inset]="true"></mat-divider>
         </mat-list-option>
       </mat-selection-list>
     </mat-card-content>
-    <mat-card-footer>
-      <a mat-button color="primary" routerLink="/register">Create User</a>
+    <mat-card-footer *ngIf="currentUser">
+      <a mat-button color="primary" routerLink="/register" *ngIf="currentUser.admin == 1">Create User</a>
     </mat-card-footer>
   </mat-card>
 </div>

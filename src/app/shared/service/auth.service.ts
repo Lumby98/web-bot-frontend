@@ -14,6 +14,11 @@ export class AuthService {
 
   constructor(private http: HttpClient ) { }
 
+  /**
+   * calls the api to handle login
+   * if login is successful set authentication cookie which contains a user token
+   * @param login
+   */
   login(login: LoginDto): Observable<boolean> {
     return this.http
       .post<any>(environment.apiUrl + '/authentication/log-in',
@@ -33,6 +38,11 @@ export class AuthService {
       }));
   }
 
+  /**
+   * used to check if the user has a cookie
+   * since the cookie is httpOnly the is achived be trying to change it
+   * @param cookieName
+   */
   doesHttpOnlyCookieExist(cookieName: string) {
     var d = new Date();
     d.setTime(d.getTime() + (1000));
@@ -42,6 +52,10 @@ export class AuthService {
     return document.cookie.indexOf(cookieName + '=') == -1;
   }
 
+  /**
+   * calls the api to register a user
+   * @param registerDto
+   */
   register(registerDto: RegisterDto): Observable<boolean>{
     return this.http
       .post<any>(
@@ -70,6 +84,9 @@ export class AuthService {
     }));
   }
 
+  /**
+   * calls the api to log out a user
+   */
   logout(): Observable<boolean>{
     try {
       const user = localStorage.getItem('currentUser');
@@ -98,6 +115,9 @@ export class AuthService {
     }
   }
 
+  /**
+   * checks if a user is authenticated
+   */
   isAuthenticated() {
     //checks if the token is set
     return this.doesHttpOnlyCookieExist('Authentication');

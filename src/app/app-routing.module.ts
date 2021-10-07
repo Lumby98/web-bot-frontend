@@ -10,11 +10,11 @@ import {InsoleRegistrationComponent} from "./insole-registration/insole-registra
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},
-  {path: 'scraper', canActivate: [AuthGuard], loadChildren: () => import('./scraper/scraper.module').then(m => m.ScraperModule)},
+  {path: 'data-collection', canActivate: [AuthGuard], loadChildren: () => import('./scraper/scraper.module').then(m => m.ScraperModule)},
   {path: 'login', component: LoginComponent},
   {path: 'register', canActivate: [AuthGuard], component: RegisterComponent},
   {path: 'user-list', canActivate: [AuthGuard], component: UserListComponent},
-  {path:'user-detail', canActivate: [AuthGuard], component: UserDetailComponent},
+  {path:'user-detail/:id', canActivate: [AuthGuard], component: UserDetailComponent},
   {path: 'insole', canActivate: [AuthGuard], component: InsoleRegistrationComponent},
   {path: '**', redirectTo: 'home'}];
 
