@@ -13,8 +13,8 @@
                   routerLink="/user-list">users</button>
         </div>
         <div class="mt-10" fxLayoutAlign="center center" fxLayoutGap="10px" >
+          <button mat-stroked-button color="primary"  class="btn-block" routerLink="/insole" *ngIf="loggedIn()">Insole Registration</button>
           <button mat-stroked-button color="primary" class="btn-block" (click)="logout()" *ngIf="loggedIn()">Log out</button>
-          <button mat-stroked-button color="primary"  class="btn-block" routerLink="/user-list" *ngIf="loggedIn()">Insole Registration</button>
         </div>
       </div>
     </mat-card-content>

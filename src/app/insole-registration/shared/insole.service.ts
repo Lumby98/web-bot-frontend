@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import {InsoleFromSheetDto} from "../../shared/dto/insole-from-sheet.dto";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {RegisterInsoleDto} from "../../shared/dto/register-insole.dto";
+import {Observable} from "rxjs";
+import {Socket} from "ngx-socket-io";
 
 @Injectable({
   providedIn: 'root'
 })
 export class InsoleService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private socket: Socket) { }
 
   /**
    * calls the api to register insoles
@@ -17,6 +18,19 @@ export class InsoleService {
    * @param insoles
    */
   registerInsoles(insoles: RegisterInsoleDto) {
-    return this.http.post(environment.apiUrl  + '/insole', insoles);
+    return this.http.post(environment.apiUrl  + '/insole', insoles, {responseType: "text"});
+  }
+
+  public listenForInsoleRegistration(dto: RegisterInsoleDto): Observable<string> {
+    this.socket.emit('startInsoleRegistration', dto);
+
+    return this.socket.fromEvent<string>('completeInsoleRegistration');
+  }
+
+  /**
+   * socket event listing for error messages
+   */
+  public listenForError(): Observable<string> {
+    return this.socket.fromEvent<string>('error')
   }
 }

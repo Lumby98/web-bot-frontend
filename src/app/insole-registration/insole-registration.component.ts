@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ExcelServices} from "../shared/service/excel.service";
 import {InsoleService} from "./shared/insole.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {InsoleFromSheetDto} from "../shared/dto/insole-from-sheet.dto";
 import {RegisterInsoleDto} from "../shared/dto/register-insole.dto";
 import {take} from "rxjs/operators";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-insole-registration',
   templateUrl: './insole-registration.component.html',
   styleUrls: ['./insole-registration.component.scss']
 })
-export class InsoleRegistrationComponent implements OnInit {
+export class InsoleRegistrationComponent implements OnInit, OnDestroy {
   hide: Boolean;
   insoleForm: FormGroup;
   insoles: InsoleFromSheetDto[] | undefined;
@@ -19,6 +20,7 @@ export class InsoleRegistrationComponent implements OnInit {
   error: any;
   succes: any;
   fileName: any;
+  errorSubscription: Subscription | undefined;
 
 
   constructor(
@@ -34,7 +36,12 @@ export class InsoleRegistrationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.errorSubscription = this.insoleService.listenForError().subscribe(err => {
+      this.error = err;
+      this.progressbar = false;
+      this.fileName = undefined;
+      this.insoles = undefined;
+    });
   }
 
   get username() { return this.insoleForm.get('username'); }
@@ -47,6 +54,7 @@ export class InsoleRegistrationComponent implements OnInit {
   excelInputChange(fileEvent: any) {
     const file = fileEvent.target.files[0]
     if (!file) {
+      this.error = 'No selected file';
       throw new Error('No selected file')
     }
     this.insoles = this.excelService.fileUpload(file);
@@ -74,7 +82,7 @@ export class InsoleRegistrationComponent implements OnInit {
       password: this.password?.value,
       insoles: this.insoles
     }
-    this.insoleService.registerInsoles(insoleLogin).pipe(take(1)).subscribe(succes => {
+    this.insoleService.listenForInsoleRegistration(insoleLogin).pipe(take(1)).subscribe(succes => {
       this.progressbar = false
       this.insoles = undefined;
       this.insoleForm.reset();
@@ -82,6 +90,7 @@ export class InsoleRegistrationComponent implements OnInit {
       this.succes = succes;
     }, error => {
       this.error = error.message;
+      console.log(error.message);
       this.progressbar = false;
       this.fileName = undefined;
       this.insoles = undefined;
@@ -101,5 +110,9 @@ export class InsoleRegistrationComponent implements OnInit {
    */
   clearSucces() {
     this.succes = undefined
+  }
+
+  ngOnDestroy(): void {
+    this.errorSubscription?.unsubscribe()
   }
 }

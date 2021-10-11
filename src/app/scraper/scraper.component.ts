@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
 import {ExcelServices} from "../shared/service/excel.service";
 import {ScrapeDto} from "../shared/dto/scrape.dto";
-import {take} from "rxjs/operators";
+import {take, takeUntil} from "rxjs/operators";
 import {Subscription} from "rxjs";
 import {HultaforsDto} from "../shared/dto/hultafors.dto";
 import {SiteDto} from "../shared/dto/site.dto";
