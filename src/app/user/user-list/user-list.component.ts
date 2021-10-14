@@ -2,7 +2,6 @@ import {Component, OnInit,} from '@angular/core';
 import {UserDto} from "../../shared/dto/user.dto";
 import {UserService} from "../shared/user.service";
 import {take} from "rxjs/operators";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-list',
@@ -13,25 +12,25 @@ export class UserListComponent implements OnInit {
   typeofUsers: UserDto[] | undefined
   currentUser: UserDto | undefined
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService) {
+  }
 
   ngOnInit(): void {
-    this.userService.getUsers().pipe(take(1)).subscribe( succes => {
-      this.typeofUsers = succes;
+    this.userService.getUsers().pipe(take(1)).subscribe(succes => {
+      this.typeofUsers = succes.sort((a, b) => {
+        if (a.username < b.username) {
+          return -1;
+        }
+        if (a.username > b.username) {
+          return 1;
+        }
+        return 0
+      });
     });
 
     const u = localStorage.getItem('currentUser');
-    if(u) {
-      const m = JSON.parse(u);
-      this.currentUser = m.body;
+    if (u) {
+      this.currentUser = JSON.parse(u).body;
     }
-  }
-
-  /**
-   * navigates to user-detail for the chosen user
-   * @param user
-   */
-  goToUser(user: UserDto) {
-    this.router.navigate(['/user-detail']);
   }
 }

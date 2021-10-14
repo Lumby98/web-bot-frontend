@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatToolbarModule} from "@angular/material/toolbar";
@@ -88,4 +88,5 @@ const materialModules = [
     ...materialModules
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+}

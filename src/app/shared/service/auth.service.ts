@@ -12,7 +12,8 @@ import {UserDto} from "../dto/user.dto";
 })
 export class AuthService {
 
-  constructor(private http: HttpClient ) { }
+  constructor(private http: HttpClient) {
+  }
 
   /**
    * calls the api to handle login
@@ -25,17 +26,17 @@ export class AuthService {
         login, {observe: "response", withCredentials: true}
       )
       .pipe(
-      map(response => {
-        const token = this.doesHttpOnlyCookieExist('Authentication');
-        if(token) {
-          localStorage.setItem('currentUser', JSON.stringify(response));
-          return true;
-        } else {
-          throw new Error('wrong credentials (auth service)')
-        }
-      }), catchError( () => {
-        throw new Error('failed to login: wrong credentials');
-      }));
+        map(response => {
+          const token = this.doesHttpOnlyCookieExist('Authentication');
+          if (token) {
+            localStorage.setItem('currentUser', JSON.stringify(response));
+            return true;
+          } else {
+            throw new Error('wrong credentials (auth service)')
+          }
+        }), catchError(() => {
+          throw new Error('failed to login: wrong credentials');
+        }));
   }
 
   /**
@@ -56,7 +57,7 @@ export class AuthService {
    * calls the api to register a user
    * @param registerDto
    */
-  register(registerDto: RegisterDto): Observable<boolean>{
+  register(registerDto: RegisterDto): Observable<boolean> {
     return this.http
       .post<any>(
         environment.apiUrl + '/authentication/register',
@@ -67,31 +68,31 @@ export class AuthService {
         map(() => {
           const user = localStorage.getItem('currentUser')
           let m: any
-          if(user){
+          if (user) {
             m = JSON.parse(user)
             console.log(m);
           } else {
             throw new Error('could not create user')
           }
 
-      if(m.body.admin == 1) {
-        return true;
-      } else {
-        throw new Error('could not create user')
-      }
-    }), catchError(err => {
-      throw Error(err.message)
-    }));
+          if (m.body.admin == 1) {
+            return true;
+          } else {
+            throw new Error('could not create user')
+          }
+        }), catchError(err => {
+          throw Error(err.message)
+        }));
   }
 
   /**
    * calls the api to log out a user
    */
-  logout(): Observable<boolean>{
+  logout(): Observable<boolean> {
     try {
       const user = localStorage.getItem('currentUser');
       let m: UserDto
-      if(!user) {
+      if (!user) {
         throw new Error('could not logout');
       }
       m = JSON.parse(user);

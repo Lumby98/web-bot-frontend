@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../shared/service/auth.service";
 import {RegisterDto} from "../shared/dto/register.dto";
@@ -11,12 +11,23 @@ import {Router} from "@angular/router";
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
-  get username() { return this.registerForm.get('username'); }
-  get password() { return this.registerForm.get('password'); }
-  get role() { return this.registerForm.get('role'); }
+
+  get username() {
+    return this.registerForm.get('username');
+  }
+
+  get password() {
+    return this.registerForm.get('password');
+  }
+
+  get role() {
+    return this.registerForm.get('role');
+  }
+
   error: any | undefined;
   Roles: any = ["Standard", "Admin"];
   hide: any;
+
   constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router) {
     this.hide = true;
     this.registerForm = this.formBuilder.group({
@@ -33,7 +44,7 @@ export class RegisterComponent implements OnInit {
    * handles registration of a user
    */
   register() {
-    if(this.registerForm.invalid){
+    if (this.registerForm.invalid) {
       this.error = 'missing user information'
       return;
     }
@@ -53,7 +64,9 @@ export class RegisterComponent implements OnInit {
     this.auth.register(dto).subscribe(succes => {
       this.router.navigate(['/user-list']);
       this.error = undefined;
-    }, err => { this.error = err});
+    }, err => {
+      this.error = err
+    });
   }
 
   /**

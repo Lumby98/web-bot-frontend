@@ -1,11 +1,12 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { ScraperComponent } from './scraper.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {ScraperComponent} from './scraper.component';
 
-const routes: Routes = [{ path: '', component: ScraperComponent }];
+const routes: Routes = [{path: '', component: ScraperComponent}];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ScraperRoutingModule { }
+export class ScraperRoutingModule {
+}

@@ -24,7 +24,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
   errorSubscription: Subscription | undefined;
   data: HultaforsDto[] = [];
   sites: SiteDto[] = [];
-  selectedSite: SiteDto| undefined;
+  selectedSite: SiteDto | undefined;
 
   constructor(private formBuilder: FormBuilder,
               private scraperService: ScraperService,
@@ -38,15 +38,18 @@ export class ScraperComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.scraperForm.controls.username.disable();
+    this.scraperForm.controls.password.disable();
     this.errorSubscription = this.scraperService.listenForError().subscribe(err => {
       this.error = err;
-      this.progressbar = false;});
+      this.progressbar = false;
+    });
     this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
       for (const p of products) {
         this.data.push(p);
       }
     });
-    this.scraperService.getSites().pipe(take(1)).subscribe( sites => {
+    this.scraperService.getSites().pipe(take(1)).subscribe(sites => {
       for (const s of sites) {
         this.sites.push(s);
       }
@@ -56,8 +59,13 @@ export class ScraperComponent implements OnInit, OnDestroy {
     })
   }
 
-  get username() { return this.scraperForm.get('username'); }
-  get password() { return this.scraperForm.get('password'); }
+  get username() {
+    return this.scraperForm.get('username');
+  }
+
+  get password() {
+    return this.scraperForm.get('password');
+  }
 
   /**
    * gets the selected value of the dropdown menu
@@ -65,62 +73,63 @@ export class ScraperComponent implements OnInit, OnDestroy {
    */
   selectChangeHandler(event: MatSelectChange) {
     this.selectedSite = event.value;
+    this.scraperForm.controls.username.enable();
+    this.scraperForm.controls.password.enable();
   }
 
   /**
    * start scraping
    */
   scrape() {
-   try {
-     //checks if the from is valid
-     if(this.scraperForm.invalid || !this.selectedSite) {
-       throw new Error('missing information');
-     }
+    try {
+      //checks if the from is valid
+      if (this.scraperForm.invalid || !this.selectedSite) {
+        throw new Error('missing information');
+      }
 
-     this.progressbar = true;
-     const dto: ScrapeDto = {
-       username: this.username?.value,
-       password: this.password?.value,
-       website: this.selectedSite.name
-     }
-     //calls the scraper service to contact the backend
-     this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
-       this.succes = status.message;
-       if(status.sites.length < 2) {
-         let updateSite = this.sites.find(e => e.name === status.sites[0].name);
-         if (updateSite) {
-           let index = this.sites.indexOf(updateSite);
-           this.sites[index] = status.sites[0];
-         }
-       } else {
-         this.sites = status.sites;
-       }
-       if(dto.website == 'Hultafors') {
-         this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
-           for (const p of products) {
-             this.data.push(p);
-           }
-         });
-       }
-       this.progressbar = false;
-     }, error => {
+      this.progressbar = true;
+      const dto: ScrapeDto = {
+        username: this.username?.value,
+        password: this.password?.value,
+        website: this.selectedSite.name
+      }
+      //calls the scraper service to contact the backend
+      this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
+        this.succes = status.message;
+        if (status.sites.length < 2) {
+          let updateSite = this.sites.find(e => e.name === status.sites[0].name);
+          if (updateSite) {
+            let index = this.sites.indexOf(updateSite);
+            this.sites[index] = status.sites[0];
+          }
+        } else {
+          this.sites = status.sites;
+        }
+        if (dto.website == 'Hultafors') {
+          this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
+            for (const p of products) {
+              this.data.push(p);
+            }
+          });
+        }
+        this.progressbar = false;
+      }, error => {
         this.error = error.message;
         this.progressbar = false;
         throw Error(error);
       });
-     this.username?.reset();
-     this.password?.reset();
-   } catch (err) {
-     this.error = err.message;
-     this.progressbar = false;
-   }
+      this.username?.reset();
+      this.password?.reset();
+    } catch (err) {
+      this.error = err.message;
+      this.progressbar = false;
+    }
   }
 
   /**
    * gets a list of products
    */
-  fillList()
-  {
+  fillList() {
     if (!this.selectedSite) {
       throw new Error('Please select which source you want to get data from')
     }
@@ -134,8 +143,8 @@ export class ScraperComponent implements OnInit, OnDestroy {
         this.downloadFile(products);
       });
     } else {
-        const table = document.getElementById("hultaforsTable");
-        this.downloadFile(table);
+      const table = document.getElementById("hultaforsTable");
+      this.downloadFile(table);
 
     }
 

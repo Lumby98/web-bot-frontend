@@ -7,11 +7,12 @@ export class AuthGuard implements CanActivate {
 
 
   constructor(private router: Router,
-              private authService: AuthService) {}
+              private authService: AuthService) {
+  }
 
-  canActivate(){
+  canActivate() {
     //check to see if a user has a valid token
-    if(this.authService.isAuthenticated()) {
+    if (this.authService.isAuthenticated()) {
 
       //if they do, return and allow the user to load app
       return true;

@@ -1,14 +1,17 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 import {InsoleFromSheetDto} from "../dto/insole-from-sheet.dto";
+
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ExcelServices {
-  constructor() {}
+  constructor() {
+  }
 
   /**
    * creates excel file from a list of Neskrid products
@@ -56,7 +59,7 @@ export class ExcelServices {
   private static convertToBinary(excelBuffer: any) {
     const buf = new ArrayBuffer(excelBuffer.length);
     const view = new Uint8Array(buf);
-    for (let i=0; i<excelBuffer.length; i++) {
+    for (let i = 0; i < excelBuffer.length; i++) {
       view[i] = excelBuffer.charCodeAt(i) & 0xFF;
     }
     return buf;
@@ -82,19 +85,21 @@ export class ExcelServices {
       const first_sheet_name = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[first_sheet_name];
       const fileArr = XLSX.utils.sheet_to_json(worksheet, {raw: true});
-      fileArr.length = fileArr.length - 9;
       const parseArr = JSON.parse(JSON.stringify(fileArr));
-      parseArr.shift();
-      parseArr.shift();
 
+      //finds all the valid orders in the file
       for (let element of parseArr) {
         const keys = Object.keys(element);
-        const orderNumber = keys.find(v => { return v === '__EMPTY'});
-        const registrationCode = keys.find(v => { return v === '__EMPTY_5'});
-        if(orderNumber && registrationCode) {
+        const orderNumber = keys.find(v => {
+          return v === '__EMPTY'
+        });
+        const registrationCode = keys.find(v => {
+          return v === '__EMPTY_5'
+        });
+        if (orderNumber && registrationCode) {
           const insole: InsoleFromSheetDto = {
             orderNumber: element[orderNumber],
-            registrationCode: element[orderNumber]
+            registrationCode: element[registrationCode]
           };
           insoles.push(insole);
         }

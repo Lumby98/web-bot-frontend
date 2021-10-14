@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../shared/service/auth.service";
 import {take} from "rxjs/operators";
 import {UserDto} from "../shared/dto/user.dto";
@@ -10,6 +10,7 @@ import {UserDto} from "../shared/dto/user.dto";
 })
 export class HomeComponent implements OnInit {
   currentUser: UserDto | undefined;
+
   constructor(private auth: AuthService) {
     const user = localStorage.getItem('currentUser')
     if (user) {

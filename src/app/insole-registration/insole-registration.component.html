@@ -10,11 +10,12 @@
              accept=".xlsx"/>
       <button mat-flat-button color="primary" (click)="excelInput.click()">Choose Spreadsheet File (excel)</button>
     </mat-card-actions>
-    <div>
-      <a *ngIf="fileName">{{fileName}}</a>
+    <div *ngIf="insoles">
+      <a>insoles: </a>
+      <a *ngFor="let insole of insoles">{{insole.orderNumber}}, </a>
     </div>
     <form class="example-form" [formGroup]="insoleForm">
-      <mat-card-content >
+      <mat-card-content>
 
         <mat-form-field class=example-full-width>
           <input matInput placeholder="Username" formControlName="username">
@@ -28,9 +29,11 @@
       </mat-card-content>
     </form>
     <mat-card-actions>
-        <div fxLayoutGap="10px" fxLayoutAlign="center center">
-          <button mat-stroked-button color="primary" disabled="{{!insoles}}" (click)="registerInsole()">login & Register Insole</button>
-        </div>
+      <div fxLayoutGap="10px" fxLayoutAlign="center center">
+        <button mat-stroked-button color="primary" disabled="{{!insoles}}" (click)="registerInsole()">login & Register
+          Insole
+        </button>
+      </div>
     </mat-card-actions>
     <mat-card-footer>
       <mat-progress-bar mode="indeterminate" *ngIf="progressbar"></mat-progress-bar>

@@ -9,7 +9,8 @@
   </span>
   <span class="fill-remaining-space"></span>
   <span>
-    <a mat-button routerLink="/user-detail/{{currentUser.id}}" *ngIf="loggedIn() && currentUser">Hi {{currentUser.username}}!</a>
+    <a mat-button routerLink="/user-detail/{{currentUser.id}}"
+       *ngIf="loggedIn() && currentUser">Hi {{currentUser.username}}!</a>
     <a mat-button routerLink="/login" *ngIf="!loggedIn()">Log In</a>
     <a mat-button (click)="logout()" *ngIf="loggedIn()">Log out</a>
   </span>

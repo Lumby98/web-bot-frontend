@@ -1,4 +1,4 @@
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="!edit && chosenUser" >
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="!edit && chosenUser">
   <mat-card class="box" [class.mat-elevation-z10]="true">
     <mat-card-header>
       <mat-card-title>User: {{chosenUser.username}}</mat-card-title>
@@ -24,10 +24,10 @@
 
     <mat-card-actions>
 
-        <div fxLayoutGap="10px" fxLayoutAlign="center center">
-          <button mat-raised-button color="primary" (click)="editStart()" *ngIf="currentUser?.admin == 1">Edit</button>
-          <button mat-raised-button color="warn" (click)="removeUser()" *ngIf="currentUser?.admin == 1">Remove</button>
-        </div>
+      <div fxLayoutGap="10px" fxLayoutAlign="center center" *ngIf="currentUser">
+        <button mat-raised-button color="primary" (click)="editStart()" *ngIf="currentUser.admin == 1">Edit</button>
+        <button mat-raised-button color="warn" (click)="removeUser()" *ngIf="currentUser.admin == 1">Remove</button>
+      </div>
 
     </mat-card-actions>
 

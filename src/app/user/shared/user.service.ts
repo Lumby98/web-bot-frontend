@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {UserDto} from "../../shared/dto/user.dto";
 import {environment} from "../../../environments/environment";
@@ -10,7 +10,8 @@ import {EditUserDto} from "../../shared/dto/edit-user.dto";
 })
 export class UserService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   /**
    * calls the api the get all users

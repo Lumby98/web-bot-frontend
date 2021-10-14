@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
 import {RegisterInsoleDto} from "../../shared/dto/register-insole.dto";
@@ -10,7 +10,8 @@ import {Socket} from "ngx-socket-io";
 })
 export class InsoleService {
 
-  constructor(private http: HttpClient,private socket: Socket) { }
+  constructor(private http: HttpClient, private socket: Socket) {
+  }
 
   /**
    * calls the api to register insoles
@@ -18,7 +19,7 @@ export class InsoleService {
    * @param insoles
    */
   registerInsoles(insoles: RegisterInsoleDto) {
-    return this.http.post(environment.apiUrl  + '/insole', insoles, {responseType: "text"});
+    return this.http.post(environment.apiUrl + '/insole', insoles, {responseType: "text"});
   }
 
   public listenForInsoleRegistration(dto: RegisterInsoleDto): Observable<string> {

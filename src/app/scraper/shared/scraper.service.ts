@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {NeskridDto} from "../../shared/dto/neskrid.dto";
@@ -16,7 +16,8 @@ import {ReturnStrapeDto} from "../../shared/dto/return-strape.dto";
 export class ScraperService {
   timeout = 300000; //5min in milliseconds
 
-  constructor(private http: HttpClient, private socket: Socket) { }
+  constructor(private http: HttpClient, private socket: Socket) {
+  }
 
   /**
    * contacts the backend to start scraping with http requests

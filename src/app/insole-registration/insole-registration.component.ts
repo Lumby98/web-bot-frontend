@@ -19,7 +19,6 @@ export class InsoleRegistrationComponent implements OnInit, OnDestroy {
   progressbar: boolean = false;
   error: any;
   succes: any;
-  fileName: any;
   errorSubscription: Subscription | undefined;
 
 
@@ -36,16 +35,23 @@ export class InsoleRegistrationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.insoleForm.disable();
     this.errorSubscription = this.insoleService.listenForError().subscribe(err => {
       this.error = err;
       this.progressbar = false;
-      this.fileName = undefined;
       this.insoles = undefined;
+      this.insoleForm.reset();
+      this.insoleForm.disable();
     });
   }
 
-  get username() { return this.insoleForm.get('username'); }
-  get password() { return this.insoleForm.get('password'); }
+  get username() {
+    return this.insoleForm.get('username');
+  }
+
+  get password() {
+    return this.insoleForm.get('password');
+  }
 
   /**
    * gets data from excel file
@@ -58,7 +64,7 @@ export class InsoleRegistrationComponent implements OnInit, OnDestroy {
       throw new Error('No selected file')
     }
     this.insoles = this.excelService.fileUpload(file);
-    this.fileName = file.name;
+    this.insoleForm.enable();
     console.log(this.insoles);
   }
 
@@ -86,14 +92,8 @@ export class InsoleRegistrationComponent implements OnInit, OnDestroy {
       this.progressbar = false
       this.insoles = undefined;
       this.insoleForm.reset();
-      this.fileName = undefined;
+      this.insoleForm.disable();
       this.succes = succes;
-    }, error => {
-      this.error = error.message;
-      console.log(error.message);
-      this.progressbar = false;
-      this.fileName = undefined;
-      this.insoles = undefined;
     });
 
   }

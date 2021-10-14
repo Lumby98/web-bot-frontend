@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ConfirmDialogService} from "../../shared/confirm-dialog/confirm-dialog.service";
 import {UserService} from "../shared/user.service";
 import {UserDto} from "../../shared/dto/user.dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {EditUserDto} from "../../shared/dto/edit-user.dto";
 import {take} from "rxjs/operators";
 
@@ -18,18 +18,43 @@ export class UserDetailComponent implements OnInit {
   admin: any;
   edit: boolean = false;
   editForm: FormGroup;
-  get username() { return this.editForm.get('username'); }
-  get password() { return this.editForm.get('password'); }
-  get role() { return this.editForm.get('role'); }
+
+  get username() {
+    return this.editForm.get('username');
+  }
+
+  get password() {
+    return this.editForm.get('password');
+  }
+
+  get role() {
+    return this.editForm.get('role');
+  }
+
   error: any | undefined;
   Roles: any = ["Standard", "Admin"];
   hide: any;
+
   constructor(
     private dialogService: ConfirmDialogService,
     private userService: UserService,
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute) {
+
+    // override the route reuse strategy
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    }
+
+    this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        // trick the Router into believing it's last link wasn't previously loaded
+        this.router.navigated = false;
+        // if you need to scroll back to top, here is the right place
+        window.scrollTo(0, 0);
+      }
+    });
 
     this.hide = true;
     this.editForm = this.editForm = this.formBuilder.group({
@@ -43,7 +68,7 @@ export class UserDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.userService.userById(+id).pipe(take(1)).subscribe(u => {
-        if(u) {
+        if (u) {
           this.chosenUser = u
         } else {
           throw new Error('failed to find user')
@@ -59,9 +84,9 @@ export class UserDetailComponent implements OnInit {
         this.role?.setValue(this.Roles[this.chosenUser.admin]);
       })
     }
-   const user = localStorage.getItem('currentUser')
+    const user = localStorage.getItem('currentUser')
     if (user) {
-      this.currentUser = JSON.parse(user);
+      this.currentUser = JSON.parse(user).body;
     }
   }
 
@@ -78,14 +103,16 @@ export class UserDetailComponent implements OnInit {
       return;
     }
 
-    const options = {title: 'Remove user?',
+    const options = {
+      title: 'Remove user?',
       message: 'Removing a user is permanent and they cannot be restored',
       cancelText: 'Cancel',
-      confirmText: 'Yes, remove user'}
+      confirmText: 'Yes, remove user'
+    }
     this.dialogService.open(options);
 
     this.dialogService.confirmed().subscribe(confirmed => {
-      if(confirmed){
+      if (confirmed) {
         if (!this.chosenUser) {
           this.error = 'failed to remove user';
           return;
@@ -103,7 +130,7 @@ export class UserDetailComponent implements OnInit {
    * updates a user
    */
   updateUser() {
-    if(this.editForm.invalid) {
+    if (this.editForm.invalid) {
       this.error = 'need more details, username and admin cannot be blank'
     }
     let a;
@@ -117,15 +144,15 @@ export class UserDetailComponent implements OnInit {
       password: this.password?.value,
       admin: a
     };
-    if(!this.chosenUser) {
+    if (!this.chosenUser) {
       this.error = 'failed to update user';
       throw new Error('failed to update user');
     }
     this.userService.editUser(this.chosenUser?.username, userToEdit).subscribe(succes => {
-      console.log(succes)
-      this.router.navigate(['/user-list']);
-    }, error => {
-      this.error = error.error.message;
+        console.log(succes)
+        this.router.navigate(['/user-list']);
+      }, error => {
+        this.error = error.error.message;
         throw error;
       }
     );
@@ -152,7 +179,7 @@ export class UserDetailComponent implements OnInit {
    * enables editing
    */
   editStart(): void {
-    if(!this.chosenUser) {
+    if (!this.chosenUser) {
       this.error = 'no user to edit';
       throw new Error('no user');
     }

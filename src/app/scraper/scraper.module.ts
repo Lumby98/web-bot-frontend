@@ -1,9 +1,9 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { ScraperRoutingModule } from './scraper-routing.module';
-import { ScraperComponent } from './scraper.component';
-import { SharedModule } from "../shared/shared.module";
+import {ScraperRoutingModule} from './scraper-routing.module';
+import {ScraperComponent} from './scraper.component';
+import {SharedModule} from "../shared/shared.module";
 import {ExcelServices} from "../shared/service/excel.service";
 
 
@@ -11,7 +11,7 @@ import {ExcelServices} from "../shared/service/excel.service";
   declarations: [
     ScraperComponent
   ],
-  providers:[ExcelServices],
+  providers: [ExcelServices],
   imports: [
     CommonModule,
     ScraperRoutingModule,

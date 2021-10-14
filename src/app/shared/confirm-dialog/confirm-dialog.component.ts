@@ -1,17 +1,19 @@
 import {ChangeDetectionStrategy, Component, HostListener, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
   styles: [`
-  .header, .dialog-message {
+    .header, .dialog-message {
       text-transform: lowercase;
-  }
-  .header::first-letter, .dialog-message::first-letter {
+    }
+
+    .header::first-letter, .dialog-message::first-letter {
       text-transform: uppercase;
-  }
-`]
+    }
+  `]
 
 })
 
@@ -21,7 +23,8 @@ export class ConfirmDialogComponent {
     confirmText: string,
     message: string,
     title: string
-  }, private mdDialogRef: MatDialogRef<ConfirmDialogComponent>){}
+  }, private mdDialogRef: MatDialogRef<ConfirmDialogComponent>) {
+  }
 
   public cancel() {
     this.close(false);
@@ -30,9 +33,11 @@ export class ConfirmDialogComponent {
   public close(value: boolean) {
     this.mdDialogRef.close(value);
   }
+
   public confirm() {
     this.close(true);
   }
+
   @HostListener("keydown.esc")
   public onEsc() {
     this.close(false);
