@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../shared/service/auth.service";
+import {AuthService} from "../../../core/services/auth.service";
 import {take} from "rxjs/operators";
-import {UserDto} from "../shared/dto/user.dto";
+import {UserDto} from "../../../dto/user.dto";
 
 @Component({
   selector: 'app-home',

@@ -3,8 +3,8 @@ import {CommonModule} from '@angular/common';
 
 import {ScraperRoutingModule} from './scraper-routing.module';
 import {ScraperComponent} from './scraper.component';
-import {SharedModule} from "../shared/shared.module";
-import {ExcelServices} from "../shared/service/excel.service";
+import {SharedModule} from "../SharedModule/shared.module";
+import {ExcelServices} from "../SharedModule/core/services/excel.service";
 
 
 @NgModule({

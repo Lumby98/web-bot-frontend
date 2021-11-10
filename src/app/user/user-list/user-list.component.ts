@@ -1,5 +1,5 @@
 import {Component, OnInit,} from '@angular/core';
-import {UserDto} from "../../shared/dto/user.dto";
+import {UserDto} from "../../SharedModule/dto/user.dto";
 import {UserService} from "../shared/user.service";
 import {take} from "rxjs/operators";
 

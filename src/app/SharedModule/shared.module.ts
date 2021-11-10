@@ -36,6 +36,10 @@ import {MatDividerModule} from "@angular/material/divider";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatDialogModule} from "@angular/material/dialog";
+import {HomeComponent} from "./presentation/containers/home/home.component";
+import {LoginComponent} from "./presentation/containers/login/login.component";
+import {AppRoutingModule} from "../app-routing.module";
+import {RouterModule} from "@angular/router";
 
 const materialModules = [
   CdkTreeModule,
@@ -75,14 +79,17 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [HomeComponent,LoginComponent],
   imports: [
+    RouterModule,
     CommonModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     ...materialModules
   ],
   exports: [
+    HomeComponent,
+    LoginComponent,
     FlexLayoutModule,
     ReactiveFormsModule,
     ...materialModules

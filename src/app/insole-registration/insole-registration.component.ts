@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ExcelServices} from "../shared/service/excel.service";
+import {ExcelServices} from "../SharedModule/core/services/excel.service";
 import {InsoleService} from "./shared/insole.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {InsoleFromSheetDto} from "../shared/dto/insole-from-sheet.dto";
-import {RegisterInsoleDto} from "../shared/dto/register-insole.dto";
+import {InsoleFromSheetDto} from "../SharedModule/dto/insole-from-sheet.dto";
+import {RegisterInsoleDto} from "../SharedModule/dto/register-insole.dto";
 import {take} from "rxjs/operators";
 import {Subscription} from "rxjs";
 

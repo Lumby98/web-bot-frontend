@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {HomeComponent} from "./home/home.component";
-import {LoginComponent} from "./login/login.component";
+import {HomeComponent} from "./SharedModule/presentation/containers/home/home.component";
+import {LoginComponent} from "./SharedModule/presentation/containers/login/login.component";
 import {RegisterComponent} from "./register/register.component";
-import {AuthGuard} from "./shared/guard/auth.guard";
+import {AuthGuard} from "./SharedModule/core/guards/auth.guard";
 import {UserListComponent} from "./user/user-list/user-list.component";
 import {UserDetailComponent} from "./user/user-detail/user-detail.component";
 import {InsoleRegistrationComponent} from "./insole-registration/insole-registration.component";

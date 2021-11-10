@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^12.2.6",
     "@angular/platform-browser-dynamic": "^12.2.6",
     "@angular/router": "^12.2.6",
+    "@ngxs/logger-plugin": "^3.7.2",
     "@ngxs/store": "^3.7.2",
     "file-saver": "^2.0.5",
     "ngx-socket-io": "^3.2.0",

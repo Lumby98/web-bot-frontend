@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ConfirmDialogService} from "../../shared/confirm-dialog/confirm-dialog.service";
+import {ConfirmDialogService} from "../../SharedModule/presentation/components/confirm-dialog/confirm-dialog.service";
 import {UserService} from "../shared/user.service";
-import {UserDto} from "../../shared/dto/user.dto";
+import {UserDto} from "../../SharedModule/dto/user.dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {EditUserDto} from "../../shared/dto/edit-user.dto";
+import {EditUserDto} from "../../SharedModule/dto/edit-user.dto";
 import {take} from "rxjs/operators";
 
 @Component({

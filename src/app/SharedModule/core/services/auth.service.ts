@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {LoginDto} from "../dto/login.dto";
-import {RegisterDto} from "../dto/register.dto";
+import {LoginDto} from "../models/login.dto";
+import {RegisterDto} from "../../dto/register.dto";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {catchError, map} from "rxjs/operators";
-import {environment} from "../../../environments/environment";
-import {UserDto} from "../dto/user.dto";
+import {environment} from "../../../../environments/environment";
+import {UserDto} from "../../dto/user.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class AuthService {
             localStorage.setItem('currentUser', JSON.stringify(response));
             return true;
           } else {
-            throw new Error('wrong credentials (auth service)')
+            throw new Error('wrong credentials (auth services)')
           }
         }), catchError(() => {
           throw new Error('failed to login: wrong credentials');
@@ -124,5 +124,15 @@ export class AuthService {
     return this.doesHttpOnlyCookieExist('Authentication');
 
 
+  }
+
+  GetCurrentUserFromLocalStorage() : UserDto | null{
+    const user = localStorage.getItem('currentUser')
+    if (user) {
+      const m = JSON.parse(user);
+      return m.body;
+    }
+
+    return null;
   }
 }

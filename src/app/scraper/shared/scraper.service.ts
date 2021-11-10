@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {NeskridDto} from "../../shared/dto/neskrid.dto";
+import {NeskridDto} from "../../SharedModule/dto/neskrid.dto";
 import {environment} from "../../../environments/environment";
-import {ScrapeDto} from "../../shared/dto/scrape.dto";
+import {ScrapeDto} from "../../SharedModule/dto/scrape.dto";
 import {catchError, map, timeout} from "rxjs/operators";
 import {Socket} from "ngx-socket-io";
-import {HultaforsDto} from "../../shared/dto/hultafors.dto";
-import {SiteDto} from "../../shared/dto/site.dto";
-import {ReturnStrapeDto} from "../../shared/dto/return-strape.dto";
+import {HultaforsDto} from "../../SharedModule/dto/hultafors.dto";
+import {SiteDto} from "../../SharedModule/dto/site.dto";
+import {ReturnStrapeDto} from "../../SharedModule/dto/return-strape.dto";
 
 @Injectable({
   providedIn: 'root'

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../shared/service/auth.service";
+import {AuthService} from "../../../core/services/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {LoginDto} from "../shared/dto/login.dto";
+import {LoginDto} from "../../../core/models/login.dto";
 import {Router} from "@angular/router";
 
 @Component({

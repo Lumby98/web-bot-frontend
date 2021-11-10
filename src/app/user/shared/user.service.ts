@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import {UserDto} from "../../shared/dto/user.dto";
+import {UserDto} from "../../SharedModule/dto/user.dto";
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {EditUserDto} from "../../shared/dto/edit-user.dto";
+import {EditUserDto} from "../../SharedModule/dto/edit-user.dto";
 
 @Injectable({
   providedIn: 'root'

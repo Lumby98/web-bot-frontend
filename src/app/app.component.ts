@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {Router} from "@angular/router";
-import {AuthService} from "./shared/service/auth.service";
+import {AuthService} from "./SharedModule/core/services/auth.service";
 import {take} from "rxjs/operators";
-import {UserDto} from "./shared/dto/user.dto";
+import {UserDto} from "./SharedModule/dto/user.dto";
 
 @Component({
   selector: 'app-root',

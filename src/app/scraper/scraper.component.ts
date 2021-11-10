@@ -1,12 +1,12 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ScraperService} from "./shared/scraper.service";
-import {ExcelServices} from "../shared/service/excel.service";
-import {ScrapeDto} from "../shared/dto/scrape.dto";
+import {ExcelServices} from "../SharedModule/core/services/excel.service";
+import {ScrapeDto} from "../SharedModule/dto/scrape.dto";
 import {take, takeUntil} from "rxjs/operators";
 import {Subscription} from "rxjs";
-import {HultaforsDto} from "../shared/dto/hultafors.dto";
-import {SiteDto} from "../shared/dto/site.dto";
+import {HultaforsDto} from "../SharedModule/dto/hultafors.dto";
+import {SiteDto} from "../SharedModule/dto/site.dto";
 import {MatSelectChange} from "@angular/material/select";
 
 @Component({
@@ -93,7 +93,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
         password: this.password?.value,
         website: this.selectedSite.name
       }
-      //calls the scraper service to contact the backend
+      //calls the scraper services to contact the backend
       this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
         this.succes = status.message;
         if (status.sites.length < 2) {
