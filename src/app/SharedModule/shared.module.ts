@@ -40,6 +40,8 @@ import {HomeComponent} from "./presentation/containers/home/home.component";
 import {LoginComponent} from "./presentation/containers/login/login.component";
 import {AppRoutingModule} from "../app-routing.module";
 import {RouterModule} from "@angular/router";
+import {NgxsModule} from "@ngxs/store";
+import {AuthState} from "./core/state/auth/auth.state";
 
 const materialModules = [
   CdkTreeModule,
@@ -85,6 +87,7 @@ const materialModules = [
     CommonModule,
     FlexLayoutModule,
     ReactiveFormsModule,
+    NgxsModule.forFeature([AuthState]),
     ...materialModules
   ],
   exports: [
