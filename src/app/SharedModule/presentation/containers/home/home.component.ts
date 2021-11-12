@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {UserDto} from "../../../dto/user.dto";
+import {UserDto} from "../../../../user/core/models/user.dto";
 import {AuthFacade} from "../../../abstraction/auth.facade";
 
 @Component({

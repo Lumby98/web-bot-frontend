@@ -9,11 +9,11 @@ import {SharedModule} from "./SharedModule/shared.module";
 import {HomeComponent} from './SharedModule/presentation/containers/home/home.component';
 import {LoginComponent} from "./SharedModule/presentation/containers/login/login.component";
 import {ReactiveFormsModule} from "@angular/forms";
-import {RegisterComponent} from './register/register.component';
+import {RegisterComponent} from './user/presentation/components/register/register.component';
 import {AuthGuard} from "./SharedModule/core/guards/auth.guard";
 import {AuthService} from "./SharedModule/core/services/auth.service";
-import {UserListComponent} from './user/user-list/user-list.component';
-import {UserDetailComponent} from './user/user-detail/user-detail.component';
+import {UserListComponent} from './user/presentation/components/user-list/user-list.component';
+import {UserDetailComponent} from './user/presentation/components/user-detail/user-detail.component';
 import {ConfirmDialogService} from "./SharedModule/presentation/components/confirm-dialog/confirm-dialog.service";
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {environment} from "../environments/environment";
@@ -21,18 +21,17 @@ import {InsoleRegistrationComponent} from './insole-registration/insole-registra
 import {NgxsModule} from "@ngxs/store";
 import {NgxsLoggerPluginModule} from "@ngxs/logger-plugin";
 import {AuthFacade} from "./SharedModule/abstraction/auth.facade";
+import {UserModule} from "./user/user.module";
 
 const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: ['websocket'], upgrade: false}};
 
 @NgModule({
   declarations: [
     AppComponent,
-    RegisterComponent,
-    UserListComponent,
-    UserDetailComponent,
     InsoleRegistrationComponent,
   ],
   imports: [
+    UserModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

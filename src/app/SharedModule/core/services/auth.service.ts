@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {LoginDto} from "../models/login.dto";
-import {RegisterDto} from "../../dto/register.dto";
+import {RegisterDto} from "../../../user/core/models/register.dto";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {catchError, map} from "rxjs/operators";
 import {environment} from "../../../../environments/environment";
-import {UserDto} from "../../dto/user.dto";
+import {UserDto} from "../../../user/core/models/user.dto";
 
 @Injectable({
   providedIn: 'root'

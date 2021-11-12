@@ -1,6 +1,6 @@
 import {Component, OnInit,} from '@angular/core';
-import {UserDto} from "../../SharedModule/dto/user.dto";
-import {UserService} from "../shared/user.service";
+import {UserDto} from "../../../core/models/user.dto";
+import {UserService} from "../../../core/services/user.service";
 import {take} from "rxjs/operators";
 
 @Component({

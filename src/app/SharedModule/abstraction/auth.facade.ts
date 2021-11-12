@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {AuthService} from "../core/services/auth.service";
-import {UserDto} from "../dto/user.dto";
+import {UserDto} from "../../user/core/models/user.dto";
 import {take} from "rxjs/operators";
 import {Store} from "@ngxs/store";
 import {ClearError, UpdateError} from "../core/state/auth/auth.actions";
