@@ -20,6 +20,7 @@ import {environment} from "../environments/environment";
 import {InsoleRegistrationComponent} from './insole-registration/insole-registration.component';
 import {NgxsModule} from "@ngxs/store";
 import {NgxsLoggerPluginModule} from "@ngxs/logger-plugin";
+import {AuthFacade} from "./SharedModule/abstraction/auth.facade";
 
 const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: ['websocket'], upgrade: false}};
 
@@ -45,6 +46,7 @@ const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: [
     NgxsLoggerPluginModule.forRoot(),
   ],
   providers: [
+    AuthFacade,
     AuthGuard,
     AuthService,
     ConfirmDialogService,

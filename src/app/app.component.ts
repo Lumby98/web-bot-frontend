@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {AuthService} from "./SharedModule/core/services/auth.service";
 import {take} from "rxjs/operators";
 import {UserDto} from "./SharedModule/dto/user.dto";
+import {AuthFacade} from "./SharedModule/abstraction/auth.facade";
 
 @Component({
   selector: 'app-root',
@@ -14,24 +15,17 @@ export class AppComponent {
   currentUser: UserDto | undefined
 
   constructor(private router: Router,
-              private authService: AuthService,
+              private authFacade: AuthFacade
   ) {
-    const user = localStorage.getItem('currentUser')
-    if (user) {
-      const m = JSON.parse(user);
-      this.currentUser = m.body;
+    this.currentUser = authFacade.getLocalUser()
     }
-  }
 
   /**
    * handles logout
    */
   logout() {
-    this.authService.logout().pipe(take(1)).subscribe(() => {
-      this.error = undefined;
-    }, err => {
-      this.error = err
-    });
+    this.authFacade.logOut();
+    this.error = this.authFacade.getError();
     this.router.navigate(['/home']);
   }
 
@@ -39,11 +33,7 @@ export class AppComponent {
    * checks if a user is logged in
    */
   loggedIn() {
-    const user = localStorage.getItem('currentUser')
-    if (user) {
-      const m = JSON.parse(user);
-      this.currentUser = m.body;
-    }
-    return this.authService.isAuthenticated();
+    this.currentUser = this.authFacade.getLocalUser()
+    return this.authFacade.isAuthenticated()
   }
 }

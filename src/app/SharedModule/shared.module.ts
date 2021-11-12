@@ -42,6 +42,7 @@ import {AppRoutingModule} from "../app-routing.module";
 import {RouterModule} from "@angular/router";
 import {NgxsModule} from "@ngxs/store";
 import {AuthState} from "./core/state/auth/auth.state";
+import {AuthFacade} from "./abstraction/auth.facade";
 
 const materialModules = [
   CdkTreeModule,

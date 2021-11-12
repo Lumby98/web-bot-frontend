@@ -126,13 +126,13 @@ export class AuthService {
 
   }
 
-  GetCurrentUserFromLocalStorage() : UserDto | null{
+  GetCurrentUserFromLocalStorage() : UserDto | undefined{
     const user = localStorage.getItem('currentUser')
     if (user) {
       const m = JSON.parse(user);
       return m.body;
     }
 
-    return null;
+    return undefined;
   }
 }
