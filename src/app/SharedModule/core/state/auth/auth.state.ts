@@ -1,6 +1,7 @@
 import {Action, State, Selector, StateContext} from '@ngxs/store';
 import {Injectable} from "@angular/core";
 import {ClearError, UpdateError} from "./auth.actions";
+import {UpdateUser} from "../../../../user/core/state/users.actions";
 
 export interface AuthStateModel{
   error: any;

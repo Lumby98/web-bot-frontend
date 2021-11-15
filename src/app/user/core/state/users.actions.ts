@@ -8,9 +8,16 @@ export class UpdateUserStore{
 
 }
 
+export class ClearUserStore{
+
+  static readonly type = '[user] Clear users'
+
+}
+
+
 export class AddUser{
 
-  constructor(public users: UserDto) {}
+  constructor(public user: UserDto) {}
   static readonly type = '[user] add user'
 
 }
@@ -18,14 +25,14 @@ export class AddUser{
 
 export class UpdateUser{
 
-  constructor(public users: EditUserDto) {}
+  constructor(public user: UserDto) {}
   static readonly type = '[user] update user'
 
 }
 
 export class DeleteUser{
 
-  constructor(public users: UserDto) {}
+  constructor(public user: UserDto) {}
   static readonly type = '[user] delete user'
 
 }
