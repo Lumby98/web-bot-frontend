@@ -121,10 +121,15 @@ export class UserDetailComponent implements OnInit {
           this.error = 'failed to remove user';
           return;
         }
+        /**
         this.userService.removeUser(this.chosenUser).subscribe(succes => {
           console.log(succes);
           this.router.navigate(['/user-list']);
         });
+         */
+        
+        this.userFacade.deleteUser(this.chosenUser)
+
       }
     });
 
