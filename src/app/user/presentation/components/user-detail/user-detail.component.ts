@@ -83,6 +83,8 @@ export class UserDetailComponent implements OnInit {
         this.username?.setValue(this.chosenUser.username);
         this.role?.setValue(this.Roles[this.chosenUser.admin]);
       })
+
+
     }
     const user = localStorage.getItem('currentUser')
     if (user) {
