@@ -6,6 +6,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {EditUserDto} from "../../../core/models/edit-user.dto";
 import {take} from "rxjs/operators";
+import {UserFacade} from "../../../abstraction/user.facade";
+import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
 
 @Component({
   selector: 'app-user-detail',
@@ -40,7 +42,10 @@ export class UserDetailComponent implements OnInit {
     private userService: UserService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private userFacade: UserFacade,
+    private auth: AuthFacade
+  ) {
 
     // override the route reuse strategy
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
@@ -67,7 +72,7 @@ export class UserDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.userService.userById(+id).pipe(take(1)).subscribe(u => {
+      /** this.userService.userById(+id).pipe(take(1)).subscribe(u => {
         if (u) {
           this.chosenUser = u
         } else {
@@ -79,17 +84,33 @@ export class UserDetailComponent implements OnInit {
         } else {
           this.admin = 'no'
         }
+        this.username?.setValue(this.chosenUser.username);
+        this.role?.setValue(this.Roles[this.chosenUser.admin]);
+      }) */
+      this.userFacade.getUserByIdFromApi(+id)
+      this.userFacade.getUserById(+id).pipe(take(1)).subscribe(u => {
+        if (u) {
+          this.chosenUser = u
+        } else {
+          throw new Error('failed to find user')
+        }
 
+        if (this.chosenUser.admin == 1) {
+          this.admin = 'yes'
+        } else {
+          this.admin = 'no'
+        }
         this.username?.setValue(this.chosenUser.username);
         this.role?.setValue(this.Roles[this.chosenUser.admin]);
       })
 
 
     }
-    const user = localStorage.getItem('currentUser')
+    this.currentUser = this.auth.getLocalUser()
+    /** const user = localStorage.getItem('currentUser')
     if (user) {
       this.currentUser = JSON.parse(user).body;
-    }
+    } */
   }
 
   /**
