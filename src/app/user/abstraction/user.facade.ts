@@ -4,7 +4,7 @@ import {Store} from "@ngxs/store";
 import {Router} from "@angular/router";
 import {UserService} from "../core/services/user.service";
 import {RegisterDto} from "../core/models/register.dto";
-import {ClearUserError, InsertOrUpdateUser, UpdateUserError} from "../core/state/users.actions";
+import {ClearUserError, DeleteUser, InsertOrUpdateUser, UpdateUserError} from "../core/state/users.actions";
 import {UserState} from "../core/state/users.state";
 import {take, tap} from "rxjs/operators";
 import {Observable, Subscription} from "rxjs";
@@ -50,5 +50,15 @@ export class UserFacade {
 
   getUserById(id: number): Observable<UserDto | undefined> {
     return this.store.select(UserState.user(id))
+  }
+
+  deleteUser(user: UserDto) {
+    this.store.dispatch(new DeleteUser(user))
+    this.userService.removeUser(user).subscribe(success => {
+      this.router.navigate(['/user-list']);
+    },
+      (error: any) => {this.updateError(error);
+      this.store.dispatch(new InsertOrUpdateUser(user))});
+
   }
 }
