@@ -24,8 +24,6 @@ export class UserFacade {
     });
   }
 
-
-
   getError(): any {
     return this.store.selectOnce(UserState.errorSelector);
   }
@@ -51,4 +49,6 @@ export class UserFacade {
   getUserById(id: number): Observable<UserDto | undefined> {
     return this.store.select(UserState.user(id))
   }
+
+
 }
