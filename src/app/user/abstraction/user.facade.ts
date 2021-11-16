@@ -9,6 +9,7 @@ import {UserState} from "../core/state/users.state";
 import {take, tap} from "rxjs/operators";
 import {Observable, Subscription} from "rxjs";
 import {UserDto} from "../core/models/user.dto";
+import {EditUserDto} from "../core/models/edit-user.dto";
 
 @Injectable()
 export class UserFacade {
@@ -52,11 +53,23 @@ export class UserFacade {
 
   deleteUser(user: UserDto) {
     this.store.dispatch(new DeleteUser(user))
-    this.userService.removeUser(user).subscribe(success => {
+    this.userService.removeUser(user).subscribe(succes => {
       this.router.navigate(['/user-list']);
     },
       (error: any) => {this.updateError(error);
       this.store.dispatch(new InsertOrUpdateUser(user))});
 
   }
+
+  updateUser(user: UserDto, editedUser: EditUserDto) {
+    this.store.dispatch(new InsertOrUpdateUser({id: user.id, admin: editedUser.admin, username: editedUser.username}))
+    this.userService.editUser(user.username, editedUser).subscribe(succes => {
+      console.log(succes)
+      this.router.navigate(['/user-list']);
+    }, error => {
+      this.store.dispatch(new UpdateUserError(error.error))
+      this.store.dispatch(new InsertOrUpdateUser(user))});
+    })
+  }
+
 }

@@ -21,6 +21,7 @@ export class UserDetailComponent implements OnInit {
   edit: boolean = false;
   editForm: FormGroup;
 
+
   get username() {
     return this.editForm.get('username');
   }
@@ -134,6 +135,7 @@ export class UserDetailComponent implements OnInit {
   updateUser() {
     if (this.editForm.invalid) {
       this.error = 'need more details, username and admin cannot be blank'
+      this.userFacade.updateError(this.error)
     }
     let a;
     if (this.role?.value == 'Admin') {
@@ -148,17 +150,18 @@ export class UserDetailComponent implements OnInit {
     };
     if (!this.chosenUser) {
       this.error = 'failed to update user';
+      this.userFacade.updateError(this.error)
       throw new Error('failed to update user');
     }
-    this.userService.editUser(this.chosenUser?.username, userToEdit).subscribe(succes => {
+   /** this.userService.editUser(this.chosenUser?.username, userToEdit).subscribe(succes => {
         console.log(succes)
         this.router.navigate(['/user-list']);
       }, error => {
         this.error = error.error.message;
         throw error;
       }
-    );
-
+    ); */
+    this.userFacade.updateUser(this.chosenUser, userToEdit)
   }
 
   /**
