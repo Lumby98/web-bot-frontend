@@ -6,8 +6,8 @@ import {UserService} from "../core/services/user.service";
 import {RegisterDto} from "../core/models/register.dto";
 import {ClearUserError, InsertOrUpdateUser, UpdateUserError} from "../core/state/users.actions";
 import {UserState} from "../core/state/users.state";
-import {take} from "rxjs/operators";
-import {Observable} from "rxjs";
+import {take, tap} from "rxjs/operators";
+import {Observable, Subscription} from "rxjs";
 import {UserDto} from "../core/models/user.dto";
 
 @Injectable()
@@ -38,14 +38,14 @@ export class UserFacade {
     this.store.dispatch(new UpdateUserError(error));
   }
 
-  getUserByIdFromApi(id: number){
-    this.userService.userById(id).pipe(take(1)).subscribe(u => {
+  getUserByIdFromApi(id: number) : Observable<UserDto>{
+    return this.userService.userById(id).pipe(tap(u => {
       if (u) {
         this.store.dispatch(new InsertOrUpdateUser(u));
       } else {
         throw new Error('failed to find user')
       }
-  })
+    }))
 }
 
   getUserById(id: number): Observable<UserDto | undefined> {

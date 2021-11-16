@@ -72,45 +72,26 @@ export class UserDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      /** this.userService.userById(+id).pipe(take(1)).subscribe(u => {
-        if (u) {
-          this.chosenUser = u
-        } else {
-          throw new Error('failed to find user')
-        }
+      this.userFacade.getUserByIdFromApi(+id).pipe(take(1)).subscribe(user => {
+        this.userFacade.getUserById(+id).pipe(take(1)).subscribe(u => {
+          if (u) {
+            this.chosenUser = u
+          } else {
+            throw new Error('failed to find user')
+          }
 
-        if (this.chosenUser.admin == 1) {
-          this.admin = 'yes'
-        } else {
-          this.admin = 'no'
-        }
-        this.username?.setValue(this.chosenUser.username);
-        this.role?.setValue(this.Roles[this.chosenUser.admin]);
-      }) */
-      this.userFacade.getUserByIdFromApi(+id)
-      this.userFacade.getUserById(+id).pipe(take(1)).subscribe(u => {
-        if (u) {
-          this.chosenUser = u
-        } else {
-          throw new Error('failed to find user')
-        }
+          if (this.chosenUser.admin == 1) {
+            this.admin = 'yes'
+          } else {
+            this.admin = 'no'
+          }
+          this.username?.setValue(this.chosenUser.username);
+          this.role?.setValue(this.Roles[this.chosenUser.admin]);
+        })
 
-        if (this.chosenUser.admin == 1) {
-          this.admin = 'yes'
-        } else {
-          this.admin = 'no'
-        }
-        this.username?.setValue(this.chosenUser.username);
-        this.role?.setValue(this.Roles[this.chosenUser.admin]);
       })
-
-
     }
     this.currentUser = this.auth.getLocalUser()
-    /** const user = localStorage.getItem('currentUser')
-    if (user) {
-      this.currentUser = JSON.parse(user).body;
-    } */
   }
 
   /**
