@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AuthService} from "../../../../SharedModule/core/services/auth.service";
-import {RegisterDto} from "../../../core/models/register.dto";
-import {Router} from "@angular/router";
+import {UserFacade} from "../../../abstraction/user.facade";
 
 @Component({
   selector: 'app-register',
@@ -28,7 +26,7 @@ export class RegisterComponent implements OnInit {
   Roles: any = ["Standard", "Admin"];
   hide: any;
 
-  constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router) {
+  constructor( private formBuilder: FormBuilder,private userFacade: UserFacade) {
     this.hide = true;
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -46,6 +44,7 @@ export class RegisterComponent implements OnInit {
   register() {
     if (this.registerForm.invalid) {
       this.error = 'missing user information'
+      this.userFacade.updateError(this.error);
       return;
     }
     let roleNumber;
@@ -54,25 +53,16 @@ export class RegisterComponent implements OnInit {
     } else {
       roleNumber = 0;
     }
+    this.userFacade.register({username: this.username?.value, password: this.password?.value, admin: roleNumber})
+    this.error = this.userFacade.getError();
 
-    const dto: RegisterDto = {
-      username: this.username?.value,
-      password: this.password?.value,
-      admin: roleNumber
-    }
 
-    this.auth.register(dto).subscribe(succes => {
-      this.router.navigate(['/user-list']);
-      this.error = undefined;
-    }, err => {
-      this.error = err
-    });
   }
 
   /**
    * clears error messages
    */
   clearError() {
-    this.error = undefined;
+    this.userFacade.clearError();
   }
 }

@@ -74,6 +74,16 @@ export class UserState {
 
   }
 
+  @Action(UpdateUserError)
+  updateError(ctx: StateContext<UsersStateModel>, action: UpdateUserError): void {
+    const state = ctx.getState();
+    const newState: UsersStateModel = {
+      ...state,
+      error: action.error
+    };
+    ctx.setState(newState);
+  }
+
   @Action(ClearUserError)
   clearError(ctx: StateContext<UsersStateModel>): void {
     const state = ctx.getState();
