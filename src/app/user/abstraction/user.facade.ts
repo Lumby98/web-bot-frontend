@@ -68,8 +68,8 @@ export class UserFacade {
       this.router.navigate(['/user-list']);
     }, error => {
       this.store.dispatch(new UpdateUserError(error.error))
-      this.store.dispatch(new InsertOrUpdateUser(user))});
-    })
-  }
+      this.store.dispatch(new InsertOrUpdateUser(user))
+    })}
+
 
 }
