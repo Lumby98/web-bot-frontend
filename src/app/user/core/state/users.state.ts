@@ -1,7 +1,7 @@
 import {UserDto} from "../models/user.dto";
-import {Selector, State, Action, StateContext} from "@ngxs/store";
+import {Selector, State, Action, StateContext, createSelector} from "@ngxs/store";
 import {Injectable} from "@angular/core";
-import {ClearError, UpdateError} from "../../../SharedModule/core/state/auth/auth.actions";
+
 import {
   ClearUserError,
   ClearUserStore, DeleteUser,
@@ -10,7 +10,7 @@ import {
   UpdateUserStore
 } from "./users.actions";
 import {append, iif, insertItem, patch, removeItem, updateItem} from "@ngxs/store/operators";
-import {AuthStateModel} from "../../../SharedModule/core/state/auth/auth.state";
+
 
 export interface UsersStateModel{
   users: UserDto[];
@@ -29,6 +29,12 @@ export class UserState {
   @Selector()
   static users(state: UsersStateModel): UserDto[] {
     return state.users;
+  }
+
+  static user(id: number): (state: UsersStateModel) => UserDto | undefined{
+    return createSelector([UserState], (state: UsersStateModel) => {
+      return state.users.find(user => user.id === id);
+    });
   }
 
   @Selector()
