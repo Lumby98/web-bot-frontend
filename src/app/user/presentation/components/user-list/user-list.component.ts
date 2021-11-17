@@ -1,9 +1,9 @@
 import {Component, OnInit,} from '@angular/core';
 import {UserDto} from "../../../core/models/user.dto";
 import {UserService} from "../../../core/services/user.service";
-import {take} from "rxjs/operators";
 import {UserFacade} from "../../../abstraction/user.facade";
 import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-user-list',
@@ -11,28 +11,17 @@ import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
-  typeofUsers: UserDto[] | undefined
+  $typeOfUsers: Observable<UserDto[]> | undefined;
   currentUser: UserDto | undefined
 
-  constructor(private userService: UserService, private userFacade: UserFacade, private auth: AuthFacade) {
+  constructor( private userFacade: UserFacade, private auth: AuthFacade) {
   }
 
   ngOnInit(): void {
-    this.userService.getUsers().pipe(take(1)).subscribe(succes => {
-      this.typeofUsers = succes.sort((a, b) => {
-        if (a.username < b.username) {
-          return -1;
-        }
-        if (a.username > b.username) {
-          return 1;
-        }
-        return 0
-      });
-    });
+    this.userFacade.getUsersFromApi();
 
-    const u = localStorage.getItem('currentUser');
-    if (u) {
-      this.currentUser = JSON.parse(u).body;
-    }
+    this.$typeOfUsers = this.userFacade.getUsersSortedByUsername();
+
+    this.currentUser = this.auth.getLocalUser();
   }
 }

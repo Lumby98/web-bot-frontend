@@ -31,6 +31,19 @@ export class UserState {
     return state.users;
   }
 
+  /*@Selector()
+  static usersSortedByUsername(state: UsersStateModel): UserDto[] {
+    return state.users.sort((a, b) => {
+      if (a.username < b.username) {
+        return -1;
+      }
+      if (a.username > b.username) {
+        return 1;
+      }
+      return 0
+    });
+  }*/
+
   static user(id: number): (state: UsersStateModel) => UserDto | undefined{
     return createSelector([UserState], (state: UsersStateModel) => {
       return state.users.find(user => user.id === id);

@@ -62,7 +62,7 @@ export class UserFacade {
 
   getUsersSortedByUsername(): Observable<UserDto[]>{
     return this.store.select<UserDto[]>(UserState.users).pipe(map( value => {
-      return value.sort((a, b) => {
+      return value.slice().sort((a, b) => {
         if (a.username < b.username) {
           return -1;
         }
@@ -72,6 +72,8 @@ export class UserFacade {
         return 0
       });
     }))
+
+    //return this.store.select<UserDto[]>(UserState.usersSortedByUsername);
 
   }
 

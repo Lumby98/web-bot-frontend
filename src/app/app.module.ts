@@ -49,7 +49,6 @@ const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: [
     AuthFacade,
     ConfirmDialogFacade,
     AuthGuard,
-    ConfirmDialogService,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

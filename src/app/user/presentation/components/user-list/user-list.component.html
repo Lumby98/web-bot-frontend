@@ -4,8 +4,8 @@
       <mat-card-title>Users</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <mat-selection-list #users [multiple]="false">
-        <mat-list-option *ngFor="let user of typeofUsers" [value]="user" routerLink="/user-detail/{{user.id}}">
+      <mat-selection-list #users [multiple]="false" >
+        <mat-list-option *ngFor="let user of $typeOfUsers | async;" [value]="user" routerLink="/user-detail/{{user.id}}">
           {{user.username}}
           <mat-divider [inset]="true"></mat-divider>
         </mat-list-option>
