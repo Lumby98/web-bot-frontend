@@ -9,7 +9,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {AuthGuard} from "./SharedModule/core/guards/auth.guard";
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {environment} from "../environments/environment";
-import {InsoleRegistrationComponent} from './insole-registration/insole-registration.component';
+import {InsoleRegistrationComponent} from './insole-registration/presentation/components/insole-registration/insole-registration.component';
 import {NgxsModule} from "@ngxs/store";
 import {NgxsLoggerPluginModule} from "@ngxs/logger-plugin";
 import {AuthFacade} from "./SharedModule/abstraction/auth.facade";

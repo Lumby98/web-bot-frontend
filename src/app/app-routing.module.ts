@@ -6,7 +6,7 @@ import {RegisterComponent} from "./user/presentation/components/register/registe
 import {AuthGuard} from "./SharedModule/core/guards/auth.guard";
 import {UserListComponent} from "./user/presentation/components/user-list/user-list.component";
 import {UserDetailComponent} from "./user/presentation/components/user-detail/user-detail.component";
-import {InsoleRegistrationComponent} from "./insole-registration/insole-registration.component";
+import {InsoleRegistrationComponent} from "./insole-registration/presentation/components/insole-registration/insole-registration.component";
 
 const routes: Routes = [
   {path: 'home', component: HomeComponent},

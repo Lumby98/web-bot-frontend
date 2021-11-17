@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { InsoleRegistrationRoutingModule } from './insole-registration-routing.module';
 import {SharedModule} from "../SharedModule/shared.module";
-import {InsoleRegistrationComponent} from "./insole-registration.component";
+import {InsoleRegistrationComponent} from "./presentation/components/insole-registration/insole-registration.component";
+import {NgxsModule} from "@ngxs/store";
+import {InsoleState} from "./core/state/insole.state";
+
 
 
 @NgModule({
@@ -11,7 +14,8 @@ import {InsoleRegistrationComponent} from "./insole-registration.component";
   imports: [
     CommonModule,
     InsoleRegistrationRoutingModule,
-    SharedModule
+    SharedModule,
+    NgxsModule.forFeature([InsoleState]),
   ]
 })
 export class InsoleRegistrationModule { }
