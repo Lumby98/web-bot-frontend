@@ -19,7 +19,8 @@ const routes: Routes = [
   {path: 'register', canActivate: [AuthGuard], component: RegisterComponent},
   {path: 'user-list', canActivate: [AuthGuard], component: UserListComponent},
   {path: 'user-detail/:id', canActivate: [AuthGuard], component: UserDetailComponent},
-  {path: 'insole', canActivate: [AuthGuard], component: InsoleRegistrationComponent},
+  {path: 'insole', canActivate: [AuthGuard],
+    loadChildren: () => import('./insole-registration/insole-registration.module').then(m => m.InsoleRegistrationModule)},
   {path: '**', redirectTo: 'home'}];
 
 @NgModule({
