@@ -43,6 +43,8 @@ import {RouterModule} from "@angular/router";
 import {NgxsModule} from "@ngxs/store";
 import {AuthState} from "./core/state/auth/auth.state";
 import {AuthFacade} from "./abstraction/auth.facade";
+import {ConfirmDialogModule} from "./presentation/components/confirm-dialog/confirm-dialog.module";
+import {ConfirmDialogService} from "./presentation/components/confirm-dialog/confirm-dialog.service";
 
 const materialModules = [
   CdkTreeModule,
@@ -97,6 +99,9 @@ const materialModules = [
     FlexLayoutModule,
     ReactiveFormsModule,
     ...materialModules
+  ],
+  providers: [
+    ConfirmDialogService
   ]
 })
 export class SharedModule {

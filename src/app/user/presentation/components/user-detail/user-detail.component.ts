@@ -8,6 +8,7 @@ import {EditUserDto} from "../../../core/models/edit-user.dto";
 import {take} from "rxjs/operators";
 import {UserFacade} from "../../../abstraction/user.facade";
 import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
+import {ConfirmDialogFacade} from "../../../../SharedModule/abstraction/confirm-dialog.facade";
 
 @Component({
   selector: 'app-user-detail',
@@ -39,11 +40,10 @@ export class UserDetailComponent implements OnInit {
   hide: any;
 
   constructor(
-    private dialogService: ConfirmDialogService,
-    private userService: UserService,
     private formBuilder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
+    private confirmDialogFacade: ConfirmDialogFacade,
     private userFacade: UserFacade,
     private auth: AuthFacade
   ) {
@@ -114,9 +114,9 @@ export class UserDetailComponent implements OnInit {
       cancelText: 'Cancel',
       confirmText: 'Yes, remove user'
     }
-    this.dialogService.open(options);
 
-    this.dialogService.confirmed().subscribe(confirmed => {
+    this.confirmDialogFacade.open(options);
+    this.confirmDialogFacade.confirmed().subscribe(confirmed => {
       if (confirmed) {
         if (!this.chosenUser) {
           this.error = 'failed to remove user';
@@ -126,6 +126,8 @@ export class UserDetailComponent implements OnInit {
 
       }
     });
+
+
 
   }
 
@@ -153,14 +155,6 @@ export class UserDetailComponent implements OnInit {
       this.userFacade.updateError(this.error)
       throw new Error('failed to update user');
     }
-   /** this.userService.editUser(this.chosenUser?.username, userToEdit).subscribe(succes => {
-        console.log(succes)
-        this.router.navigate(['/user-list']);
-      }, error => {
-        this.error = error.error.message;
-        throw error;
-      }
-    ); */
     this.userFacade.updateUser(this.chosenUser, userToEdit)
   }
 
@@ -193,5 +187,6 @@ export class UserDetailComponent implements OnInit {
       return;
     }
     this.error = "unauthorised: cannot edit a user that isn't yourself, user";
+    this.userFacade.updateError(this.error);
   }
 }

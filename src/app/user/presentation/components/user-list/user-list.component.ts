@@ -2,6 +2,8 @@ import {Component, OnInit,} from '@angular/core';
 import {UserDto} from "../../../core/models/user.dto";
 import {UserService} from "../../../core/services/user.service";
 import {take} from "rxjs/operators";
+import {UserFacade} from "../../../abstraction/user.facade";
+import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
 
 @Component({
   selector: 'app-user-list',
@@ -12,7 +14,7 @@ export class UserListComponent implements OnInit {
   typeofUsers: UserDto[] | undefined
   currentUser: UserDto | undefined
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private userFacade: UserFacade, private auth: AuthFacade) {
   }
 
   ngOnInit(): void {

@@ -22,6 +22,7 @@ import {NgxsModule} from "@ngxs/store";
 import {NgxsLoggerPluginModule} from "@ngxs/logger-plugin";
 import {AuthFacade} from "./SharedModule/abstraction/auth.facade";
 import {UserModule} from "./user/user.module";
+import {ConfirmDialogFacade} from "./SharedModule/abstraction/confirm-dialog.facade";
 
 const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: ['websocket'], upgrade: false}};
 
@@ -46,8 +47,8 @@ const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: [
   ],
   providers: [
     AuthFacade,
+    ConfirmDialogFacade,
     AuthGuard,
-    AuthService,
     ConfirmDialogService,
   ],
   bootstrap: [AppComponent],
