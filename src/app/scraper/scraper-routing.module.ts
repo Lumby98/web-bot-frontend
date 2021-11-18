@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {ScraperComponent} from './scraper.component';
+import {ScraperComponent} from './presentation/components/scraper/scraper.component';
 
 const routes: Routes = [{path: '', component: ScraperComponent}];
 

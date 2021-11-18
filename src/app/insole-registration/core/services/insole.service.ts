@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
-import {RegisterInsoleDto} from "../../SharedModule/dto/register-insole.dto";
+import {environment} from "../../../../environments/environment";
+import {RegisterInsoleDto} from "../models/register-insole.dto";
 import {Observable} from "rxjs";
 import {Socket} from "ngx-socket-io";
 

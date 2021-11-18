@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
-import {InsoleFromSheetDto} from "../../dto/insole-from-sheet.dto";
+import {InsoleFromSheetDto} from "../../../insole-registration/core/models/insole-from-sheet.dto";
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';

@@ -3,6 +3,7 @@ import {AuthService} from "../../../core/services/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {LoginDto} from "../../../core/models/login.dto";
 import {Router} from "@angular/router";
+import {AuthFacade} from "../../../abstraction/auth.facade";
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,7 @@ export class LoginComponent implements OnInit {
   error: string | undefined;
   hide: any;
 
-  constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private authFacade: AuthFacade ) {
     this.hide = true;
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -41,17 +42,14 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    const dto: LoginDto = {username: this.username?.value, password: this.password?.value}
-    this.auth.login(dto).subscribe(succes => {
-      this.router.navigate(['/home']);
-      this.error = undefined;
-    }, err => {
-      this.error = err
-    });
+    this.authFacade.login({username: this.username?.value, password: this.password?.value});
+    this.error = this.authFacade.getError();
+
 
   }
 
   clearError() {
     this.error = undefined;
+    this.authFacade.clearError();
   }
 }

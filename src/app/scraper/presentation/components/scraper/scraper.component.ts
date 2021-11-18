@@ -1,13 +1,14 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ScraperService} from "./shared/scraper.service";
-import {ExcelServices} from "../SharedModule/core/services/excel.service";
-import {ScrapeDto} from "../SharedModule/dto/scrape.dto";
+import {ScraperService} from "../../../core/services/scraper.service";
+import {ExcelServices} from "../../../../SharedModule/core/services/excel.service";
+import {ScrapeDto} from "../../../core/models/scrape.dto";
 import {take, takeUntil} from "rxjs/operators";
 import {Subscription} from "rxjs";
-import {HultaforsDto} from "../SharedModule/dto/hultafors.dto";
-import {SiteDto} from "../SharedModule/dto/site.dto";
+import {HultaforsDto} from "../../../core/models/hultafors.dto";
+import {SiteDto} from "../../../core/models/site.dto";
 import {MatSelectChange} from "@angular/material/select";
+import {ScraperFacade} from "../../../abstraction/scraper.facade";
 
 @Component({
   selector: 'app-scraper',
@@ -27,8 +28,8 @@ export class ScraperComponent implements OnInit, OnDestroy {
   selectedSite: SiteDto | undefined;
 
   constructor(private formBuilder: FormBuilder,
-              private scraperService: ScraperService,
-              private excelService: ExcelServices) {
+              private scraperFacade: ScraperFacade
+  ) {
     this.hide = true
     this.scraperForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -40,16 +41,21 @@ export class ScraperComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.scraperForm.controls.username.disable();
     this.scraperForm.controls.password.disable();
-    this.errorSubscription = this.scraperService.listenForError().subscribe(err => {
+
+    this.errorSubscription = this.scraperFacade.listenForError().subscribe(err => {
       this.error = err;
       this.progressbar = false;
     });
-    this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
+
+
+
+    this.scraperFacade.getHultaforsProducts().pipe(take(1)).subscribe(products => {
       for (const p of products) {
         this.data.push(p);
       }
     });
-    this.scraperService.getSites().pipe(take(1)).subscribe(sites => {
+
+    this.scraperFacade.getSites().pipe(take(1)).subscribe(sites => {
       for (const s of sites) {
         this.sites.push(s);
       }
@@ -94,7 +100,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
         website: this.selectedSite.name
       }
       //calls the scraper services to contact the backend
-      this.scraperService.listenForScrape(dto).pipe(take(1)).subscribe(status => {
+      this.scraperFacade.listenForScrape(dto).pipe(take(1)).subscribe(status => {
         this.succes = status.message;
         if (status.sites.length < 2) {
           let updateSite = this.sites.find(e => e.name === status.sites[0].name);
@@ -106,7 +112,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
           this.sites = status.sites;
         }
         if (dto.website == 'Hultafors') {
-          this.scraperService.getHultaforsProducts().pipe(take(1)).subscribe(products => {
+          this.scraperFacade.getHultaforsProducts().pipe(take(1)).subscribe(products => {
             for (const p of products) {
               this.data.push(p);
             }
@@ -135,7 +141,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
     }
 
     if (this.selectedSite.name == 'Neskrid') {
-      this.scraperService.getNeskridProducts().pipe(take(1)).subscribe(data => {
+      this.scraperFacade.getNeskridProducts().pipe(take(1)).subscribe(data => {
         const products = [];
         for (const p of data) {
           products.push(p);
@@ -156,9 +162,9 @@ export class ScraperComponent implements OnInit, OnDestroy {
    */
   downloadFile(products: any) {
     if (this.selectedSite?.name == 'Neskrid') {
-      this.excelService.exportAsExcelNeskrid(products, 'Products from Neskrid');
+      this.scraperFacade.exportAsExcelNeskrid(products, 'Products from Neskrid');
     } else {
-      this.excelService.exportAsExcelHultafos(products, 'Products from Hultafors');
+      this.scraperFacade.exportAsExcelHultafos(products, 'Products from Hultafors');
     }
   }
 
@@ -167,6 +173,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
    */
   clearError() {
     this.error = undefined;
+    this.scraperFacade.clearError();
   }
 
   /**

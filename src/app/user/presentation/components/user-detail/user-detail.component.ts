@@ -1,11 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {ConfirmDialogService} from "../../SharedModule/presentation/components/confirm-dialog/confirm-dialog.service";
-import {UserService} from "../shared/user.service";
-import {UserDto} from "../../SharedModule/dto/user.dto";
+import {ConfirmDialogService} from "../../../../SharedModule/presentation/components/confirm-dialog/confirm-dialog.service";
+import {UserService} from "../../../core/services/user.service";
+import {UserDto} from "../../../core/models/user.dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {EditUserDto} from "../../SharedModule/dto/edit-user.dto";
+import {EditUserDto} from "../../../core/models/edit-user.dto";
 import {take} from "rxjs/operators";
+import {UserFacade} from "../../../abstraction/user.facade";
+import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
+import {ConfirmDialogFacade} from "../../../../SharedModule/abstraction/confirm-dialog.facade";
 
 @Component({
   selector: 'app-user-detail',
@@ -18,6 +21,7 @@ export class UserDetailComponent implements OnInit {
   admin: any;
   edit: boolean = false;
   editForm: FormGroup;
+
 
   get username() {
     return this.editForm.get('username');
@@ -36,11 +40,13 @@ export class UserDetailComponent implements OnInit {
   hide: any;
 
   constructor(
-    private dialogService: ConfirmDialogService,
-    private userService: UserService,
     private formBuilder: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private confirmDialogFacade: ConfirmDialogFacade,
+    private userFacade: UserFacade,
+    private auth: AuthFacade
+  ) {
 
     // override the route reuse strategy
     this.router.routeReuseStrategy.shouldReuseRoute = function () {
@@ -67,27 +73,26 @@ export class UserDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.userService.userById(+id).pipe(take(1)).subscribe(u => {
-        if (u) {
-          this.chosenUser = u
-        } else {
-          throw new Error('failed to find user')
-        }
+      this.userFacade.getUserByIdFromApi(+id).pipe(take(1)).subscribe(user => {
+        this.userFacade.getUserById(+id).pipe(take(1)).subscribe(u => {
+          if (u) {
+            this.chosenUser = u
+          } else {
+            throw new Error('failed to find user')
+          }
 
-        if (this.chosenUser.admin == 1) {
-          this.admin = 'yes'
-        } else {
-          this.admin = 'no'
-        }
+          if (this.chosenUser.admin == 1) {
+            this.admin = 'yes'
+          } else {
+            this.admin = 'no'
+          }
+          this.username?.setValue(this.chosenUser.username);
+          this.role?.setValue(this.Roles[this.chosenUser.admin]);
+        })
 
-        this.username?.setValue(this.chosenUser.username);
-        this.role?.setValue(this.Roles[this.chosenUser.admin]);
       })
     }
-    const user = localStorage.getItem('currentUser')
-    if (user) {
-      this.currentUser = JSON.parse(user).body;
-    }
+    this.currentUser = this.auth.getLocalUser()
   }
 
   /**
@@ -109,20 +114,20 @@ export class UserDetailComponent implements OnInit {
       cancelText: 'Cancel',
       confirmText: 'Yes, remove user'
     }
-    this.dialogService.open(options);
 
-    this.dialogService.confirmed().subscribe(confirmed => {
+    this.confirmDialogFacade.open(options);
+    this.confirmDialogFacade.confirmed().subscribe(confirmed => {
       if (confirmed) {
         if (!this.chosenUser) {
           this.error = 'failed to remove user';
           return;
         }
-        this.userService.removeUser(this.chosenUser).subscribe(succes => {
-          console.log(succes);
-          this.router.navigate(['/user-list']);
-        });
+        this.userFacade.deleteUser(this.chosenUser)
+
       }
     });
+
+
 
   }
 
@@ -132,6 +137,7 @@ export class UserDetailComponent implements OnInit {
   updateUser() {
     if (this.editForm.invalid) {
       this.error = 'need more details, username and admin cannot be blank'
+      this.userFacade.updateError(this.error)
     }
     let a;
     if (this.role?.value == 'Admin') {
@@ -146,17 +152,10 @@ export class UserDetailComponent implements OnInit {
     };
     if (!this.chosenUser) {
       this.error = 'failed to update user';
+      this.userFacade.updateError(this.error)
       throw new Error('failed to update user');
     }
-    this.userService.editUser(this.chosenUser?.username, userToEdit).subscribe(succes => {
-        console.log(succes)
-        this.router.navigate(['/user-list']);
-      }, error => {
-        this.error = error.error.message;
-        throw error;
-      }
-    );
-
+    this.userFacade.updateUser(this.chosenUser, userToEdit)
   }
 
   /**
@@ -188,5 +187,6 @@ export class UserDetailComponent implements OnInit {
       return;
     }
     this.error = "unauthorised: cannot edit a user that isn't yourself, user";
+    this.userFacade.updateError(this.error);
   }
 }

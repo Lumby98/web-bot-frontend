@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService} from "../../../core/services/auth.service";
-import {take} from "rxjs/operators";
-import {UserDto} from "../../../dto/user.dto";
+import {UserDto} from "../../../../user/core/models/user.dto";
+import {AuthFacade} from "../../../abstraction/auth.facade";
 
 @Component({
   selector: 'app-home',
@@ -11,11 +10,8 @@ import {UserDto} from "../../../dto/user.dto";
 export class HomeComponent implements OnInit {
   currentUser: UserDto | undefined;
 
-  constructor(private auth: AuthService) {
-    const user = localStorage.getItem('currentUser')
-    if (user) {
-      this.currentUser = JSON.parse(user);
-    }
+  constructor( private authFacade: AuthFacade) {
+    this.currentUser = authFacade.getLocalUser()
   }
 
   ngOnInit(): void {
@@ -26,13 +22,13 @@ export class HomeComponent implements OnInit {
    * logs out a user
    */
   logout() {
-    this.auth.logout().pipe(take(1)).subscribe();
+    this.authFacade.logOut();
   }
 
   /**
    * checks if a user is logged in
    */
   loggedIn() {
-    return this.auth.isAuthenticated();
+    return this.authFacade.isAuthenticated()
   }
 }
