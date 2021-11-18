@@ -1,6 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ExcelServices} from "../../../../SharedModule/core/services/excel.service";
-import {InsoleService} from "../../../core/services/insole.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {InsoleFromSheetDto} from "../../../core/models/insole-from-sheet.dto";
 import {RegisterInsoleDto} from "../../../core/models/register-insole.dto";
