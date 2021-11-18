@@ -28,8 +28,6 @@ export class ScraperComponent implements OnInit, OnDestroy {
   selectedSite: SiteDto | undefined;
 
   constructor(private formBuilder: FormBuilder,
-              private scraperService: ScraperService,
-              private excelService: ExcelServices,
               private scraperFacade: ScraperFacade
   ) {
     this.hide = true
