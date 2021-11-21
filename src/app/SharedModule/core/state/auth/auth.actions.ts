@@ -7,3 +7,13 @@ export class UpdateError{
 
   static readonly type = '[item] Update error';
 }
+
+export class ClearKey{
+  static readonly type = '[key] clear key';
+}
+
+export class UpdateKey{
+  constructor(public key: string) {}
+
+  static readonly type = '[key] Update key';
+}

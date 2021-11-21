@@ -3,9 +3,11 @@ import {LoginDto} from "../models/login.dto";
 import {RegisterDto} from "../../../user/core/models/register.dto";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {catchError, map} from "rxjs/operators";
+import {catchError, map, tap} from "rxjs/operators";
 import {environment} from "../../../../environments/environment";
 import {UserDto} from "../../../user/core/models/user.dto";
+import {InsertSavedLoginDto} from "../models/insert-SavedLogin.dto";
+import {KeyDto} from "../models/Key.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -135,4 +137,42 @@ export class AuthService {
 
     return undefined;
   }
+
+  insertSavedLogin(insertSavedLoginDto: InsertSavedLoginDto): Observable<boolean> {
+    return this.http
+      .post<any>(
+        environment.apiUrl + '/saved-login/insert',
+        insertSavedLoginDto,
+        {withCredentials: true}
+      )
+      .pipe(
+        tap(savedLogin => {
+          return !!savedLogin;
+
+        }), catchError(err => {
+          throw Error(err.message)
+        }));
+  }
+
+
+  verify(key: KeyDto): Observable<boolean> {
+    return this.http
+      .post<any>(environment.apiUrl + 'saved-login/verify',
+        key, {observe: "response", withCredentials: true}
+      )
+      .pipe(
+        map(response => {
+
+          return response.status == 200;
+
+        }), catchError(() => {
+          throw new Error('failed to login: wrong credentials');
+        }));
+  }
+
+
+
+
+
+
 }
