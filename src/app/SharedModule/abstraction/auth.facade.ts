@@ -59,7 +59,7 @@ export class AuthFacade{
 
   insertSavedLogin(insertSavedLoginDto: InsertSavedLoginDto ){
     this.auth.insertSavedLogin(insertSavedLoginDto).pipe(take(1)).subscribe(success =>{
-      
+
     }, err => {
       this.store.dispatch(new UpdateError(err));
     })
