@@ -3,15 +3,16 @@
   <span>Web bot</span>
   <span class="nav-tool-items">
     <a mat-button routerLink="/home">Home</a>
-    <a mat-button routerLink="/data-collection">Data Collection</a>
+    <a mat-button routerLink="/data-collection">Data collection</a>
     <a mat-button routerLink="/insole">Insole registration</a>
+    <a mat-button routerLink="/saved-logins">Saved logins</a>
     <a mat-button routerLink="/user-list" *ngIf="loggedIn()">Users</a>
   </span>
   <span class="fill-remaining-space"></span>
   <span>
     <a mat-button routerLink="/user-detail/{{currentUser.id}}"
        *ngIf="loggedIn() && currentUser">Hi {{currentUser.username}}!</a>
-    <a mat-button routerLink="/login" *ngIf="!loggedIn()">Log In</a>
+    <a mat-button routerLink="/login" *ngIf="!loggedIn()">Login</a>
     <a mat-button (click)="logout()" *ngIf="loggedIn()">Log out</a>
   </span>
 </mat-toolbar>
