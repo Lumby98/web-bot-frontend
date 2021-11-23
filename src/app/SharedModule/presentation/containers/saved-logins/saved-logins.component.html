@@ -1,3 +1,5 @@
 <p>saved-logins page works!</p>
-<p *ngIf="currentKey$ | async; else elseBlock">Key has been saved!</p>
+<div *ngIf="currentKey$ | async as key; else elseBlock">
+  <p> Key has been saved! </p>
+</div>
 <ng-template #elseBlock>Key has NOT been saved!</ng-template>

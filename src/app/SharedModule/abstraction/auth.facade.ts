@@ -3,7 +3,7 @@ import {AuthService} from "../core/services/auth.service";
 import {UserDto} from "../../user/core/models/user.dto";
 import {take, tap} from "rxjs/operators";
 import {Store} from "@ngxs/store";
-import {ClearError, UpdateError, UpdateKey} from "../core/state/auth/auth.actions";
+import {ClearError, ClearKey, UpdateError, UpdateKey} from "../core/state/auth/auth.actions";
 import {AuthState} from "../core/state/auth/auth.state";
 import {LoginDto} from "../core/models/login.dto";
 import {Router} from "@angular/router";
@@ -34,7 +34,9 @@ export class AuthFacade{
   logOut(){
     this.auth.logout().pipe(take(1)).subscribe(() => {
       this.store.dispatch(new ClearError());
+      this.store.dispatch(new ClearKey());
     }, err => {
+      this.store.dispatch(new ClearKey());
       this.store.dispatch(new UpdateError(err));
     });
   }
