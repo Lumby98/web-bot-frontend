@@ -39,7 +39,7 @@ export class AuthFacade{
     });
   }
 
-  getError(): any {
+  getError(): Observable<any> {
     return this.store.selectOnce(AuthState.error);
   }
 
