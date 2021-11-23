@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Observable} from "rxjs";
+import {FormBuilder} from "@angular/forms";
+import {AuthFacade} from "../../../abstraction/auth.facade";
 
 @Component({
   selector: 'app-saved-logins',
@@ -7,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SavedLoginsComponent implements OnInit {
 
-  constructor() { }
+  currentKey$: Observable<string>
+
+  constructor(private formBuilder: FormBuilder, private authFacade: AuthFacade) {
+    this.currentKey$ = this.authFacade.getCurrentKey();
+  }
 
   ngOnInit(): void {
   }

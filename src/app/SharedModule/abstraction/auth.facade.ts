@@ -43,6 +43,10 @@ export class AuthFacade{
     return this.store.selectOnce(AuthState.error);
   }
 
+  getCurrentKey(): Observable<string> {
+    return this.store.select(AuthState.key);
+  }
+
   getErrorObservable(): Observable<any> {
     return this.store.select(AuthState.error);
   }
