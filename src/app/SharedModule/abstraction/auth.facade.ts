@@ -43,6 +43,11 @@ export class AuthFacade{
     return this.store.selectOnce(AuthState.error);
   }
 
+  getErrorObservable(): Observable<any> {
+    return this.store.select(AuthState.error);
+  }
+
+
   clearError(){
     this.store.dispatch(new ClearError());
   }

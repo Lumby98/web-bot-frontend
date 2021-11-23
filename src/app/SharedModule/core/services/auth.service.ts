@@ -156,8 +156,9 @@ export class AuthService {
 
 
   verify(key: KeyDto): Observable<boolean> {
+    console.log("gets called" + key.password)
     return this.http
-      .post<any>(environment.apiUrl + 'saved-login/verify',
+      .post<any>(environment.apiUrl + '/saved-login/verify',
         key, {observe: "response", withCredentials: true}
       )
       .pipe(
@@ -165,8 +166,9 @@ export class AuthService {
 
           return response.status == 200;
 
-        }), catchError(() => {
-          throw new Error('failed to login: wrong credentials');
+        }), catchError(err => {
+          console.log(err)
+          throw new Error('failed to verify key');
         }));
   }
 
