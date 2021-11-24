@@ -14,6 +14,7 @@ import {NgxsLoggerPluginModule} from "@ngxs/logger-plugin";
 import {AuthFacade} from "./SharedModule/abstraction/auth.facade";
 import {UserModule} from "./user/user.module";
 import {ConfirmDialogFacade} from "./SharedModule/abstraction/confirm-dialog.facade";
+import {SweetAlert2LoaderService, SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 
 const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: ['websocket'], upgrade: false}};
 
@@ -27,6 +28,7 @@ const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: [
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    SweetAlert2Module.forRoot(),
     SharedModule,
     ReactiveFormsModule,
     SocketIoModule.forRoot(config),

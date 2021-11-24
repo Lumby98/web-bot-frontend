@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthFacade} from "../../../abstraction/auth.facade";
 import {Observable} from "rxjs";
@@ -13,6 +13,8 @@ import {ClearError, UpdateError} from "../../../core/state/auth/auth.actions";
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+
+
 
   get username() {
     return this.loginForm.get('username');

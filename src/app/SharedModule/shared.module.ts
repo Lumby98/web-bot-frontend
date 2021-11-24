@@ -46,6 +46,7 @@ import {AuthFacade} from "./abstraction/auth.facade";
 import {ConfirmDialogModule} from "./presentation/components/confirm-dialog/confirm-dialog.module";
 import {ConfirmDialogService} from "./presentation/components/confirm-dialog/confirm-dialog.service";
 import { SavedLoginsComponent } from './presentation/containers/saved-logins/saved-logins.component';
+import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 
 const materialModules = [
   CdkTreeModule,
@@ -91,6 +92,7 @@ const materialModules = [
     CommonModule,
     FlexLayoutModule,
     ReactiveFormsModule,
+    SweetAlert2Module,
     NgxsModule.forFeature([AuthState]),
     ...materialModules
   ],

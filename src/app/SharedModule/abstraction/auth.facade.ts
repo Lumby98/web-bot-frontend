@@ -68,12 +68,12 @@ export class AuthFacade{
   }
 
 
-  insertSavedLogin(insertSavedLoginDto: InsertSavedLoginDto ){
-    this.auth.insertSavedLogin(insertSavedLoginDto).pipe(take(1)).subscribe(success =>{
+  insertSavedLogin(insertSavedLoginDto: InsertSavedLoginDto ): Observable<boolean>{
+    return this.auth.insertSavedLogin(insertSavedLoginDto).pipe(take(1), tap(success =>{
 
     }, err => {
       this.store.dispatch(new UpdateError(err));
-    })
+    }))
 
   }
 
