@@ -98,12 +98,13 @@
   </mat-card>
 </div>
 
-  <ng-template #elseBlock> <p> Key has NOT been saved! </p>
+  <ng-template #elseBlock>
     <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
 
     <mat-card class="box" [class.mat-elevation-z10]="true">
       <mat-card-header>
         <mat-card-title>Key verify</mat-card-title>
+        <p style="margin-top: 1rem"> Key has NOT been verified! </p>
       </mat-card-header>
 
       <form class="example-form" (ngSubmit)="verifyKey()" [formGroup]="keyVerifyFrom">
