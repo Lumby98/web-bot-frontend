@@ -11,6 +11,7 @@ import {Observable} from "rxjs";
 import {KeyDto} from "../core/models/Key.dto";
 import {InsertSavedLoginDto} from "../core/models/insert-SavedLogin.dto";
 import {UpdateUserError} from "../../user/core/state/users.actions";
+import {InsertKeyDto} from "../core/models/insert-Key.dto";
 
 @Injectable()
 export class AuthFacade{
@@ -85,6 +86,16 @@ export class AuthFacade{
        this.updateError(Error('failed to verify key'))
      }
    }))
+  }
+
+  changeKey(key: InsertKeyDto): Observable<boolean>{
+    return this.auth.changeKey(key).pipe(tap(boolean =>{
+      if(boolean){
+        this.store.dispatch(new UpdateKey(key.password));
+      }else {
+        this.updateError(Error('failed to change key'))
+      }
+    }))
   }
 
 }

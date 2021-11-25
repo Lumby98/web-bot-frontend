@@ -14,8 +14,10 @@ import {SwalComponent} from "@sweetalert2/ngx-sweetalert2";
 })
 export class SavedLoginsComponent implements OnInit {
   hide: Boolean;
+  changedKeyBool: boolean = false;
   loginInsertForm: FormGroup;
   keyVerifyFrom: FormGroup;
+  keyChangeForm: FormGroup;
   currentKey$: Observable<string>
   public selectedType: any;
   public loginTypes: { value: LoginTypeEnum; type: string; }[] | undefined;
@@ -36,6 +38,10 @@ export class SavedLoginsComponent implements OnInit {
     return this.keyVerifyFrom.get('key');
   }
 
+  get newKey() {
+    return this.keyChangeForm.get('newKey');
+  }
+
   private  get  selectedLoginType():LoginTypeEnum {
     return this.selectedType ? this.selectedType.value: null;
   }
@@ -52,6 +58,10 @@ export class SavedLoginsComponent implements OnInit {
 
     this.keyVerifyFrom = this.formBuilder.group({
       key: ["" , Validators.required]
+    });
+
+    this.keyChangeForm = this.formBuilder.group({
+      newKey: ["" , Validators.required]
     });
   }
 
@@ -92,6 +102,12 @@ export class SavedLoginsComponent implements OnInit {
       this.authFacade.updateError(err);
     });
 
+  }
+
+  changeKey(){
+   // this.authFacade.changeKey({password: this.key?.value}).pipe(take(1)).subscribe( success => {},err => {
+     // this.authFacade.updateError(err);
+    // });
   }
 
   clearError() {
