@@ -23,6 +23,10 @@
           <button mat-stroked-button color="primary" class="btn-block" (click)="logout()" *ngIf="loggedIn()">Log out
           </button>
         </div>
+        <div class="mt-10" fxLayoutAlign="center center" fxLayoutGap="10px">
+          <button mat-stroked-button color="primary" class="btn-block" routerLink="/saved-logins" *ngIf="loggedIn()">Saved logins
+          </button>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

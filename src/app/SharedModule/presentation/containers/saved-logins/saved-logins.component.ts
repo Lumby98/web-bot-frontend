@@ -6,6 +6,7 @@ import {LoginTypeEnum, LoginTypeMapping} from "../../../core/enums/loginType.enu
 import {MatSelectChange} from "@angular/material/select";
 import {take} from "rxjs/operators";
 import {SwalComponent} from "@sweetalert2/ngx-sweetalert2";
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-saved-logins',
@@ -25,6 +26,9 @@ export class SavedLoginsComponent implements OnInit {
 
   @ViewChild('successSwal')
   public readonly successSwal!: SwalComponent;
+
+  @ViewChild('keyChangeSuccessSwal')
+  public readonly keyChangeSuccessSwal!: SwalComponent;
 
   get username() {
     return this.loginInsertForm.get('username');
@@ -105,9 +109,27 @@ export class SavedLoginsComponent implements OnInit {
   }
 
   changeKey(){
-   // this.authFacade.changeKey({password: this.key?.value}).pipe(take(1)).subscribe( success => {},err => {
-     // this.authFacade.updateError(err);
-    // });
+    this.currentKey$.pipe(take(1)).subscribe(key => {
+
+      if(this.newKey?.value){
+      this.authFacade.changeKey({prevPassword: key, password: this.newKey?.value}).subscribe(result => {
+        if (result){
+          this.keyChangeSuccessSwal.fire();
+        }
+      })
+      }else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Key cant be empty',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+      }
+    });
+
+
+
+
   }
 
   clearError() {
