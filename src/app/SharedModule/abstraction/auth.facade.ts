@@ -3,7 +3,7 @@ import {AuthService} from "../core/services/auth.service";
 import {UserDto} from "../../user/core/models/user.dto";
 import {take, tap} from "rxjs/operators";
 import {Store} from "@ngxs/store";
-import {ClearError, UpdateError, UpdateKey} from "../core/state/auth/auth.actions";
+import {ClearError, ClearKey, UpdateError, UpdateKey} from "../core/state/auth/auth.actions";
 import {AuthState} from "../core/state/auth/auth.state";
 import {LoginDto} from "../core/models/login.dto";
 import {Router} from "@angular/router";
@@ -11,6 +11,7 @@ import {Observable} from "rxjs";
 import {KeyDto} from "../core/models/Key.dto";
 import {InsertSavedLoginDto} from "../core/models/insert-SavedLogin.dto";
 import {UpdateUserError} from "../../user/core/state/users.actions";
+import {InsertKeyDto} from "../core/models/insert-Key.dto";
 
 @Injectable()
 export class AuthFacade{
@@ -34,14 +35,25 @@ export class AuthFacade{
   logOut(){
     this.auth.logout().pipe(take(1)).subscribe(() => {
       this.store.dispatch(new ClearError());
+      this.store.dispatch(new ClearKey());
     }, err => {
+      this.store.dispatch(new ClearKey());
       this.store.dispatch(new UpdateError(err));
     });
   }
 
-  getError(): any {
+  getError(): Observable<any> {
     return this.store.selectOnce(AuthState.error);
   }
+
+  getCurrentKey(): Observable<string> {
+    return this.store.select(AuthState.key);
+  }
+
+  getErrorObservable(): Observable<any> {
+    return this.store.select(AuthState.error);
+  }
+
 
   clearError(){
     this.store.dispatch(new ClearError());
@@ -57,12 +69,12 @@ export class AuthFacade{
   }
 
 
-  insertSavedLogin(insertSavedLoginDto: InsertSavedLoginDto ){
-    this.auth.insertSavedLogin(insertSavedLoginDto).pipe(take(1)).subscribe(success =>{
+  insertSavedLogin(insertSavedLoginDto: InsertSavedLoginDto ): Observable<boolean>{
+    return this.auth.insertSavedLogin(insertSavedLoginDto).pipe(take(1), tap(success =>{
 
     }, err => {
       this.store.dispatch(new UpdateError(err));
-    })
+    }))
 
   }
 
@@ -74,6 +86,16 @@ export class AuthFacade{
        this.updateError(Error('failed to verify key'))
      }
    }))
+  }
+
+  changeKey(key: InsertKeyDto): Observable<boolean>{
+    return this.auth.changeKey(key).pipe(tap(boolean =>{
+      if(boolean){
+        this.store.dispatch(new UpdateKey(key.password));
+      }else {
+        this.updateError(Error('failed to change key'))
+      }
+    }))
   }
 
 }

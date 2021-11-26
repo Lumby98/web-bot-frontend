@@ -23,9 +23,11 @@
     "@angular/router": "^12.2.6",
     "@ngxs/logger-plugin": "^3.7.2",
     "@ngxs/store": "^3.7.2",
+    "@sweetalert2/ngx-sweetalert2": "^10.0.0",
     "file-saver": "^2.0.5",
     "ngx-socket-io": "^3.2.0",
     "rxjs": "~6.6.0",
+    "sweetalert2": "^11.2.0",
     "tslib": "^2.3.0",
     "xlsx": "^0.17.2",
     "zone.js": "~0.11.4"

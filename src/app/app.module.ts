@@ -9,12 +9,12 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {AuthGuard} from "./SharedModule/core/guards/auth.guard";
 import {SocketIoConfig, SocketIoModule} from "ngx-socket-io";
 import {environment} from "../environments/environment";
-import {InsoleRegistrationComponent} from './insole-registration/presentation/components/insole-registration/insole-registration.component';
 import {NgxsModule} from "@ngxs/store";
 import {NgxsLoggerPluginModule} from "@ngxs/logger-plugin";
 import {AuthFacade} from "./SharedModule/abstraction/auth.facade";
 import {UserModule} from "./user/user.module";
 import {ConfirmDialogFacade} from "./SharedModule/abstraction/confirm-dialog.facade";
+import {SweetAlert2LoaderService, SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 
 const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: ['websocket'], upgrade: false}};
 
@@ -28,6 +28,7 @@ const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: [
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    SweetAlert2Module.forRoot(),
     SharedModule,
     ReactiveFormsModule,
     SocketIoModule.forRoot(config),

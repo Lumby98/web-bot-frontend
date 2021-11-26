@@ -8,6 +8,7 @@ import {environment} from "../../../../environments/environment";
 import {UserDto} from "../../../user/core/models/user.dto";
 import {InsertSavedLoginDto} from "../models/insert-SavedLogin.dto";
 import {KeyDto} from "../models/Key.dto";
+import {InsertKeyDto} from "../models/insert-Key.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -156,8 +157,9 @@ export class AuthService {
 
 
   verify(key: KeyDto): Observable<boolean> {
+    console.log("gets called" + key.password)
     return this.http
-      .post<any>(environment.apiUrl + 'saved-login/verify',
+      .post<any>(environment.apiUrl + '/saved-login/verify',
         key, {observe: "response", withCredentials: true}
       )
       .pipe(
@@ -165,8 +167,25 @@ export class AuthService {
 
           return response.status == 200;
 
-        }), catchError(() => {
-          throw new Error('failed to login: wrong credentials');
+        }), catchError(err => {
+          console.log(err)
+          throw new Error('failed to verify key');
+        }));
+  }
+
+  changeKey(key: InsertKeyDto): Observable<boolean>{
+    return this.http
+      .post<any>(environment.apiUrl + '/saved-login/changeKey',
+        key, {observe: "response", withCredentials: true}
+      )
+      .pipe(
+        map(response => {
+
+          return response.status == 200;
+
+        }), catchError(err => {
+          console.log(err)
+          throw new Error('failed to change key');
         }));
   }
 

@@ -93,7 +93,6 @@ export class UserFacade {
   }
 
 
-
   deleteUser(user: UserDto) {
     this.store.dispatch(new DeleteUser(user))
     this.userService.removeUser(user).subscribe(succes => {

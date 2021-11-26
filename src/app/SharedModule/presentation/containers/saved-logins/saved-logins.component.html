@@ -1,0 +1,204 @@
+<!--<mat-card class="box" [class.mat-elevation-z10]="true" >
+    <mat-card-header fxLayoutAlign="center top">
+      <mat-card-title>Saved logins</mat-card-title>
+    </mat-card-header>
+
+
+    <mat-card-actions fxLayoutAlign="center center">
+      <div *ngIf="currentKey$ | async as key; else elseBlock">
+        <p> Key has been saved! </p>
+      </div>
+      <ng-template #elseBlock> <p> Key has NOT been saved! </p></ng-template>
+    </mat-card-actions>
+
+    <form class="example-form" [formGroup]="loginInsertForm">
+      <mat-card-content>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Choose Site...</mat-label>
+          <mat-select formControlName="loginType" (selectionChange)="selectChangeHandler($event)">
+            <mat-option *ngFor="let loginType of loginTypes" [value]="loginType">{{loginType.type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Username" formControlName="username">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password' : 'text'">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </mat-form-field>
+
+      </mat-card-content>
+    </form>
+    <mat-card-actions>
+
+    </mat-card-actions>
+    <mat-card-footer>
+
+    </mat-card-footer>
+  </mat-card>-->
+
+
+
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="currentKey$ | async as key; else elseBlock" >
+
+  <div *ngIf="!changedKeyBool">
+  <mat-card class="box" [class.mat-elevation-z10]="true">
+    <mat-card-header fxLayoutAlign="center top">
+      <mat-card-title>Insert logins</mat-card-title>
+    </mat-card-header>
+
+    <form class="example-form" [formGroup]="loginInsertForm" (ngSubmit)="insertLogin()">
+      <mat-card-content>
+
+        <mat-form-field class="example-full-width">
+          <mat-label>Choose login type...</mat-label>
+          <mat-select formControlName="loginType" (selectionChange)="selectChangeHandler($event)">
+            <mat-option *ngFor="let loginType of loginTypes" [value]="loginType">{{loginType.type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Username" formControlName="username">
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password' : 'text'">
+          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </mat-form-field>
+
+
+      </mat-card-content>
+      <mat-card-actions>
+        <div fxLayoutAlign="center top" fxLayoutGap="10px">
+          <button mat-stroked-button color="primary" type="submit">Insert login</button>
+          <button (click)="changedKeyBool = !changedKeyBool" mat-stroked-button color="primary" type="button">Change key menu</button>
+         <!-- <button mat-stroked-button color="primary" type="button" (click)="fillList()">Create File</button>-->
+        </div>
+
+      </mat-card-actions>
+    </form>
+    <mat-card-footer>
+      <mat-error *ngIf="error$ | async ">
+        <button mat-icon-button color="warn" (click)="clearError()">x</button>
+        {{error$ | async}}
+      </mat-error>
+      <!--<mat-progress-bar mode="indeterminate" *ngIf="progressbar"></mat-progress-bar>
+      <mat-error *ngIf="error">
+        <button mat-icon-button color="warn" (click)="clearError()">x</button>
+        {{error}}
+      </mat-error>
+      <div *ngIf="succes">
+        <button mat-icon-button (click)="clearSucces()">x</button>
+        <span>{{succes}}</span>
+      </div>-->
+    </mat-card-footer>
+  </mat-card>
+
+  </div>
+
+  <div *ngIf="changedKeyBool">
+    <mat-card class="box" [class.mat-elevation-z10]="true">
+      <mat-card-header>
+        <mat-card-title>Key change</mat-card-title>
+      </mat-card-header>
+
+      <form class="example-form" (ngSubmit)="changeKey()" [formGroup]="keyChangeForm">
+        <mat-card-content>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="newKey" formControlName="newKey" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <div fxLayoutAlign="center top" fxLayoutGap="10px">
+            <button mat-stroked-button color="primary" type="submit">Change key</button>
+            <button (click)="changedKeyBool = !changedKeyBool" mat-stroked-button color="primary" type="button">Insert login menu</button>
+            <!-- <button mat-stroked-button color="primary" type="button" (click)="fillList()">Create File</button>-->
+          </div>
+
+        </mat-card-actions>
+      </form>
+
+      <mat-card-footer>
+        <mat-error *ngIf="error$ | async ">
+          <button mat-icon-button color="warn" (click)="clearError()">x</button>
+          {{error$ | async}}
+        </mat-error>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+
+
+
+
+</div>
+
+
+  <!--<div class="login-wrapper" *ngIf="changedKeyBool" fxLayout="row" fxLayoutAlign="center center">
+
+    <mat-card class="box" [class.mat-elevation-z10]="true">
+      <mat-card-header>
+        <mat-card-title>Key change</mat-card-title>
+      </mat-card-header>
+
+      <form class="example-form" (ngSubmit)="verifyKey()" [formGroup]="keyVerifyFrom">
+        <mat-card-content>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Key" formControlName="key" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+        </mat-card-content>
+        <button mat-stroked-button color="accent" class="btn-block">Verify</button>
+      </form>
+
+      <mat-card-footer>
+        <mat-error *ngIf="error$ | async ">
+          <button mat-icon-button color="warn" (click)="clearError()">x</button>
+          {{error$ | async}}
+        </mat-error>
+      </mat-card-footer>
+    </mat-card>
+
+  </div>-->
+
+  <ng-template #elseBlock>
+    <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+
+    <mat-card class="box" [class.mat-elevation-z10]="true">
+      <mat-card-header>
+        <mat-card-title>Key verify</mat-card-title>
+        <p style="margin-top: 1rem"> Key has NOT been verified! </p>
+      </mat-card-header>
+
+      <form class="example-form" (ngSubmit)="verifyKey()" [formGroup]="keyVerifyFrom">
+        <mat-card-content>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Key" formControlName="key" [type]="hide ? 'password' : 'text'">
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </mat-form-field>
+        </mat-card-content>
+        <button mat-stroked-button color="accent" class="btn-block">Verify</button>
+      </form>
+
+      <mat-card-footer>
+        <mat-error *ngIf="error$ | async ">
+          <button mat-icon-button color="warn" (click)="clearError()">x</button>
+          {{error$ | async}}
+        </mat-error>
+      </mat-card-footer>
+    </mat-card>
+
+  </div>
+  </ng-template>
+
+  <swal #successSwal title="Creation successful" text="Successfully created a login" icon="success" [toast]="true" [timer]="2500" [timerProgressBar]="true"></swal>
+
+  <swal #keyChangeSuccessSwal title="Key change successful" text="Successfully changed key" icon="success" [toast]="true" [timer]="2500" [timerProgressBar]="true"></swal>
+
+
