@@ -4,6 +4,7 @@ import {Socket} from "ngx-socket-io";
 import {OrderRegistrationDto} from "../models/orderRegistrationDto";
 import {Observable} from "rxjs";
 import {LogEntryDto} from "../models/LogEntry.dto";
+import {ProcessStepDto} from "../models/processStep.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,10 @@ export class OrderService {
 
   public listenForOrderLogEvent(): Observable<LogEntryDto>{
     return this.socket.fromEvent<LogEntryDto>('orderLogEvent');
+  }
 
+  public listenForProcessStepEvent(): Observable<ProcessStepDto> {
+    return this.socket.fromEvent<ProcessStepDto>('processStepEvent');
   }
 
   /**
