@@ -21,7 +21,7 @@ export class InsertOrUpdateLogEntry{
 
 }
 
-export class DeleteUser{
+export class DeleteLogEntry{
 
   constructor(public logEntry: LogEntryDto) {}
   static readonly type = '[logEntry] delete LogEntry'
