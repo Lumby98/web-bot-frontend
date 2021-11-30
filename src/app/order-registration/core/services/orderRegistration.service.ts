@@ -3,13 +3,13 @@ import {HttpClient} from "@angular/common/http";
 import {Socket} from "ngx-socket-io";
 import {OrderRegistrationDto} from "../models/orderRegistrationDto";
 import {Observable} from "rxjs";
-import {LogEntryDto} from "../models/LogEntry.dto";
+import {LogEntryDto} from "../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../models/processStep.dto";
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrderService {
+export class OrderRegistrationService {
 
   constructor(private http: HttpClient, private socket: Socket) {
   }

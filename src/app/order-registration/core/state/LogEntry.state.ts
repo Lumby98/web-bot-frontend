@@ -1,15 +1,15 @@
 import {Selector, State, Action, StateContext, createSelector} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {append, iif, insertItem, patch, removeItem, updateItem} from "@ngxs/store/operators";
-import {LogEntryDto} from "../models/LogEntry.dto";
+import {LogEntryDto} from "../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../models/processStep.dto";
 import {
-  ClearLogEntryError,
-  ClearLogEntryStore,
-  DeleteLogEntry,
-  InsertOrUpdateLogEntry,
-  UpdateLogEntryError,
-  UpdateLogEntryStore
+  ClearOrderRegLogEntryError,
+  ClearOrderRegLogEntryStore,
+  DeleteOrderRegLogEntry,
+  InsertOrUpdateOrderRegLogEntry,
+  UpdateOrderRegLogEntryError,
+  UpdateOrderRegLogEntryStore
 } from "./logEntry.actions";
 
 
@@ -49,8 +49,8 @@ export class logEntryState {
     return state.error;
   }
 
-  @Action(UpdateLogEntryStore)
-  updateLogEntryStore(ctx: StateContext<logEntryStateModel>, action: UpdateLogEntryStore): void {
+  @Action(UpdateOrderRegLogEntryStore)
+  updateLogEntryStore(ctx: StateContext<logEntryStateModel>, action: UpdateOrderRegLogEntryStore): void {
     const state = ctx.getState();
     const newState: logEntryStateModel = {
       ...state,
@@ -59,7 +59,7 @@ export class logEntryState {
     ctx.setState(newState);
   }
 
-  @Action(ClearLogEntryStore)
+  @Action(ClearOrderRegLogEntryStore)
   clearLogEntryStore(ctx: StateContext<logEntryStateModel>): void {
     const state = ctx.getState();
     const newState: logEntryStateModel = {
@@ -68,16 +68,16 @@ export class logEntryState {
     ctx.setState(newState);
   }
 
-  @Action(InsertOrUpdateLogEntry)
-  insertOrUpdateLogEntry(ctx: StateContext<logEntryStateModel>, action: InsertOrUpdateLogEntry): void {
+  @Action(InsertOrUpdateOrderRegLogEntry)
+  insertOrUpdateLogEntry(ctx: StateContext<logEntryStateModel>, action: InsertOrUpdateOrderRegLogEntry): void {
     /*ctx.setState(patch({users: updateItem<UserDto>(user => user.id === action.user.id, action.user)}));
   */
     ctx.setState(patch({logEntries: this.insertOrUpdateLogEntryMethod(action.logEntry.id,action.logEntry)}));
   }
 
 
-  @Action(DeleteLogEntry)
-  deleteLogEntry(ctx: StateContext<logEntryStateModel>, action: DeleteLogEntry): void{
+  @Action(DeleteOrderRegLogEntry)
+  deleteLogEntry(ctx: StateContext<logEntryStateModel>, action: DeleteOrderRegLogEntry): void{
     const state = ctx.getState();
     if(state.logEntries){
       ctx.setState(patch({
@@ -87,8 +87,8 @@ export class logEntryState {
 
   }
 
-  @Action(UpdateLogEntryError)
-  updateLogEntryError(ctx: StateContext<logEntryStateModel>, action: UpdateLogEntryError): void {
+  @Action(UpdateOrderRegLogEntryError)
+  updateLogEntryError(ctx: StateContext<logEntryStateModel>, action: UpdateOrderRegLogEntryError): void {
     const state = ctx.getState();
     const newState: logEntryStateModel = {
       ...state,
@@ -97,7 +97,7 @@ export class logEntryState {
     ctx.setState(newState);
   }
 
-  @Action(ClearLogEntryError)
+  @Action(ClearOrderRegLogEntryError)
   clearLogEntryError(ctx: StateContext<logEntryStateModel>): void {
     const state = ctx.getState();
     const newState: logEntryStateModel = {

@@ -1,32 +1,32 @@
-import {LogEntryDto} from "../models/LogEntry.dto";
+import {LogEntryDto} from "../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../models/processStep.dto";
 
-export class UpdateLogEntryStore{
+export class UpdateOrderRegLogEntryStore {
   constructor(public logEntries: LogEntryDto[]) {}
-  static readonly type = '[logEntry] Update logEntries'
+  static readonly type = '[OrderRegLogEntry] Update OrderRegLogEntries'
 }
 
-export class ClearLogEntryStore{
-  static readonly type = '[logEntry] Clear LogEntry'
+export class ClearOrderRegLogEntryStore {
+  static readonly type = '[OrderRegLogEntry] Clear OrderRegLogEntry'
 }
 
-export class InsertOrUpdateLogEntry{
+export class InsertOrUpdateOrderRegLogEntry {
   constructor(public logEntry: LogEntryDto) {}
-  static readonly type = '[logEntry] InsertOrUpdate LogEntry'
+  static readonly type = '[OrderRegLogEntry] InsertOrUpdate OrderRegLogEntry'
 }
 
-export class DeleteLogEntry{
+export class DeleteOrderRegLogEntry {
   constructor(public logEntry: LogEntryDto) {}
-  static readonly type = '[logEntry] delete LogEntry'
+  static readonly type = 'OrderReg[logEntry] delete OrderRegLogEntry'
 }
 
-export class ClearLogEntryError{
-  static readonly type = '[logEntry] clear logEntry error';
+export class ClearOrderRegLogEntryError {
+  static readonly type = '[OrderRegLogEntry] clear OrderRegLogEntry error';
 }
 
-export class UpdateLogEntryError{
+export class UpdateOrderRegLogEntryError {
   constructor(public error: any) {}
-  static readonly type = '[logEntry] Update logEntry error';
+  static readonly type = '[OrderRegLogEntry] Update OrderRegLogEntry error';
 }
 
 export class UpdateProcessStep{
