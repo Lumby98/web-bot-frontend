@@ -110,7 +110,7 @@ export class orderRegLogEntryState {
   }
 
   @Action(UpdateProcessStep)
-  updateProcesStep(ctx: StateContext<OrderRegLogEntryStateModel>, action: UpdateProcessStep){
+  updateProcessStep(ctx: StateContext<OrderRegLogEntryStateModel>, action: UpdateProcessStep){
     const state = ctx.getState();
     let newState: OrderRegLogEntryStateModel;
 
