@@ -3,10 +3,13 @@ import { CommonModule } from '@angular/common';
 
 import { OrderRegistrationRoutingModule } from './order-registration-routing.module';
 import {SharedModule} from "../SharedModule/shared.module";
+import { OrderRegistrationComponent } from './presentation/containers/order-registration/order-registration.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    OrderRegistrationComponent
+  ],
   imports: [
     CommonModule,
     OrderRegistrationRoutingModule,
