@@ -5,7 +5,7 @@ import {LogEntryDto} from "../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../models/processStep.dto";
 import {
   ClearOrderRegLogEntryError,
-  ClearOrderRegLogEntryStore,
+  ClearOrderRegLogEntryStore, ClearProcessSteps,
   DeleteOrderRegLogEntry,
   InsertOrUpdateOrderRegLogEntry,
   UpdateOrderRegLogEntryError,
@@ -49,6 +49,25 @@ export class orderRegLogEntryState {
   @Selector()
   static errorSelector(state: OrderRegLogEntryStateModel): any{
     return state.error;
+  }
+
+
+  static processStep(type: ProcessStepEnum): (state: OrderRegLogEntryStateModel) => ProcessStepDto | undefined{
+    return createSelector([orderRegLogEntryState], (state: OrderRegLogEntryStateModel) => {
+      switch(type) {
+        case ProcessStepEnum.GETORDERINFO:
+          return state.getOrderInfo;
+          break;
+
+        case  ProcessStepEnum.GETORDER:
+          return state.getOrder;
+          break;
+
+        case  ProcessStepEnum.ALOCATEORDER:
+          return state.allocateOrder;
+          break;
+      }
+    });
   }
 
   @Action(UpdateOrderRegLogEntryStore)
@@ -109,8 +128,20 @@ export class orderRegLogEntryState {
     ctx.setState(newState);
   }
 
+  @Action(ClearProcessSteps)
+  clearProcessSteps(ctx: StateContext<OrderRegLogEntryStateModel>){
+    const state = ctx.getState();
+    const newState: OrderRegLogEntryStateModel = {
+      ...state,
+      getOrderInfo: undefined,
+      getOrder: undefined,
+      allocateOrder: undefined
+    };
+    ctx.setState(newState);
+  }
+
   @Action(UpdateProcessStep)
-  updateProcesStep(ctx: StateContext<OrderRegLogEntryStateModel>, action: UpdateProcessStep){
+  updateProcessStep(ctx: StateContext<OrderRegLogEntryStateModel>, action: UpdateProcessStep){
     const state = ctx.getState();
     let newState: OrderRegLogEntryStateModel;
 

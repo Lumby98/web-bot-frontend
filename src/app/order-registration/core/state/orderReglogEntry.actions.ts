@@ -34,6 +34,6 @@ export class UpdateProcessStep{
     static readonly type = '[ProcessStep] Update ProcessStep';
 }
 
-export class clearProcessSteps{
+export class ClearProcessSteps{
   static readonly type = '[ProcessStep] Clear ProcessSteps';
 }
