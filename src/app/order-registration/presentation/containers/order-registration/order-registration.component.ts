@@ -54,7 +54,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   startOrderRegistration(){
 
   }
-  
+
 
   /**
    * Calls the Facade to clear error from store.
