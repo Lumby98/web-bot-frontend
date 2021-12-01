@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Observable, Subject} from "rxjs";
+import {Observable, Subject, Subscription} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
 import {orderRegistrationFacade} from "../../../abstraction/orderRegistration.facade";
@@ -23,6 +23,8 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   allocateOrder$!: Observable<ProcessStepDto | undefined>
   error$!: Observable<any>;
   orderRegisterForm: FormGroup;
+  listenForOrderLogSubscription: Subscription | undefined;
+  listenProcessStepEventSubscription: Subscription | undefined;
 
 
   constructor(private formBuilder: FormBuilder, private authFacade: AuthFacade, private orderRegistrationFacade: orderRegistrationFacade ) {
@@ -37,8 +39,6 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.orderRegistrationFacade.listenForError().pipe(takeUntil(this.unsubscriber$)).subscribe();
-    this.orderRegistrationFacade.listenForProcessStepEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
-    this.orderRegistrationFacade.listenForOrderLogEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
 
     this.getOrderInfo$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.GETORDERINFO);
     this.getOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.GETORDER);
@@ -52,9 +52,37 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   }
 
   startOrderRegistration(){
+    if(this.orderRegisterForm.invalid){
+      this.orderRegistrationFacade.updateError('Order number cannot be blank!');
+    }
+    else{
+
+      if (this.startedRegistration){
+        this.orderRegistrationFacade.updateError('Order registration is already started!');
+      }
+      else {
+        this.startedRegistration = true;
+        this.listenProcessStepEventSubscription = this.orderRegistrationFacade.listenForProcessStepEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
+        this.listenForOrderLogSubscription = this.orderRegistrationFacade.listenForOrderLogEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
+      }
+    }
 
   }
-  
+
+  stopOrderRegistration(){
+    if(!this.startedRegistration){
+      this.orderRegistrationFacade.updateError('Order registration is already stopped!');
+    }
+    else{
+      this.startedRegistration = false;
+      this.listenProcessStepEventSubscription?.unsubscribe();
+      this.listenForOrderLogSubscription?.unsubscribe();
+
+      this.orderRegistrationFacade.clearLogEntries();
+      this.orderRegistrationFacade.clearProcessSteps();
+    }
+  }
+
 
   /**
    * Calls the Facade to clear error from store.
