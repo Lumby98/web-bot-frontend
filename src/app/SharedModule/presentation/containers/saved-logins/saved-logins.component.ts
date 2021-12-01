@@ -17,7 +17,6 @@ export class SavedLoginsComponent implements OnInit {
   hide: Boolean;
   changedKeyBool: boolean = false;
   loginInsertForm: FormGroup;
-  keyVerifyFrom: FormGroup;
   keyChangeForm: FormGroup;
   currentKey$: Observable<string>
   public selectedType: any;
@@ -38,10 +37,6 @@ export class SavedLoginsComponent implements OnInit {
     return this.loginInsertForm.get('password');
   }
 
-  get key() {
-    return this.keyVerifyFrom.get('key');
-  }
-
   get newKey() {
     return this.keyChangeForm.get('newKey');
   }
@@ -58,10 +53,6 @@ export class SavedLoginsComponent implements OnInit {
       loginType: ['', Validators.required],
       username: ['', Validators.required],
       password: ['', Validators.required],
-    });
-
-    this.keyVerifyFrom = this.formBuilder.group({
-      key: ["" , Validators.required]
     });
 
     this.keyChangeForm = this.formBuilder.group({
@@ -99,13 +90,6 @@ export class SavedLoginsComponent implements OnInit {
         })
       });
     }
-  }
-
-  verifyKey(){
-    this.authFacade.verify({password: this.key?.value}).pipe(take(1)).subscribe( success => {},err => {
-      this.authFacade.updateError(err);
-    });
-
   }
 
   changeKey(){

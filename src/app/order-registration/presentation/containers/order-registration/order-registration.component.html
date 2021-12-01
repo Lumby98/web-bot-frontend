@@ -1,1 +1,7 @@
-<p>order-registration works!</p>
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="currentKey$ | async as key; else elseBlock" >
+
+</div>
+
+<ng-template #elseBlock>
+  <app-key-verify></app-key-verify>>
+</ng-template>

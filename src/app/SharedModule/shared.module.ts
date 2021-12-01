@@ -102,7 +102,8 @@ const materialModules = [
     LoginComponent,
     FlexLayoutModule,
     ReactiveFormsModule,
-    ...materialModules
+    ...materialModules,
+    KeyVerifyComponent
   ],
   providers: [
     ConfirmDialogService
