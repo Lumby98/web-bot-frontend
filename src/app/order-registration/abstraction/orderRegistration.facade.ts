@@ -11,9 +11,11 @@ import {
   UpdateProcessStep
 } from "../core/state/orderReglogEntry.actions";
 import {ProcessStepDto} from "../core/models/processStep.dto";
-import {orderRegLogEntryState, OrderRegLogEntryStateModel} from "../core/state/orderRegLogEntry.state";
+import {orderRegLogEntryState} from "../core/state/orderRegLogEntry.state";
 import {ProcessStepEnum} from "../core/enums/processStep.enum";
+import {Injectable} from "@angular/core";
 
+@Injectable()
 export class orderRegistrationFacade{
   constructor(private orderRegistrationService: OrderRegistrationService, private store: Store) {
 

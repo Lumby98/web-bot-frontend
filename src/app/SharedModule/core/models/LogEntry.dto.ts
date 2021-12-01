@@ -1,5 +1,3 @@
-import {OrderDto} from "./order.dto";
-import {OrderError} from "./OrderError";
 
 export interface LogEntryDto {
   id: number;
@@ -7,6 +5,4 @@ export interface LogEntryDto {
   desc: string;
   process: string;
   timestamp: string;
-  order?: OrderDto;
-  err?: OrderError;
 }
