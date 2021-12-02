@@ -1,10 +1,8 @@
 <!--<mat-icon aria-hidden="false" aria-label="Example home icon">done</mat-icon>-->
 
-<div style="height: 70%" fxLayout="row" fxLayoutAlign="center center"  *ngIf="currentKey$ | async as key; else elseBlock" >
+<div style="height: 70%; " fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="10px" *ngIf="currentKey$ | async as key; else elseBlock" >
 
-  <div style="height: 70%" fxLayout="row" fxLayoutAlign="flex-start" fxLayoutGap="10px" >
-
-  <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+  <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" >
 
     <mat-card class="box" [class.mat-elevation-z10]="true">
       <mat-card-header fxLayoutAlign="center top">
@@ -77,10 +75,11 @@
       </mat-card-footer>
     </mat-card>
 
-  </div>
   </div>
 
 </div>
+
+
 
 <ng-template #elseBlock>
   <app-key-verify></app-key-verify>>
