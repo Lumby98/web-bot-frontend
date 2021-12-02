@@ -4,5 +4,5 @@ export interface LogEntryDto {
   status: boolean;
   desc: string;
   process: string;
-  timestamp: string;
+  timestamp: Date;
 }

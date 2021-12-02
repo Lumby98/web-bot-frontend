@@ -6,7 +6,7 @@ import {orderRegistrationFacade} from "../../../abstraction/orderRegistration.fa
 import {LogEntryDto} from "../../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../../../core/models/processStep.dto";
 import {ProcessStepEnum} from "../../../core/enums/processStep.enum";
-import {takeUntil} from "rxjs/operators";
+import {take, takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-order-registration',
@@ -36,6 +36,10 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     })
 
   }
+  get orderNumbers(){
+    return this.orderRegisterForm.get('orderNumbers')
+  }
+
 
   ngOnInit(): void {
     this.orderRegistrationFacade.listenForError().pipe(takeUntil(this.unsubscriber$)).subscribe();
@@ -52,19 +56,46 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   }
 
   startOrderRegistration(){
-    if(this.orderRegisterForm.invalid){
-      this.orderRegistrationFacade.updateError('Order number cannot be blank!');
-    }
-    else{
+    try {
+      if (this.orderRegisterForm.invalid) {
+        this.orderRegistrationFacade.updateError('Order number cannot be blank!');
+      } else {
 
-      if (this.startedRegistration){
-        this.orderRegistrationFacade.updateError('Order registration is already started!');
+        if (this.startedRegistration) {
+          this.orderRegistrationFacade.updateError('Order registration is already started!');
+        } else {
+
+          const orderNumbers = this.orderNumbers?.value.split(",");
+
+          if (orderNumbers) {
+
+            this.currentKey$.pipe(take(1)).subscribe(key => {
+              if (key) {
+                this.startedRegistration = true;
+                this.listenProcessStepEventSubscription = this.orderRegistrationFacade.listenForProcessStepEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
+                this.listenForOrderLogSubscription = this.orderRegistrationFacade.listenForOrderLogEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
+
+                this.orderRegistrationFacade.startOrderRegistration({orderNumbers: orderNumbers, key: key});
+
+
+              } else {
+                this.orderRegistrationFacade.updateError('Could not get key');
+              }
+
+
+            }, error => {
+              this.orderRegistrationFacade.updateError(error);
+            });
+          }else {
+            this.orderRegistrationFacade.updateError('No Order Numbers');
+          }
+
+
+        }
       }
-      else {
-        this.startedRegistration = true;
-        this.listenProcessStepEventSubscription = this.orderRegistrationFacade.listenForProcessStepEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
-        this.listenForOrderLogSubscription = this.orderRegistrationFacade.listenForOrderLogEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
-      }
+    }
+    catch (error) {
+      this.orderRegistrationFacade.updateError(error);
     }
 
   }
