@@ -7,6 +7,7 @@ import {LogEntryDto} from "../../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../../../core/models/processStep.dto";
 import {ProcessStepEnum} from "../../../core/enums/processStep.enum";
 import {take, takeUntil} from "rxjs/operators";
+import {isNewLine} from "@angular/compiler/src/chars";
 
 @Component({
   selector: 'app-order-registration',
@@ -65,7 +66,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
           this.orderRegistrationFacade.updateError('Order registration is already started!');
         } else {
 
-          const orderNumbers = this.orderNumbers?.value.split(",");
+          const orderNumbers = this.orderNumbers?.value.split(/\r?\n/);
 
           if (orderNumbers) {
 
