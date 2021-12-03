@@ -168,33 +168,7 @@
   </div>-->
 
   <ng-template #elseBlock>
-    <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-
-    <mat-card class="box" [class.mat-elevation-z10]="true">
-      <mat-card-header>
-        <mat-card-title>Key verify</mat-card-title>
-        <p style="margin-top: 1rem"> Key has NOT been verified! </p>
-      </mat-card-header>
-
-      <form class="example-form" (ngSubmit)="verifyKey()" [formGroup]="keyVerifyFrom">
-        <mat-card-content>
-          <mat-form-field class="example-full-width">
-            <input matInput placeholder="Key" formControlName="key" [type]="hide ? 'password' : 'text'">
-            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </mat-form-field>
-        </mat-card-content>
-        <button mat-stroked-button color="accent" class="btn-block">Verify</button>
-      </form>
-
-      <mat-card-footer>
-        <mat-error *ngIf="error$ | async ">
-          <button mat-icon-button color="warn" (click)="clearError()">x</button>
-          {{error$ | async}}
-        </mat-error>
-      </mat-card-footer>
-    </mat-card>
-
-  </div>
+    <app-key-verify></app-key-verify>
   </ng-template>
 
   <swal #successSwal title="Creation successful" text="Successfully created a login" icon="success" [toast]="true" [timer]="2500" [timerProgressBar]="true"></swal>

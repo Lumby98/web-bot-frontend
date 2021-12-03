@@ -1,12 +1,9 @@
-import {OrderDto} from "./order.dto";
-import {OrderError} from "./OrderError";
+import {LogOrderDto} from "./logOrder.dto";
 
 export interface LogEntryDto {
   id: number;
   status: boolean;
-  desc: string;
   process: string;
-  timestamp: string;
-  order?: OrderDto;
-  err?: OrderError;
+  timestamp: Date;
+  order: LogOrderDto;
 }
