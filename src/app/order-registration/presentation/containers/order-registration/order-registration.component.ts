@@ -26,6 +26,8 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   orderRegisterForm: FormGroup;
   listenForOrderLogSubscription: Subscription | undefined;
   listenProcessStepEventSubscription: Subscription | undefined;
+  displayedColumns: string[] = ['OrderNum', 'Process', 'Completed', 'CompletedAt'];
+
 
 
   constructor(private formBuilder: FormBuilder, private authFacade: AuthFacade, private orderRegistrationFacade: orderRegistrationFacade ) {
