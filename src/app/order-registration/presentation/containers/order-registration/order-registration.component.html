@@ -1,4 +1,5 @@
 <!--<mat-icon aria-hidden="false" aria-label="Example home icon">done</mat-icon>-->
+<!--<mat-icon aria-hidden="false" aria-label="Example home icon">report_problem</mat-icon>-->
 
 <div style="height: 70%; " fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="10px" *ngIf="currentKey$ | async as key; else elseBlock" >
 
@@ -44,10 +45,23 @@
 
     <mat-card class="box" [class.mat-elevation-z10]="true">
       <mat-card-header fxLayoutAlign="center top">
-        <mat-card-title>FILLER</mat-card-title>
+        <mat-card-title>Process Steps</mat-card-title>
       </mat-card-header>
 
         <mat-card-content>
+          <div *ngIf="startedRegistration">
+            <mat-list>
+              <mat-list-item *ngIf="(getOrderInfo$ | async) as getOrderInfo" > Get order info <div *ngIf="getOrderInfo.error">
+                <mat-icon aria-hidden="false" aria-label="Example home icon">report_problem</mat-icon> </div>
+                <div *ngIf="!getOrderInfo.error">
+                  <mat-icon aria-hidden="false" aria-label="Example home icon">done</mat-icon> </div>
+              </mat-list-item >
+              <mat-list-item *ngIf="!(getOrderInfo$ | async)"> Get order info <mat-spinner ></mat-spinner>
+              </mat-list-item>
+
+            </mat-list>
+
+          </div>
 
 
         </mat-card-content>

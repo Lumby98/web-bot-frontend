@@ -29,7 +29,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
 
 
   constructor(private formBuilder: FormBuilder, private authFacade: AuthFacade, private orderRegistrationFacade: orderRegistrationFacade ) {
-    this.error$ = this.authFacade.getErrorObservable();
+    this.error$ = this.orderRegistrationFacade.getErrorObservable();
     this.currentKey$ = this.authFacade.getCurrentKey();
 
     this.orderRegisterForm = this.formBuilder.group({
@@ -47,7 +47,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
 
     this.getOrderInfo$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.GETORDERINFO);
     this.getOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.GETORDER);
-    this.allocateOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.GETORDERINFO);
+    this.allocateOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.ALOCATEORDER);
     this.displayLogEntries$ = this.orderRegistrationFacade.getOrderLogEntries();
   }
 
