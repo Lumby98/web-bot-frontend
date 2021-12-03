@@ -4,7 +4,6 @@ import {AuthFacade} from "../../../abstraction/auth.facade";
 import {Observable} from "rxjs";
 import {ConfirmDialogFacade} from "../../../../SharedModule/abstraction/confirm-dialog.facade";
 import {take} from "rxjs/operators";
-import {ClearError, UpdateError} from "../../../core/state/auth/auth.actions";
 
 @Component({
   selector: 'app-login',

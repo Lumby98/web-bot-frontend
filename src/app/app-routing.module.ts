@@ -6,7 +6,6 @@ import {RegisterComponent} from "./user/presentation/containers/register/registe
 import {AuthGuard} from "./SharedModule/core/guards/auth.guard";
 import {UserListComponent} from "./user/presentation/containers/user-list/user-list.component";
 import {UserDetailComponent} from "./user/presentation/containers/user-detail/user-detail.component";
-import {InsoleRegistrationComponent} from "./insole-registration/presentation/containers/insole-registration/insole-registration.component";
 import {SavedLoginsComponent} from "./SharedModule/presentation/containers/saved-logins/saved-logins.component";
 
 const routes: Routes = [
@@ -23,6 +22,8 @@ const routes: Routes = [
   {path: 'user-detail/:id', canActivate: [AuthGuard], component: UserDetailComponent},
   {path: 'insole', canActivate: [AuthGuard],
     loadChildren: () => import('./insole-registration/insole-registration.module').then(m => m.InsoleRegistrationModule)},
+  {path: 'log', canActivate: [AuthGuard],
+  loadChildren: () => import('./log/log.module').then(m => m.LogModule)},
   {path: '**', redirectTo: 'home'}];
 
 @NgModule({
