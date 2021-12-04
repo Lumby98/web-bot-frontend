@@ -47,6 +47,7 @@ import {ConfirmDialogModule} from "./presentation/components/confirm-dialog/conf
 import {ConfirmDialogService} from "./presentation/components/confirm-dialog/confirm-dialog.service";
 import { SavedLoginsComponent } from './presentation/containers/saved-logins/saved-logins.component';
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
+import { KeyVerifyComponent } from './presentation/containers/key-verify/key-verify.component';
 
 const materialModules = [
   CdkTreeModule,
@@ -86,7 +87,7 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [HomeComponent,LoginComponent, SavedLoginsComponent],
+  declarations: [HomeComponent,LoginComponent, SavedLoginsComponent, KeyVerifyComponent],
   imports: [
     RouterModule,
     CommonModule,
@@ -101,7 +102,8 @@ const materialModules = [
     LoginComponent,
     FlexLayoutModule,
     ReactiveFormsModule,
-    ...materialModules
+    ...materialModules,
+    KeyVerifyComponent
   ],
   providers: [
     ConfirmDialogService

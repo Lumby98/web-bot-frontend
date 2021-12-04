@@ -19,8 +19,8 @@ export class OrderRegistrationService {
     this.socket.emit('startOrderRegistration', orderRegistrationDto);
   }
 
-  public listenForOrderLogEvent(): Observable<LogEntryDto>{
-    return this.socket.fromEvent<LogEntryDto>('orderLogEvent');
+  public listenForOrderLogEvent(): Observable<LogEntryDto[]>{
+    return this.socket.fromEvent<LogEntryDto[]>('orderLogEvent');
   }
 
   public listenForProcessStepEvent(): Observable<ProcessStepDto> {
