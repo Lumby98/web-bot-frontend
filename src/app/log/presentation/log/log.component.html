@@ -1,9 +1,10 @@
 
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+<div  class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" *ngIf="(LogEntries$ | async)">
 
   <mat-card class="box" [class.mat-elevation-z10]="true">
     <mat-card-header>
       <mat-card-title>Log</mat-card-title>
+
     </mat-card-header>
 
       <mat-card-content>
@@ -11,9 +12,14 @@
           <input matInput placeholder="Key" [formControl]="queryForm">
         </mat-form-field>
 
-        <div *ngIf="paginatedLogEntries$ | async">
 
-        <table mat-table [dataSource]="LogEntries$" style="width: 1000px" class="mat-elevation-z8">
+        <button (click)="removeAllLogEntries()" mat-stroked-button color="warn">
+          <mat-icon>close</mat-icon> Clear log
+        </button>
+
+        <div *ngIf="(LogEntries$ | async)">
+
+        <table mat-table [dataSource]="LogEntries$" style="width: 1000px">
 
           <ng-container matColumnDef="OrderNum" >
             <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Order # </th>
@@ -45,7 +51,16 @@
 
           <ng-container matColumnDef="CompletedAt">
             <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Completed at </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.timestamp | date: 'medium'}} </td>
+            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.timestamp | date: 'medium' }}  </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Delete">
+            <th mat-header-cell *matHeaderCellDef style="padding: 5px">  </th>
+            <td mat-cell *matCellDef="let logEntry" style="padding: 5px">
+              <button (click)="removeLogEntry(logEntry)" mat-icon-button >
+              <mat-icon>close</mat-icon>
+            </button>
+            </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -64,6 +79,16 @@
 
 
     <mat-card-footer>
+      <mat-paginator
+        (page)="handlePageEvent($event)"
+        [length]="length$ | async"
+        [pageSize]="pageSize"
+        [showFirstLastButtons]="showFirstLastButtons"
+        [pageSizeOptions]="pageSizeOptions"
+        [pageIndex]="pageIndex"
+        aria-label="Select page">
+      </mat-paginator>
+
       <mat-error *ngIf="error$ | async ">
         <button mat-icon-button color="warn" (click)="clearError()">x</button>
         {{error$ | async}}
@@ -72,3 +97,6 @@
   </mat-card>
 
 </div>
+
+
+

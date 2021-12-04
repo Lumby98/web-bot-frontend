@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {Store} from "@ngxs/store";
 import {LogService} from "../core/services/log.service";
 import {QueryDto} from "../../SharedModule/presentation/dto/filter/query.dto";
-import {take, tap} from "rxjs/operators";
+import {count, take, tap} from "rxjs/operators";
 import {
   ClearLogEntryError,
   ClearLogEntryStore, DeleteLogEntry, InsertOrUpdateLogEntry,
@@ -45,15 +45,25 @@ export class LogFacade {
   }
 
   removeLogEntry(logEntry: LogEntryDto){
-    this.store.dispatch(new DeleteLogEntry(logEntry));
-    this.logService.remove(logEntry.id).subscribe( succes => {
+    this.getCountObservable().pipe(take(1)).subscribe(count => {
+      const newCount = count-1
+      this.store.dispatch(new DeleteLogEntry(logEntry));
+      this.store.dispatch(new UpdateLogEntryCount(newCount))
+      this.logService.remove(logEntry.id).subscribe( succes => {
 
-    },
-      error => {
-      this.updateError(error);
-      this.store.dispatch(new InsertOrUpdateLogEntry(logEntry));
-      })
-  }
+
+        },
+        error => {
+          this.updateError(error);
+          this.store.dispatch(new InsertOrUpdateLogEntry(logEntry));
+          this.store.dispatch(new UpdateLogEntryCount(count))
+        });
+    })
+
+    }
+
+
+
 
   removeAllLogEntries(){
     let logEntries: LogEntryDto[] = [];
