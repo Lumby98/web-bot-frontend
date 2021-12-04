@@ -2,7 +2,6 @@ import {OrderRegistrationService} from "../core/services/orderRegistration.servi
 import {Store} from "@ngxs/store";
 import {OrderRegistrationDto} from "../core/models/orderRegistrationDto";
 import {Observable} from "rxjs";
-import {LogEntryDto} from "../../SharedModule/core/models/LogEntry.dto";
 import {tap} from "rxjs/operators";
 import {
   ClearOrderRegLogEntryError, ClearOrderRegLogEntryStore, ClearProcessSteps,
@@ -14,6 +13,7 @@ import {ProcessStepDto} from "../core/models/processStep.dto";
 import {orderRegLogEntryState} from "../core/state/orderRegLogEntry.state";
 import {ProcessStepEnum} from "../core/enums/processStep.enum";
 import {Injectable} from "@angular/core";
+import {LogEntryDto} from "../../log/presentation/dto/log-entry.dto";
 
 @Injectable()
 export class orderRegistrationFacade{

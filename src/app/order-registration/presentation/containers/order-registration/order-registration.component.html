@@ -100,17 +100,17 @@
 
           <ng-container matColumnDef="OrderNum" >
             <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Order # </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.order.orderNumber}} </td>
+            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.order.orderNr}} </td>
           </ng-container>
 
           <ng-container matColumnDef="Process" >
             <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Process </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.process}} </td>
+            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{ processStepToString(logEntry.process)}} </td>
           </ng-container>
 
           <ng-container matColumnDef="Completed" >
             <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Completed </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.order.completed}} </td>
+            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.status}} </td>
           </ng-container>
 
           <ng-container matColumnDef="CompletedAt">

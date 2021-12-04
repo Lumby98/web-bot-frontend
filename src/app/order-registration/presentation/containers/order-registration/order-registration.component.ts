@@ -3,11 +3,10 @@ import {Observable, Subject, Subscription} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
 import {orderRegistrationFacade} from "../../../abstraction/orderRegistration.facade";
-import {LogEntryDto} from "../../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../../../core/models/processStep.dto";
 import {ProcessStepEnum} from "../../../core/enums/processStep.enum";
 import {take, takeUntil} from "rxjs/operators";
-import {isNewLine} from "@angular/compiler/src/chars";
+import {LogEntryDto} from "../../../../log/presentation/dto/log-entry.dto";
 
 @Component({
   selector: 'app-order-registration',
@@ -48,7 +47,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     this.orderRegistrationFacade.listenForError().pipe(takeUntil(this.unsubscriber$)).subscribe();
 
     this.getOrderInfo$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.GETORDERINFO);
-    this.getOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.GETORDER);
+    this.getOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.REGISTERORDER);
     this.allocateOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.ALOCATEORDER);
     this.displayLogEntries$ = this.orderRegistrationFacade.getOrderLogEntries();
   }
@@ -75,8 +74,14 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
             this.currentKey$.pipe(take(1)).subscribe(key => {
               if (key) {
                 this.startedRegistration = true;
-                this.listenProcessStepEventSubscription = this.orderRegistrationFacade.listenForProcessStepEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
-                this.listenForOrderLogSubscription = this.orderRegistrationFacade.listenForOrderLogEvent().pipe(takeUntil(this.unsubscriber$)).subscribe();
+                this.listenProcessStepEventSubscription = this.orderRegistrationFacade
+                  .listenForProcessStepEvent()
+                  .pipe(takeUntil(this.unsubscriber$))
+                  .subscribe();
+                this.listenForOrderLogSubscription = this.orderRegistrationFacade
+                  .listenForOrderLogEvent()
+                  .pipe(takeUntil(this.unsubscriber$))
+                  .subscribe();
 
                 this.orderRegistrationFacade.startOrderRegistration({orderNumbers: orderNumbers, key: key});
 
@@ -123,6 +128,24 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
    */
   clearError(){
     this.orderRegistrationFacade.clearError();
+  }
+
+
+  processStepToString(process: ProcessStepEnum): string{
+    switch (process) {
+
+      case ProcessStepEnum.GETORDERINFO:
+        return 'Get order info';
+
+      case ProcessStepEnum.REGISTERORDER:
+        return 'Register order';
+
+      case ProcessStepEnum.ALOCATEORDER:
+        return 'Allocate order';
+
+
+    }
+
   }
 
 

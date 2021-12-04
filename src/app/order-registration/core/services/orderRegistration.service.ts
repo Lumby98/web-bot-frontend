@@ -3,8 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {Socket} from "ngx-socket-io";
 import {OrderRegistrationDto} from "../models/orderRegistrationDto";
 import {Observable} from "rxjs";
-import {LogEntryDto} from "../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../models/processStep.dto";
+import {LogEntryDto} from "../../../log/presentation/dto/log-entry.dto";
 
 @Injectable({
   providedIn: 'root'

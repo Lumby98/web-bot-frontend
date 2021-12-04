@@ -1,7 +1,6 @@
 import {Action, createSelector, Selector, State, StateContext} from "@ngxs/store";
 import {Injectable} from "@angular/core";
 import {iif, insertItem, patch, removeItem, updateItem} from "@ngxs/store/operators";
-import {LogEntryDto} from "../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../models/processStep.dto";
 import {
   ClearOrderRegLogEntryError,
@@ -13,6 +12,7 @@ import {
   UpdateProcessStep
 } from "./orderReglogEntry.actions";
 import {ProcessStepEnum} from "../enums/processStep.enum";
+import {LogEntryDto} from "../../../log/presentation/dto/log-entry.dto";
 
 
 export interface OrderRegLogEntryStateModel {
@@ -59,7 +59,7 @@ export class orderRegLogEntryState {
           return state.getOrderInfo;
           break;
 
-        case  ProcessStepEnum.GETORDER:
+        case  ProcessStepEnum.REGISTERORDER:
           return state.getOrder;
           break;
 
@@ -152,7 +152,7 @@ export class orderRegLogEntryState {
           getOrderInfo: action.processStepDto
         };
         break;
-      case  ProcessStepEnum.GETORDER:
+      case  ProcessStepEnum.REGISTERORDER:
         newState = {
           ...state,
           getOrder: action.processStepDto
