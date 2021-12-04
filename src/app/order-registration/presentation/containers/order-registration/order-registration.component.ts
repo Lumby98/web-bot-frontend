@@ -55,6 +55,8 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscriber$.next();
     this.unsubscriber$.complete();
+    this.orderRegistrationFacade.clearLogEntries();
+    this.orderRegistrationFacade.clearProcessSteps();
   }
 
   startOrderRegistration(){
