@@ -6,13 +6,15 @@ import {
   ClearLogEntryError,
   ClearLogEntryStore,
   DeleteLogEntry,
-  InsertOrUpdateLogEntry,
+  InsertOrUpdateLogEntry, UpdateLogEntryCount,
   UpdateLogEntryError,
   UpdateLogEntryStore
 } from "./logEntry.actions";
+import {PaginationDto} from "../../../SharedModule/presentation/dto/filter/pagination-dto";
 
 export interface LogEntryStateModel {
   logEntries: LogEntryDto[];
+  count: number;
   error: any;
 }
 
@@ -21,17 +23,23 @@ export interface LogEntryStateModel {
   defaults: {
     logEntries: [],
     error: undefined,
+    count: 0,
 
   }
 })
 @Injectable()
 export class logEntryState{
   @Selector()
-  static orderRegLogEntries(state: LogEntryStateModel): LogEntryDto[] {
+  static logEntries(state: LogEntryStateModel): LogEntryDto[] {
     return state.logEntries;
   }
 
-  static OrderRegLogEntry(id: number): (state: LogEntryStateModel) => LogEntryDto | undefined{
+  @Selector()
+  static paginatedLogEntries(state: LogEntryStateModel): PaginationDto<LogEntryDto>  {
+    return {count: state.count, data: state.logEntries};
+  }
+
+  static logEntry(id: number): (state: LogEntryStateModel) => LogEntryDto | undefined{
     return createSelector([logEntryState], (state: LogEntryStateModel) => {
       return state.logEntries.find(logEntry => logEntry.id === id);
     });
@@ -41,6 +49,22 @@ export class logEntryState{
   static errorSelector(state: LogEntryStateModel): any{
     return state.error;
   }
+
+  @Selector()
+  static count(state: LogEntryStateModel): any{
+    return state.count;
+  }
+
+  @Action(UpdateLogEntryCount)
+  updateLogEntryCount(ctx: StateContext<LogEntryStateModel>, action: UpdateLogEntryCount): void {
+    const state = ctx.getState();
+    const newState: LogEntryStateModel = {
+      ...state,
+      count: action.count
+    };
+    ctx.setState(newState);
+  }
+
 
   @Action(UpdateLogEntryStore)
   updateLogEntryStore(ctx: StateContext<LogEntryStateModel>, action: UpdateLogEntryStore): void {
@@ -56,15 +80,13 @@ export class logEntryState{
   clearLogEntryStore(ctx: StateContext<LogEntryStateModel>): void {
     const state = ctx.getState();
     const newState: LogEntryStateModel = {
-      ...state, logEntries: []
+      ...state, logEntries: [], count: 0,
     };
     ctx.setState(newState);
   }
 
   @Action(InsertOrUpdateLogEntry)
   insertOrUpdateLogEntry(ctx: StateContext<LogEntryStateModel>, action: InsertOrUpdateLogEntry): void {
-    /*ctx.setState(patch({users: updateItem<UserDto>(user => user.id === action.user.id, action.user)}));
-  */
     ctx.setState(patch({logEntries: this.insertOrUpdateLogEntryMethod(action.logEntry.id,action.logEntry)}));
   }
 

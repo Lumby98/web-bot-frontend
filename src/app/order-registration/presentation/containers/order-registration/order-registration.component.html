@@ -113,6 +113,19 @@
             <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.status}} </td>
           </ng-container>
 
+          <ng-container matColumnDef="Message" >
+            <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Message </th>
+            <td mat-cell *matCellDef="let logEntry" style="padding: 10px" >
+              <div *ngIf="logEntry.error">
+                {{logEntry.error.errorMessage}}
+              </div>
+              <div *ngIf="!logEntry.error">
+                Success
+              </div>
+
+            </td>
+          </ng-container>
+
           <ng-container matColumnDef="CompletedAt">
             <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Completed at </th>
             <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.timestamp | date: 'medium'}} </td>

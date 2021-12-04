@@ -20,10 +20,15 @@ export class DeleteLogEntry {
 }
 
 export class ClearLogEntryError {
-  static readonly type = '[LogEntry] clear logEntry error';
+  static readonly type = '[error] clear logEntry error';
 }
 
 export class UpdateLogEntryError {
   constructor(public error: any) {}
-  static readonly type = '[LogEntry] Update logEntry error';
+  static readonly type = '[error] Update logEntry error';
+}
+
+export class UpdateLogEntryCount {
+  constructor(public count: number) {}
+  static readonly type = '[count] Update logEntry count';
 }
