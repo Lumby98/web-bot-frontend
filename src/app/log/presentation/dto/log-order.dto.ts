@@ -1,5 +1,5 @@
 export interface LogOrderDto {
   id: number;
-  orderNumber: string;
+  orderNr: string;
   completed: boolean;
 }

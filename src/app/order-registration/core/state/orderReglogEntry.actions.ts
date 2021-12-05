@@ -1,5 +1,5 @@
-import {LogEntryDto} from "../../../SharedModule/core/models/LogEntry.dto";
 import {ProcessStepDto} from "../models/processStep.dto";
+import {LogEntryDto} from "../../../log/presentation/dto/log-entry.dto";
 
 export class UpdateOrderRegLogEntryStore {
   constructor(public logEntries: LogEntryDto[]) {}

@@ -22,6 +22,8 @@ const routes: Routes = [
   {path: 'user-detail/:id', canActivate: [AuthGuard], component: UserDetailComponent},
   {path: 'insole', canActivate: [AuthGuard],
     loadChildren: () => import('./insole-registration/insole-registration.module').then(m => m.InsoleRegistrationModule)},
+  {path: 'log', canActivate: [AuthGuard],
+  loadChildren: () => import('./log/log.module').then(m => m.LogModule)},
   {path: 'order-registration', canActivate: [AuthGuard],
     loadChildren: () => import('./order-registration/order-registration.module').then(m => m.OrderRegistrationModule)},
   {path: '**', redirectTo: 'home'}];
