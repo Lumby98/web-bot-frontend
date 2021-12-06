@@ -124,3 +124,10 @@ table {
   padding: 0.8375em 0;
 }
 
+.table{
+  position: relative;
+  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
+}
+

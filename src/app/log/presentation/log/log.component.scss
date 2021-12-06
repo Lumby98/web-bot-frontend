@@ -5,3 +5,10 @@
 .example-full-width{
   padding: 10px;
 }
+
+.table{
+  position: relative;
+  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
+}
