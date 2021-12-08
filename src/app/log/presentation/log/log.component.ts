@@ -9,6 +9,7 @@ import {PageEvent} from "@angular/material/paginator";
 import {debounceTime, distinctUntilChanged, takeUntil} from "rxjs/operators";
 import {ProcessStepEnum} from "../../../order-registration/core/enums/processStep.enum";
 import {ConfirmDialogFacade} from "../../../SharedModule/abstraction/confirm-dialog.facade";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-log',

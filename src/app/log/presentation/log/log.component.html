@@ -89,9 +89,9 @@
         aria-label="Select page">
       </mat-paginator>
 
-      <mat-error *ngIf="error$ | async ">
+      <mat-error *ngIf="error$ | async as error">
         <button mat-icon-button color="warn" (click)="clearError()">x</button>
-        {{error$ | async}}
+        {{error.message || error}}
       </mat-error>
     </mat-card-footer>
   </mat-card>
