@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Edit error message</h1>
+<div *ngIf="data.log" mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Error message</mat-label>
+    <input *ngIf="data.log.error" matInput [formControl]="editErrorForm">
+    <p *ngIf="!data.log.error">This error has no message, so it cant be edited</p>
+  </mat-form-field>
+  <p>Editing this field will overwrite the message of all future errors with the below message:</p>
+    <div *ngIf="data.log.error">
+      <b>Original message:</b>
+      <p>{{data.log.error.errorMessage}}</p>
+    </div>
+
+    <p *ngIf="!data.log.error">This error has no message</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancelClick()">Cancel</button>
+  <button mat-button (click)="onOkClick()">Ok</button>
+</div>

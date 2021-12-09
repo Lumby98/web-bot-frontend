@@ -1,15 +1,17 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LogFacade} from "../../abstraction/log-facade";
+import {LogFacade} from "../../../abstraction/log-facade";
 import {Observable, Subject} from "rxjs";
-import {PaginationDto} from "../../../SharedModule/presentation/dto/filter/pagination-dto";
-import {LogEntryDto} from "../dto/log-entry.dto";
-import {QueryDto} from "../../../SharedModule/presentation/dto/filter/query.dto";
+import {PaginationDto} from "../../../../SharedModule/presentation/dto/filter/pagination-dto";
+import {LogEntryDto} from "../../dto/log-entry.dto";
+import {QueryDto} from "../../../../SharedModule/presentation/dto/filter/query.dto";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {PageEvent} from "@angular/material/paginator";
 import {debounceTime, distinctUntilChanged, takeUntil} from "rxjs/operators";
-import {ProcessStepEnum} from "../../../order-registration/core/enums/processStep.enum";
-import {ConfirmDialogFacade} from "../../../SharedModule/abstraction/confirm-dialog.facade";
+import {ProcessStepEnum} from "../../../../order-registration/core/enums/processStep.enum";
+import {ConfirmDialogFacade} from "../../../../SharedModule/abstraction/confirm-dialog.facade";
 import Swal from "sweetalert2";
+import {MatDialog} from "@angular/material/dialog";
+import {EditModalComponent} from "../../components/edit-modal/edit-modal.component";
 
 @Component({
   selector: 'app-log',
@@ -27,16 +29,16 @@ export class LogComponent implements OnInit, OnDestroy {
   pageIndex = 0;
   pageSizeOptions = [25, 50, 100];
   showFirstLastButtons = true;
-  displayedColumns: string[] = ['OrderNum', 'Process', 'Completed','Message', 'CompletedAt', 'Delete'];
+  displayedColumns: string[] = ['OrderNum', 'Process', 'Completed', 'Message', 'CompletedAt', 'Delete'];
 
-  constructor(private formBuilder: FormBuilder, private logFacade: LogFacade, private confirmDialogFacade: ConfirmDialogFacade) {
+  constructor(private formBuilder: FormBuilder, private logFacade: LogFacade, private confirmDialogFacade: ConfirmDialogFacade, public dialog: MatDialog) {
 
   }
 
   ngOnInit(): void {
     this.queryForm.valueChanges
-      .pipe(takeUntil(this.unsubscriber$), debounceTime(500),distinctUntilChanged())
-      .subscribe( (value) => {
+      .pipe(takeUntil(this.unsubscriber$), debounceTime(500), distinctUntilChanged())
+      .subscribe((value) => {
         this.submitQueryForm();
 
       });
@@ -44,20 +46,18 @@ export class LogComponent implements OnInit, OnDestroy {
     this.error$ = this.logFacade.getErrorObservable();
     this.length$ = this.logFacade.getCountObservable();
     this.paginatedLogEntries$ = this.logFacade.getPaginatedLogEntries();
-    this.findAllFromApiPaginated({page: this.pageIndex +1, take: this.pageSize, keyword: ""});
+    this.findAllFromApiPaginated({page: this.pageIndex + 1, take: this.pageSize, keyword: ""});
 
     this.LogEntries$ = this.logFacade.getLogEntries();
 
     this.LogEntries$.pipe(takeUntil(this.unsubscriber$)).subscribe(value => {
-      for (let log of value){
+      for (let log of value) {
         console.log(log.timestamp)
       }
 
-    })
+    });
+
   }
-
-
-
 
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
@@ -65,24 +65,23 @@ export class LogComponent implements OnInit, OnDestroy {
     this.submitQueryForm();
   }
 
-  submitQueryForm(){
-    try{
-      this.findAllFromApiPaginated({page: this.pageIndex +1, take: this.pageSize, keyword: this.queryForm.value})
-    }
-    catch (e) {
+  submitQueryForm() {
+    try {
+      this.findAllFromApiPaginated({page: this.pageIndex + 1, take: this.pageSize, keyword: this.queryForm.value})
+    } catch (e) {
       this.updateError(e);
     }
   }
 
-  findAllFromApiPaginated(query: QueryDto){
+  findAllFromApiPaginated(query: QueryDto) {
     this.logFacade.findAllFromApiPaginated(query);
   }
 
-  removeLogEntry(logEntry: LogEntryDto){
+  removeLogEntry(logEntry: LogEntryDto) {
     this.logFacade.removeLogEntry(logEntry);
   }
 
-  removeAllLogEntries(){
+  removeAllLogEntries() {
     const options = {
       title: 'Remove all logs?',
       message: 'Warning this button will remove all the saved logs! Are you sure you want continue?',
@@ -103,11 +102,11 @@ export class LogComponent implements OnInit, OnDestroy {
   /**
    * Calls the Facade to clear error from store.
    */
-  clearError(){
+  clearError() {
     this.logFacade.clearError();
   }
 
-  updateError(error: any){
+  updateError(error: any) {
     this.logFacade.updateError(error);
   }
 
@@ -116,7 +115,7 @@ export class LogComponent implements OnInit, OnDestroy {
     this.unsubscriber$.complete();
   }
 
-  processStepToString(process: ProcessStepEnum): string{
+  processStepToString(process: ProcessStepEnum): string {
     switch (process) {
 
       case ProcessStepEnum.GETORDERINFO:
@@ -133,4 +132,10 @@ export class LogComponent implements OnInit, OnDestroy {
 
   }
 
+  updateLogEntry(logToUpdate: LogEntryDto) {
+    const dialogRef = this.dialog.open(EditModalComponent, {width: '500px', height: '325px', data: {log: logToUpdate}});
+    dialogRef.afterClosed().subscribe(result => {
+      this.submitQueryForm();
+    });
+  }
 }

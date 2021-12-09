@@ -26,8 +26,12 @@
         <div class="mt-10" fxLayoutAlign="center center" fxLayoutGap="10px">
           <button mat-stroked-button color="primary" class="btn-block" routerLink="/order-registration" *ngIf="loggedIn()">Order registration
           </button>
+          <button mat-stroked-button color="primary" class="btn-block" routerLink="/log" *ngIf="loggedIn()">Log
+          </button>
+        </div>
+        <div class="mt-10" fxLayoutAlign="center center" fxLayoutGap="10px">
           <button mat-stroked-button color="primary" class="btn-block" (click)="logout()" *ngIf="loggedIn()">Log out
-        </button>
+          </button>
         </div>
 
       </div>

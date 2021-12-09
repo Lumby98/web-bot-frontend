@@ -15,7 +15,7 @@ import {AuthFacade} from "./SharedModule/abstraction/auth.facade";
 import {UserModule} from "./user/user.module";
 import {ConfirmDialogFacade} from "./SharedModule/abstraction/confirm-dialog.facade";
 import {SweetAlert2LoaderService, SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
-import { LogComponent } from './log/presentation/log/log.component';
+import { LogComponent } from './log/presentation/containers/log/log.component';
 
 const config: SocketIoConfig = {url: environment.apiUrl, options: {transports: ['websocket'], upgrade: false}};
 

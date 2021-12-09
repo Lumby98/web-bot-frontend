@@ -40,8 +40,14 @@
             <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Message </th>
             <td mat-cell *matCellDef="let logEntry" style="padding: 10px" >
               <div *ngIf="logEntry.error">
-                {{logEntry.error.errorMessage}}
+                <div *ngIf="logEntry.error.displayErrorMessage">
+                  {{logEntry.error.displayErrorMessage}}
+                </div>
+                <div *ngIf="!logEntry.error.displayErrorMessage">
+                  {{logEntry.error.errorMessage}}
+                </div>
               </div>
+
               <div *ngIf="!logEntry.error">
                 Success
               </div>
@@ -58,8 +64,11 @@
             <th mat-header-cell *matHeaderCellDef style="padding: 5px">  </th>
             <td mat-cell *matCellDef="let logEntry" style="padding: 5px">
               <button (click)="removeLogEntry(logEntry)" mat-icon-button >
-              <mat-icon>close</mat-icon>
+              <mat-icon class="delete-icon">close</mat-icon>
             </button>
+              <button *ngIf="logEntry.error" (click)="updateLogEntry(logEntry)" mat-icon-button >
+                <mat-icon class="edit-icon">edit</mat-icon>
+              </button>
             </td>
           </ng-container>
 
