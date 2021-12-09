@@ -1,5 +1,4 @@
-export interface OrderErrorDto {
-  id: number;
+export interface CreateOrderErrorDto {
   errorMessage: string;
   displayErrorMessage?: string;
 }

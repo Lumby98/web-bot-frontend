@@ -5,6 +5,7 @@ import {QueryDto} from "../../../SharedModule/presentation/dto/filter/query.dto"
 import {LogEntryDto} from "../../presentation/dto/log-entry.dto";
 import {environment} from "../../../../environments/environment";
 import {Observable} from "rxjs";
+import {UpdateLogDto} from "../../presentation/dto/update-log.dto";
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +46,9 @@ export class LogService {
       .delete(
         environment.apiUrl + '/log/deleteAll',
         {withCredentials: true});
+  }
+
+  update(log: UpdateLogDto) {
+    return this.http.patch(environment.apiUrl + '/log', log, {withCredentials: true})
   }
 }

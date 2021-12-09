@@ -1,0 +1,32 @@
+.Remove-button {
+  padding: 5px;
+}
+
+.example-full-width {
+  padding: 10px;
+}
+
+.table {
+  position: relative;
+  min-height: 200px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.edit-icon:hover {
+  opacity: 100%;
+  color: #3f51b5;
+}
+
+.edit-icon {
+  opacity: 50%;
+}
+
+.delete-icon:hover {
+  opacity: 100%;
+  color: #f44336;
+}
+
+.delete-icon {
+  opacity: 50%;
+}
