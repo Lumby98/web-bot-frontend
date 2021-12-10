@@ -7,6 +7,8 @@ import {ProcessStepDto} from "../../../core/models/processStep.dto";
 import {ProcessStepEnum} from "../../../core/enums/processStep.enum";
 import {take, takeUntil} from "rxjs/operators";
 import {LogEntryDto} from "../../../../log/presentation/dto/log-entry.dto";
+import {OrderProcessDto} from "../../../core/models/order-process.Dto";
+import {ProcessEnum} from "../../../core/enums/process.enum";
 
 @Component({
   selector: 'app-order-registration',
@@ -26,6 +28,8 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   listenForOrderLogSubscription: Subscription | undefined;
   listenProcessStepEventSubscription: Subscription | undefined;
   displayedColumns: string[] = ['OrderNum', 'Process', 'Completed','Message', 'CompletedAt'];
+  currentOrderProcesses: OrderProcessDto[] = [];
+  orderProcessCount: number = 0;
 
 
 
@@ -50,6 +54,37 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     this.getOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.REGISTERORDER);
     this.allocateOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.ALOCATEORDER);
     this.displayLogEntries$ = this.orderRegistrationFacade.getOrderLogEntries();
+    this.allocateOrder$.pipe(takeUntil(this.unsubscriber$)).subscribe(processStep => {
+      if (!this.startedRegistration) {
+        this.orderRegistrationFacade.updateError('Receiving allocation events even though registration has not started');
+        return;
+      }
+
+      if (!processStep){
+        return;
+      }
+
+      if (!(this.currentOrderProcesses.length > 0)) {
+        this.orderRegistrationFacade.updateError('List of orders currently being processed is empty');
+        return;
+      }
+
+      if (!(this.orderProcessCount <= this.currentOrderProcesses.length)){
+        this.orderRegistrationFacade.updateError('order process count exceeded the length of the list of orders');
+        return;
+      }
+
+      if (processStep.error){
+        this.currentOrderProcesses[this.orderProcessCount].process = ProcessEnum.FAIL;
+        this.orderProcessCount++
+        this.orderRegistrationFacade.clearProcessSteps();
+      } else {
+        this.currentOrderProcesses[this.orderProcessCount].process = ProcessEnum.COMPLETE;
+        this.orderProcessCount++
+        this.orderRegistrationFacade.clearProcessSteps();
+      }
+
+    });
   }
 
   ngOnDestroy(): void {
@@ -71,7 +106,16 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
 
           const orderNumbers = this.orderNumbers?.value.split(/\r?\n/);
 
+
           if (orderNumbers) {
+
+            this.currentOrderProcesses = [];
+            for (const orderNumber of orderNumbers){
+              const orderProcess: OrderProcessDto = {orderNumber: orderNumber, process: ProcessEnum.LOADING}
+              this.currentOrderProcesses.push(orderProcess);
+            }
+
+            this.orderProcessCount = 0;
 
             this.currentKey$.pipe(take(1)).subscribe(key => {
               if (key) {
@@ -116,9 +160,10 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     }
     else{
       this.startedRegistration = false;
+      this.currentOrderProcesses = [];
+      this.orderProcessCount = 0;
       this.listenProcessStepEventSubscription?.unsubscribe();
       this.listenForOrderLogSubscription?.unsubscribe();
-
       this.orderRegistrationFacade.clearLogEntries();
       this.orderRegistrationFacade.clearProcessSteps();
     }
