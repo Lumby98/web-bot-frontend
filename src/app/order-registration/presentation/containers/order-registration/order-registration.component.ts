@@ -55,12 +55,13 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     this.allocateOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.ALOCATEORDER);
     this.displayLogEntries$ = this.orderRegistrationFacade.getOrderLogEntries();
     this.allocateOrder$.pipe(takeUntil(this.unsubscriber$)).subscribe(processStep => {
-      if (!this.startedRegistration) {
-        this.orderRegistrationFacade.updateError('Receiving allocation events even though registration has not started');
+
+      if (!processStep){
         return;
       }
 
-      if (!processStep){
+      if (!this.startedRegistration) {
+        this.orderRegistrationFacade.updateError('Receiving allocation events even though registration has not started');
         return;
       }
 
@@ -77,11 +78,15 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
       if (processStep.error){
         this.currentOrderProcesses[this.orderProcessCount].process = ProcessEnum.FAIL;
         this.orderProcessCount++
-        this.orderRegistrationFacade.clearProcessSteps();
+        if (this.orderProcessCount < this.currentOrderProcesses.length) {
+          this.orderRegistrationFacade.clearProcessSteps();
+        }
       } else {
         this.currentOrderProcesses[this.orderProcessCount].process = ProcessEnum.COMPLETE;
         this.orderProcessCount++
-        this.orderRegistrationFacade.clearProcessSteps();
+        if (this.orderProcessCount < this.currentOrderProcesses.length) {
+          this.orderRegistrationFacade.clearProcessSteps();
+        }
       }
 
     });

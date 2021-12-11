@@ -10,7 +10,7 @@ import {take} from "rxjs/operators";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   loginForm: FormGroup;
 
 
@@ -28,21 +28,20 @@ export class LoginComponent implements OnInit {
   }
 
   error$!: Observable<any>;
-  hide: any;
+  hidePass: any;
+  hideKey: any;
 
   constructor(private formBuilder: FormBuilder, private authFacade: AuthFacade,
               private confirmDialogFacade: ConfirmDialogFacade,) {
     this.error$ = this.authFacade.getErrorObservable();
-    this.hide = true;
+    this.hidePass = true;
+    this.hideKey = true;
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
       key: [""]
     });
 
-  }
-
-  ngOnInit(): void {
   }
 
   /**
