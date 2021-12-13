@@ -40,6 +40,59 @@
       </mat-card-footer>
     </mat-card>
 
+    <mat-card class="ordersBox" *ngIf="startedRegistration" style="margin-left: 10px" [class.mat-elevation-z10]="true">
+      <mat-card-header fxLayoutAlign="center top" style="margin-bottom: 10px">
+        <mat-card-title>Orders</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngIf="currentOrderProcesses.length > 0">
+          <mat-list >
+            <div *ngFor="let order of currentOrderProcesses">
+            <mat-list-item *ngIf="order.process === processEnum.FAIL">
+              <div class="container">
+                <p>{{order.orderNumber}}</p>
+                <mat-icon class="orderIcon" aria-hidden="false" aria-label="Example home icon" style="color: red; ">report_problem
+                </mat-icon>
+              </div>
+              </mat-list-item>
+              <mat-list-item *ngIf="order.process === processEnum.COMPLETE">
+              <div class="container">
+                <p>{{order.orderNumber}}</p>
+                <mat-icon class="orderIcon" aria-hidden="false" aria-label="Example home icon" style="color: green">done</mat-icon>
+              </div>
+              </mat-list-item>
+              <mat-list-item *ngIf="order.process === processEnum.PENDING">
+                <div class="container">
+                  <p>{{order.orderNumber}}</p>
+                  <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: orange">hourglass_empty
+                  </mat-icon>
+                </div>
+              </mat-list-item>
+            <mat-list-item *ngIf="order.process === processEnum.PROCESSING">
+              <div class="container">
+                <p>{{order.orderNumber}}</p>
+              <mat-spinner class="orderIcon" diameter="25" style="margin-left: 5px"></mat-spinner>
+              </div>
+            </mat-list-item>
+            </div>
+          </mat-list>
+
+        </div>
+
+
+      </mat-card-content>
+
+      <mat-card-actions>
+
+      </mat-card-actions>
+
+      <mat-card-footer>
+
+      </mat-card-footer>
+
+    </mat-card>
+
     <mat-card class="box" *ngIf="startedRegistration" style="margin-left: 10px" [class.mat-elevation-z10]="true">
       <mat-card-header fxLayoutAlign="center top" style="margin-bottom: 10px">
         <mat-card-title>Process Steps</mat-card-title>
@@ -115,10 +168,10 @@
   </div>
 
 
-  <div *ngIf="(allocateOrder$ | async)" class="login-wrapper table" fxLayout="row"
-       fxLayoutAlign="center top" style="margin-top: 10px">
+  <div *ngIf="registrationComplete" class="login-wrapper table" fxLayout="row"
+       fxLayoutAlign="center top" style="margin-top: 10px" [class.mat-elevation-z10]="true">
 
-    <table mat-table [dataSource]="displayLogEntries$" style="width: 1000px" [class.mat-elevation-z10]="true">
+    <table mat-table [dataSource]="displayLogEntries$" style="width: 1000px" >
 
       <ng-container matColumnDef="OrderNum">
         <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Order #</th>
