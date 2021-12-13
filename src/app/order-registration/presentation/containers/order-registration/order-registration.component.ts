@@ -7,6 +7,8 @@ import {ProcessStepDto} from "../../../core/models/processStep.dto";
 import {ProcessStepEnum} from "../../../core/enums/processStep.enum";
 import {take, takeUntil} from "rxjs/operators";
 import {LogEntryDto} from "../../../../log/presentation/dto/log-entry.dto";
+import {OrderProcessDto} from "../../../core/models/order-process.Dto";
+import {ProcessEnum} from "../../../core/enums/process.enum";
 
 @Component({
   selector: 'app-order-registration',
@@ -14,6 +16,8 @@ import {LogEntryDto} from "../../../../log/presentation/dto/log-entry.dto";
   styleUrls: ['./order-registration.component.scss']
 })
 export class OrderRegistrationComponent implements OnInit, OnDestroy {
+  public processEnum = ProcessEnum;
+  registrationComplete: boolean = false;
   unsubscriber$ = new Subject();
   startedRegistration: boolean = false;
   currentKey$: Observable<string>
@@ -25,11 +29,12 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   orderRegisterForm: FormGroup;
   listenForOrderLogSubscription: Subscription | undefined;
   listenProcessStepEventSubscription: Subscription | undefined;
-  displayedColumns: string[] = ['OrderNum', 'Process', 'Completed','Message', 'CompletedAt'];
+  displayedColumns: string[] = ['OrderNum', 'Process', 'Completed', 'Message', 'CompletedAt'];
+  currentOrderProcesses: OrderProcessDto[] = [];
+  orderProcessCount: number = 0;
 
 
-
-  constructor(private formBuilder: FormBuilder, private authFacade: AuthFacade, private orderRegistrationFacade: orderRegistrationFacade ) {
+  constructor(private formBuilder: FormBuilder, private authFacade: AuthFacade, private orderRegistrationFacade: orderRegistrationFacade) {
     this.error$ = this.orderRegistrationFacade.getErrorObservable();
     this.currentKey$ = this.authFacade.getCurrentKey();
 
@@ -38,7 +43,8 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     })
 
   }
-  get orderNumbers(){
+
+  get orderNumbers() {
     return this.orderRegisterForm.get('orderNumbers')
   }
 
@@ -50,6 +56,30 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     this.getOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.REGISTERORDER);
     this.allocateOrder$ = this.orderRegistrationFacade.getProcessStep(ProcessStepEnum.ALOCATEORDER);
     this.displayLogEntries$ = this.orderRegistrationFacade.getOrderLogEntries();
+    this.allocateOrder$.pipe(takeUntil(this.unsubscriber$)).subscribe(processStep => {
+
+      if (!processStep) {
+        return;
+      }
+
+      if (!this.startedRegistration) {
+        this.orderRegistrationFacade.updateError('Receiving allocation events even though registration has not started');
+        return;
+      }
+
+      if (!(this.currentOrderProcesses.length > 0)) {
+        this.orderRegistrationFacade.updateError('List of orders currently being processed is empty');
+        return;
+      }
+
+      if (!(this.orderProcessCount <= this.currentOrderProcesses.length)) {
+        this.orderRegistrationFacade.updateError('order process count exceeded the length of the list of orders');
+        return;
+      }
+
+      this.handleOrderProcessing(processStep.error);
+
+    });
   }
 
   ngOnDestroy(): void {
@@ -59,8 +89,9 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     this.orderRegistrationFacade.clearProcessSteps();
   }
 
-  startOrderRegistration(){
+  startOrderRegistration() {
     try {
+      this.registrationComplete = false;
       if (this.orderRegisterForm.invalid) {
         this.orderRegistrationFacade.updateError('Order number cannot be blank!');
       } else {
@@ -69,9 +100,36 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
           this.orderRegistrationFacade.updateError('Order registration is already started!');
         } else {
 
-          const orderNumbers = this.orderNumbers?.value.split(/\r?\n/);
+          let orderNumbersArray: string[];
+          if (this.orderNumbers) {
+            const trimmedOrderNumbers = this.orderNumbers.value.trim();
+            orderNumbersArray = trimmedOrderNumbers.split(/\r?\n/);
 
-          if (orderNumbers) {
+            for (let orderNumber of orderNumbersArray) {
+              if (orderNumber === "") {
+                const index = orderNumbersArray.indexOf(orderNumber, 0);
+                if (index > -1) {
+                  orderNumbersArray.splice(index, 1);
+                }
+              }
+            }
+
+          } else {
+            this.orderRegistrationFacade.updateError('Failed to get order numbers form')
+            return;
+          }
+
+          if (orderNumbersArray) {
+
+            this.currentOrderProcesses = [];
+            for (const orderNumber of orderNumbersArray) {
+              const orderProcess: OrderProcessDto = {orderNumber: orderNumber, process: ProcessEnum.PENDING}
+              this.currentOrderProcesses.push(orderProcess);
+            }
+
+            this.currentOrderProcesses[0].process = ProcessEnum.PROCESSING;
+
+            this.orderProcessCount = 0;
 
             this.currentKey$.pipe(take(1)).subscribe(key => {
               if (key) {
@@ -85,7 +143,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
                   .pipe(takeUntil(this.unsubscriber$))
                   .subscribe();
 
-                this.orderRegistrationFacade.startOrderRegistration({orderNumbers: orderNumbers, key: key});
+                this.orderRegistrationFacade.startOrderRegistration({orderNumbers: orderNumbersArray, key: key});
 
 
               } else {
@@ -96,29 +154,29 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
             }, error => {
               this.orderRegistrationFacade.updateError(error);
             });
-          }else {
+          } else {
             this.orderRegistrationFacade.updateError('No Order Numbers');
           }
 
 
         }
       }
-    }
-    catch (error) {
+    } catch (error) {
       this.orderRegistrationFacade.updateError(error);
     }
 
   }
 
-  stopOrderRegistration(){
-    if(!this.startedRegistration){
+  stopOrderRegistration() {
+    if (!this.startedRegistration) {
       this.orderRegistrationFacade.updateError('Order registration is already stopped!');
-    }
-    else{
+    } else {
       this.startedRegistration = false;
+      this.registrationComplete = false;
+      this.currentOrderProcesses = [];
+      this.orderProcessCount = 0;
       this.listenProcessStepEventSubscription?.unsubscribe();
       this.listenForOrderLogSubscription?.unsubscribe();
-
       this.orderRegistrationFacade.clearLogEntries();
       this.orderRegistrationFacade.clearProcessSteps();
     }
@@ -128,12 +186,12 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   /**
    * Calls the Facade to clear error from store.
    */
-  clearError(){
+  clearError() {
     this.orderRegistrationFacade.clearError();
   }
 
 
-  processStepToString(process: ProcessStepEnum): string{
+  processStepToString(process: ProcessStepEnum): string {
     switch (process) {
 
       case ProcessStepEnum.GETORDERINFO:
@@ -150,6 +208,19 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
 
   }
 
+  handleOrderProcessing(error: boolean){
+    this.currentOrderProcesses[this.orderProcessCount].process = error ? ProcessEnum.FAIL : ProcessEnum.COMPLETE;
+    this.orderProcessCount++
+
+    if (this.orderProcessCount == this.currentOrderProcesses.length) {
+      this.registrationComplete = true;
+    }
+
+    if (this.orderProcessCount < this.currentOrderProcesses.length) {
+      this.orderRegistrationFacade.clearProcessSteps();
+      this.currentOrderProcesses[this.orderProcessCount].process = ProcessEnum.PROCESSING;
+    }
+  }
 
 
 }

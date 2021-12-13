@@ -1,11 +1,12 @@
 <!--<mat-icon aria-hidden="false" aria-label="Example home icon">done</mat-icon>-->
 <!--<mat-icon aria-hidden="false" aria-label="Example home icon">report_problem</mat-icon>-->
 
-<div style="height: 70%; " fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="10px" *ngIf="currentKey$ | async as key; else elseBlock">
+<div style="margin-top: 200px;" fxLayout="column" fxLayoutAlign="center center"
+     *ngIf="currentKey$ | async as key; else elseBlock">
 
-  <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center" >
+  <div class="login-wrapper" fxLayout="row" fxLayoutAlign="end end">
 
-    <mat-card class="box" [class.mat-elevation-z10]="true">
+    <mat-card class="box"  [class.mat-elevation-z10]="true">
       <mat-card-header fxLayoutAlign="center top" style="margin-bottom: 10px">
         <mat-card-title>Order registration</mat-card-title>
       </mat-card-header>
@@ -14,14 +15,17 @@
         <mat-card-content>
 
           <mat-form-field class="example-full-width">
-            <textarea matInput placeholder="Order number splits on new line (enter press)" formControlName="orderNumbers"></textarea>
+            <textarea matInput placeholder="Order number splits on new line (enter press)"
+                      formControlName="orderNumbers"></textarea>
           </mat-form-field>
 
         </mat-card-content>
         <mat-card-actions>
           <div fxLayoutAlign="center top" fxLayoutGap="10px">
             <button mat-stroked-button color="primary" type="submit">Start registration</button>
-            <button (click)="stopOrderRegistration()" mat-stroked-button color="primary" type="button">Stop registration</button>
+            <button (click)="stopOrderRegistration()" mat-stroked-button color="primary" type="button">Stop
+              registration
+            </button>
 
           </div>
 
@@ -36,55 +40,124 @@
       </mat-card-footer>
     </mat-card>
 
-  </div>
+    <mat-card class="ordersBox" *ngIf="startedRegistration" style="margin-left: 10px" [class.mat-elevation-z10]="true">
+      <mat-card-header fxLayoutAlign="center top" style="margin-bottom: 10px">
+        <mat-card-title>Orders</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngIf="currentOrderProcesses.length > 0">
+          <mat-list >
+            <div *ngFor="let order of currentOrderProcesses">
+            <mat-list-item *ngIf="order.process === processEnum.FAIL">
+              <div class="container">
+                <p>{{order.orderNumber}}</p>
+                <mat-icon class="orderIcon" aria-hidden="false" aria-label="Example home icon" style="color: red; ">report_problem
+                </mat-icon>
+              </div>
+              </mat-list-item>
+              <mat-list-item *ngIf="order.process === processEnum.COMPLETE">
+              <div class="container">
+                <p>{{order.orderNumber}}</p>
+                <mat-icon class="orderIcon" aria-hidden="false" aria-label="Example home icon" style="color: green">done</mat-icon>
+              </div>
+              </mat-list-item>
+              <mat-list-item *ngIf="order.process === processEnum.PENDING">
+                <div class="container">
+                  <p>{{order.orderNumber}}</p>
+                  <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: orange">hourglass_empty
+                  </mat-icon>
+                </div>
+              </mat-list-item>
+            <mat-list-item *ngIf="order.process === processEnum.PROCESSING">
+              <div class="container">
+                <p>{{order.orderNumber}}</p>
+              <mat-spinner class="orderIcon" diameter="25" style="margin-left: 5px"></mat-spinner>
+              </div>
+            </mat-list-item>
+            </div>
+          </mat-list>
+
+        </div>
 
 
-  <div  *ngIf="startedRegistration" class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+      </mat-card-content>
 
-    <mat-card class="box" [class.mat-elevation-z10]="true">
+      <mat-card-actions>
+
+      </mat-card-actions>
+
+      <mat-card-footer>
+
+      </mat-card-footer>
+
+    </mat-card>
+
+    <mat-card class="box" *ngIf="startedRegistration" style="margin-left: 10px" [class.mat-elevation-z10]="true">
       <mat-card-header fxLayoutAlign="center top" style="margin-bottom: 10px">
         <mat-card-title>Process Steps</mat-card-title>
       </mat-card-header>
 
-        <mat-card-content>
-          <div *ngIf="startedRegistration">
-            <mat-list>
-              <mat-list-item *ngIf="(getOrderInfo$ | async) as getOrderInfo" > Get order info <div *ngIf="getOrderInfo.error">
-                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: red">report_problem</mat-icon> </div>
-                <div *ngIf="!getOrderInfo.error">
-                  <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: green">done</mat-icon> </div>
-              </mat-list-item >
-              <mat-list-item *ngIf="!(getOrderInfo$ | async)"> Get order info <mat-spinner diameter="25" style="margin-left: 5px"></mat-spinner>
-              </mat-list-item>
+      <mat-card-content>
+        <div *ngIf="startedRegistration">
+          <mat-list>
+            <mat-list-item *ngIf="(getOrderInfo$ | async) as getOrderInfo"> Get order info
+              <div *ngIf="getOrderInfo.error">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: red">report_problem
+                </mat-icon>
+              </div>
+              <div *ngIf="!getOrderInfo.error">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: green">done</mat-icon>
+              </div>
+            </mat-list-item>
+            <mat-list-item *ngIf="!(getOrderInfo$ | async)"> Get order info
+              <mat-spinner diameter="25" style="margin-left: 5px"></mat-spinner>
+            </mat-list-item>
 
-              <mat-list-item *ngIf="(getOrder$ | async) as getOrder" > Get orders <div *ngIf="getOrder.error">
-                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: red">report_problem</mat-icon> </div>
-                <div *ngIf="!getOrder.error">
-                  <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: green">done</mat-icon> </div>
-              </mat-list-item >
-              <mat-list-item *ngIf="!(getOrderInfo$ | async) && !(getOrder$ | async)"> Get orders <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: orange">hourglass_empty</mat-icon></mat-list-item>
-              <mat-list-item *ngIf="!(getOrder$ | async) && (getOrderInfo$ | async)"> Get orders <mat-spinner diameter="25" style="margin-left: 5px"></mat-spinner>
-              </mat-list-item>
+            <mat-list-item *ngIf="(getOrder$ | async) as getOrder"> Get orders
+              <div *ngIf="getOrder.error">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: red">report_problem
+                </mat-icon>
+              </div>
+              <div *ngIf="!getOrder.error">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: green">done</mat-icon>
+              </div>
+            </mat-list-item>
+            <mat-list-item *ngIf="!(getOrderInfo$ | async) && !(getOrder$ | async)"> Get orders
+              <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: orange">hourglass_empty
+              </mat-icon>
+            </mat-list-item>
+            <mat-list-item *ngIf="!(getOrder$ | async) && (getOrderInfo$ | async)"> Get orders
+              <mat-spinner diameter="25" style="margin-left: 5px"></mat-spinner>
+            </mat-list-item>
 
-              <mat-list-item *ngIf="(allocateOrder$ | async) as allocateOrder" > Allocating orders <div *ngIf="allocateOrder.error">
-                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: red">report_problem</mat-icon> </div>
-                <div *ngIf="!allocateOrder.error">
-                  <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: green">done</mat-icon> </div>
-              </mat-list-item >
-              <mat-list-item *ngIf="!(getOrder$ | async) && !(allocateOrder$ | async)"> Allocating orders <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: orange">hourglass_empty</mat-icon></mat-list-item>
-              <mat-list-item *ngIf="!(allocateOrder$ | async) && (getOrder$ | async)"> Allocating orders <mat-spinner diameter="25" style="margin-left: 5px"></mat-spinner>
-              </mat-list-item>
+            <mat-list-item *ngIf="(allocateOrder$ | async) as allocateOrder"> Allocating orders
+              <div *ngIf="allocateOrder.error">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: red">report_problem
+                </mat-icon>
+              </div>
+              <div *ngIf="!allocateOrder.error">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: green">done</mat-icon>
+              </div>
+            </mat-list-item>
+            <mat-list-item *ngIf="!(getOrder$ | async) && !(allocateOrder$ | async)"> Allocating orders
+              <mat-icon aria-hidden="false" aria-label="Example home icon" style="color: orange">hourglass_empty
+              </mat-icon>
+            </mat-list-item>
+            <mat-list-item *ngIf="!(allocateOrder$ | async) && (getOrder$ | async)"> Allocating orders
+              <mat-spinner diameter="25" style="margin-left: 5px"></mat-spinner>
+            </mat-list-item>
 
-            </mat-list>
+          </mat-list>
 
-          </div>
+        </div>
 
 
-        </mat-card-content>
+      </mat-card-content>
 
-        <mat-card-actions>
+      <mat-card-actions>
 
-        </mat-card-actions>
+      </mat-card-actions>
 
       <mat-card-footer>
 
@@ -94,55 +167,55 @@
 
   </div>
 
-  <div *ngIf="(allocateOrder$ | async)" class="login-wrapper table" fxLayout="col" fxLayoutAlign="center center stretch" >
 
-        <table mat-table [dataSource]="displayLogEntries$" style="width: 1000px" class="mat-elevation-z8">
+  <div *ngIf="registrationComplete" class="login-wrapper table" fxLayout="row"
+       fxLayoutAlign="center top" style="margin-top: 10px" [class.mat-elevation-z10]="true">
 
-          <ng-container matColumnDef="OrderNum" >
-            <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Order # </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.order.orderNr}} </td>
-          </ng-container>
+    <table mat-table [dataSource]="displayLogEntries$" style="width: 1000px" >
 
-          <ng-container matColumnDef="Process" >
-            <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Process </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{ processStepToString(logEntry.process)}} </td>
-          </ng-container>
+      <ng-container matColumnDef="OrderNum">
+        <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Order #</th>
+        <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.order.orderNr}} </td>
+      </ng-container>
 
-          <ng-container matColumnDef="Completed" >
-            <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Completed </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.status}} </td>
-          </ng-container>
+      <ng-container matColumnDef="Process">
+        <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Process</th>
+        <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{ processStepToString(logEntry.process)}} </td>
+      </ng-container>
 
-          <ng-container matColumnDef="Message" >
-            <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Message </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px" >
-              <div *ngIf="logEntry.error">
-                {{logEntry.error.errorMessage}}
-              </div>
-              <div *ngIf="!logEntry.error">
-                Success
-              </div>
+      <ng-container matColumnDef="Completed">
+        <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Completed</th>
+        <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.status}} </td>
+      </ng-container>
 
-            </td>
-          </ng-container>
+      <ng-container matColumnDef="Message">
+        <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Message</th>
+        <td mat-cell *matCellDef="let logEntry" style="padding: 10px">
+          <div *ngIf="logEntry.error">
+            {{logEntry.error.errorMessage}}
+          </div>
+          <div *ngIf="!logEntry.error">
+            Success
+          </div>
 
-          <ng-container matColumnDef="CompletedAt">
-            <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Completed at </th>
-            <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.timestamp | date: 'medium'}} </td>
-          </ng-container>
+        </td>
+      </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
-          <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>
+      <ng-container matColumnDef="CompletedAt">
+        <th mat-header-cell *matHeaderCellDef style="padding: 10px"> Completed at</th>
+        <td mat-cell *matCellDef="let logEntry" style="padding: 10px"> {{logEntry.timestamp | date: 'medium'}} </td>
+      </ng-container>
 
-        </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+      <tr mat-row *matRowDef="let myRowData; columns: displayedColumns"></tr>
+
+    </table>
 
   </div>
 
 </div>
 
 
-
-
 <ng-template #elseBlock>
-  <app-key-verify></app-key-verify>>
+  <app-key-verify></app-key-verify>
 </ng-template>

@@ -1,3 +1,17 @@
 .fill-remaining-space {
   flex: 1 1 auto
 }
+
+.dynamicSpacing {
+  display: flex;
+  height: 600px;
+}
+
+@media only screen and (min-height: 800px) {
+  .dynamicSpacing {
+    display: flex;
+    height: 70%;
+  }
+}
+
+

@@ -1,5 +1,5 @@
 <!-- Toolbar -->
-<mat-toolbar color="primary" class="app-header">
+<mat-toolbar color="primary" class="app-header" style="flex: auto">
   <span>Web bot</span>
   <span class="nav-tool-items">
     <a mat-button routerLink="/home">Home</a>
@@ -18,5 +18,8 @@
     <a mat-button (click)="logout()" *ngIf="loggedIn()">Log out</a>
   </span>
 </mat-toolbar>
+<div fxLayout="column" fxLayoutAlign="center center" class="dynamicSpacing" >
+  <router-outlet></router-outlet>
+</div>
 
-<router-outlet></router-outlet>
+
