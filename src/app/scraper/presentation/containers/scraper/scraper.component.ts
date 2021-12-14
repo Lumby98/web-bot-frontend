@@ -4,11 +4,12 @@ import {ScraperService} from "../../../core/services/scraper.service";
 import {ExcelServices} from "../../../../SharedModule/core/services/excel.service";
 import {ScrapeDto} from "../../../core/models/scrape.dto";
 import {take, takeUntil} from "rxjs/operators";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {HultaforsDto} from "../../../core/models/hultafors.dto";
 import {SiteDto} from "../../../core/models/site.dto";
 import {MatSelectChange} from "@angular/material/select";
 import {ScraperFacade} from "../../../abstraction/scraper.facade";
+import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
 
 @Component({
   selector: 'app-scraper',
@@ -26,9 +27,11 @@ export class ScraperComponent implements OnInit, OnDestroy {
   data: HultaforsDto[] = [];
   sites: SiteDto[] = [];
   selectedSite: SiteDto | undefined;
+  currentKey$: Observable<string>;
 
   constructor(private formBuilder: FormBuilder,
-              private scraperFacade: ScraperFacade
+              private scraperFacade: ScraperFacade,
+              private authFacade: AuthFacade,
   ) {
     this.hide = true
     this.scraperForm = this.formBuilder.group({
@@ -36,6 +39,7 @@ export class ScraperComponent implements OnInit, OnDestroy {
       password: ['', Validators.required],
       site: ['', Validators.required]
     });
+    this.currentKey$ = this.authFacade.getCurrentKey();
   }
 
   ngOnInit(): void {
