@@ -1,104 +1,97 @@
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-  <mat-card class="box" [class.mat-elevation-z10]="true">
-    <mat-card-header fxLayoutAlign="center top">
-      <mat-card-title>Data Collection</mat-card-title>
-    </mat-card-header>
+<div *ngIf="currentKey$ | async as key; else elseBlock">
+  <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card class="box" [class.mat-elevation-z10]="true">
+      <mat-card-header fxLayoutAlign="center top">
+        <mat-card-title>Data Collection</mat-card-title>
+      </mat-card-header>
 
-    <form class="example-form" [formGroup]="scraperForm" (ngSubmit)="scrape()">
-      <mat-card-content>
+      <form class="example-form" [formGroup]="scraperForm" (ngSubmit)="scrape()">
+        <mat-card-content>
 
-        <mat-form-field class="example-full-width">
-          <mat-label>Choose Site...</mat-label>
-          <mat-select formControlName="site" (selectionChange)="selectChangeHandler($event)">
-            <mat-option *ngFor="let site of sites" [value]="site">{{site.name}} -- {{site.lastScraped}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Choose Site...</mat-label>
+            <mat-select formControlName="site" (selectionChange)="selectChangeHandler($event)">
+              <mat-option *ngFor="let site of sites" [value]="site">{{site.name}} -- {{site.lastScraped}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Username" formControlName="username">
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password' : 'text'">
-          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </mat-form-field>
-
-
-      </mat-card-content>
-      <mat-card-actions>
-        <div fxLayoutAlign="center top" fxLayoutGap="10px">
-          <button mat-stroked-button color="primary" type="submit">Get Data</button>
-          <button mat-stroked-button color="primary" type="button" (click)="fillList()">Create File</button>
+        </mat-card-content>
+        <mat-card-actions>
+          <div fxLayoutAlign="center top" fxLayoutGap="10px">
+            <button mat-stroked-button color="primary" type="submit">Get Data</button>
+            <button mat-stroked-button color="primary" type="button" (click)="fillList()">Create File</button>
+          </div>
+        </mat-card-actions>
+      </form>
+      <mat-card-footer>
+        <mat-progress-bar mode="indeterminate" *ngIf="progressbar"></mat-progress-bar>
+        <mat-error *ngIf="error">
+          <button mat-icon-button color="warn" (click)="clearError()">x</button>
+          {{error}}
+        </mat-error>
+        <div *ngIf="succes">
+          <button mat-icon-button (click)="clearSucces()">x</button>
+          <span>{{succes}}</span>
         </div>
-      </mat-card-actions>
-    </form>
-    <mat-card-footer>
-      <mat-progress-bar mode="indeterminate" *ngIf="progressbar"></mat-progress-bar>
-      <mat-error *ngIf="error">
-        <button mat-icon-button color="warn" (click)="clearError()">x</button>
-        {{error}}
-      </mat-error>
-      <div *ngIf="succes">
-        <button mat-icon-button (click)="clearSucces()">x</button>
-        <span>{{succes}}</span>
-      </div>
-    </mat-card-footer>
-  </mat-card>
+      </mat-card-footer>
+    </mat-card>
+  </div>
+
+  <div *ngIf="data.length > 1" [hidden]="hidden">
+    <table id="hultaforsTable">
+      <thead>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>sizes</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>dates</th>
+      </tr>
+      <tr>
+        <th>article number</th>
+        <th>article name</th>
+        <th></th>
+        <th *ngFor="let size of data[0].sizes">{{size.size}}</th>
+        <th></th>
+        <th *ngFor="let size of data[0].sizes">{{size.size}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let product of data">
+        <td>{{product.articleNumber}}</td>
+        <td>{{product.articleName}}</td>
+        <td></td>
+        <td *ngFor="let size of product.sizes">{{size.status}}</td>
+        <td></td>
+        <td *ngFor="let size of product.sizes">{{size.date}}</td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<div *ngIf="data.length > 1" [hidden]="hidden">
-  <table id="hultaforsTable">
-    <thead>
-    <tr>
-      <th></th>
-      <th></th>
-      <th>sizes</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th>dates</th>
-    </tr>
-    <tr>
-      <th>article number</th>
-      <th>article name</th>
-      <th></th>
-      <th *ngFor="let size of data[0].sizes">{{size.size}}</th>
-      <th></th>
-      <th *ngFor="let size of data[0].sizes">{{size.size}}</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let product of data">
-      <td>{{product.articleNumber}}</td>
-      <td>{{product.articleName}}</td>
-      <td></td>
-      <td *ngFor="let size of product.sizes">{{size.status}}</td>
-      <td></td>
-      <td *ngFor="let size of product.sizes">{{size.date}}</td>
-
-    </tr>
-    </tbody>
-  </table>
-</div>
-
-
-
+<ng-template #elseBlock>
+  <app-key-verify></app-key-verify>
+</ng-template>
 
 
