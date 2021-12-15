@@ -1,5 +1,4 @@
 export interface ScrapeDto {
-  username: string;
-  password: string;
+  key: string;
   website: string;
 }

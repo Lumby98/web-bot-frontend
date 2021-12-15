@@ -1,54 +1,45 @@
-<div class="customCard-wrapper" fxLayout="row" fxLayoutAlign="center center">
+<div *ngIf="currentKey$ | async as key; else elseBlock">
+  <div class="customCard-wrapper" fxLayout="row" fxLayoutAlign="center center">
 
-  <mat-card class="box" [class.mat-elevation-z10]="true">
-    <mat-card-header fxLayoutAlign="center top">
-      <mat-card-title>Insole Registration</mat-card-title>
-    </mat-card-header>
+    <mat-card class="box" [class.mat-elevation-z10]="true">
+      <mat-card-header fxLayoutAlign="center top">
+        <mat-card-title>Insole Registration</mat-card-title>
+      </mat-card-header>
 
-    <mat-card-actions fxLayoutAlign="center center">
-      <input #excelInput hidden="true" type="file" onclick="this.value=null" (change)="excelInputChange($event)"
-             accept=".xlsx"/>
-      <button mat-flat-button color="primary" (click)="excelInput.click()">Choose Spreadsheet File (excel)</button>
-    </mat-card-actions>
-    <div *ngIf="insoles">
-      <a>insoles: </a>
-      <a *ngFor="let insole of insoles">{{insole.orderNumber}}, </a>
-    </div>
-    <form class="example-form" [formGroup]="insoleForm">
-      <mat-card-content>
-
-        <mat-form-field class=example-full-width>
-          <input matInput placeholder="Username" formControlName="username">
-        </mat-form-field>
-
-        <mat-form-field class="example-full-width">
-          <input matInput placeholder="Password" formControlName="password" [type]="hide ? 'password' : 'text'">
-          <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </mat-form-field>
-
-      </mat-card-content>
-    </form>
-    <mat-card-actions>
-      <div fxLayoutGap="10px" fxLayoutAlign="center center">
-        <button mat-stroked-button color="primary" disabled="{{!insoles}}" (click)="registerInsole()">login & Register
-          Insole
-        </button>
+      <mat-card-actions fxLayoutAlign="center center">
+        <input #excelInput hidden="true" type="file" onclick="this.value=null" (change)="excelInputChange($event)"
+               accept=".xlsx"/>
+        <button mat-flat-button color="primary" (click)="excelInput.click()">Choose Spreadsheet File (excel)</button>
+      </mat-card-actions>
+      <div *ngIf="insoles">
+        <a>insoles: </a>
+        <a *ngFor="let insole of insoles">{{insole.orderNumber}}, </a>
       </div>
-    </mat-card-actions>
-    <mat-card-footer>
-      <mat-progress-bar mode="indeterminate" *ngIf="progressbar"></mat-progress-bar>
-      <mat-error *ngIf="error">
-        <button mat-icon-button color="warn" (click)="clearError()">x</button>
-        {{error}}
-      </mat-error>
-      <div *ngIf="succes">
-        <button mat-icon-button (click)="clearSucces()">x</button>
-        <span>{{succes}}</span>
-      </div>
-    </mat-card-footer>
-  </mat-card>
+      <mat-card-actions>
+        <div fxLayoutGap="10px" fxLayoutAlign="center center">
+          <button mat-stroked-button color="primary" disabled="{{!insoles}}" (click)="registerInsole()">login & Register
+            Insole
+          </button>
+        </div>
+      </mat-card-actions>
+      <mat-card-footer>
+        <mat-progress-bar mode="indeterminate" *ngIf="progressbar"></mat-progress-bar>
+        <mat-error *ngIf="error">
+          <button mat-icon-button color="warn" (click)="clearError()">x</button>
+          {{error}}
+        </mat-error>
+        <div *ngIf="succes">
+          <button mat-icon-button (click)="clearSucces()">x</button>
+          <span>{{succes}}</span>
+        </div>
+      </mat-card-footer>
+    </mat-card>
 
+  </div>
 </div>
 
+<ng-template #elseBlock>
+  <app-key-verify></app-key-verify>
+</ng-template>
 
 

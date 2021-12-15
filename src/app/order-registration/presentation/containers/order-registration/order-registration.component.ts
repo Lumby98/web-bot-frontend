@@ -141,7 +141,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
                 this.listenForOrderLogSubscription = this.orderRegistrationFacade
                   .listenForOrderLogEvent()
                   .pipe(takeUntil(this.unsubscriber$))
-                  .subscribe();
+                  .subscribe()
 
                 this.orderRegistrationFacade.startOrderRegistration({orderNumbers: orderNumbersArray, key: key});
 
