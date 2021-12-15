@@ -3,8 +3,10 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {InsoleFromSheetDto} from "../../../core/models/insole-from-sheet.dto";
 import {RegisterInsoleDto} from "../../../core/models/register-insole.dto";
 import {take} from "rxjs/operators";
-import {Subscription} from "rxjs";
+import {Observable, Subscription} from "rxjs";
 import {insoleRegistrationFacade} from "../../../abstraction/insoleRegistrationFacade";
+import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
+import {ScrapeDto} from "../../../../scraper/core/models/scrape.dto";
 
 @Component({
   selector: 'app-insole-registration',
@@ -13,43 +15,29 @@ import {insoleRegistrationFacade} from "../../../abstraction/insoleRegistrationF
 })
 export class InsoleRegistrationComponent implements OnInit, OnDestroy {
   hide: Boolean;
-  insoleForm: FormGroup;
   insoles: InsoleFromSheetDto[] | undefined;
   progressbar: boolean = false;
   error: any;
   succes: any;
   errorSubscription: Subscription | undefined;
-
+  currentKey$: Observable<string>;
 
   constructor(
     private insoleFacade: insoleRegistrationFacade,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private authFacade: AuthFacade) {
     this.hide = true;
-    this.insoleForm = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-    });
+    this.currentKey$ = this.authFacade.getCurrentKey();
 
   }
 
   ngOnInit(): void {
-    this.insoleForm.disable();
 
     this.errorSubscription = this.insoleFacade.listenForError().subscribe(err => {
       this.error = err;
       this.progressbar = false;
       this.insoles = undefined;
-      this.insoleForm.reset();
-      this.insoleForm.disable();
     });
-  }
-
-  get username() {
-    return this.insoleForm.get('username');
-  }
-
-  get password() {
-    return this.insoleForm.get('password');
   }
 
   /**
@@ -64,7 +52,6 @@ export class InsoleRegistrationComponent implements OnInit, OnDestroy {
       throw new Error('No selected file')
     }
     this.insoles = this.insoleFacade.fileUpload(file);
-    this.insoleForm.enable();
     console.log(this.insoles);
   }
 
@@ -72,32 +59,42 @@ export class InsoleRegistrationComponent implements OnInit, OnDestroy {
    * registers insoles
    */
   registerInsole() {
-    this.progressbar = true
-    if (!this.insoles) {
-      this.progressbar = false
-      this.error = 'No insoles to register'
-      this.insoleFacade.updateError(this.error);
-      return;
-    }
-    if (this.insoleForm.invalid) {
-      this.progressbar = false
-      this.error = 'missing information'
-      this.insoleFacade.updateError(this.error);
-      return;
-    }
-    const insoleLogin: RegisterInsoleDto = {
-      username: this.username?.value,
-      password: this.password?.value,
-      insoles: this.insoles
-    }
 
-    this.insoleFacade.listenForInsoleRegistration(insoleLogin).pipe(take(1)).subscribe(succes => {
-      this.progressbar = false
-      this.insoles = undefined;
-      this.insoleForm.reset();
-      this.insoleForm.disable();
-      this.succes = succes;
+    this.currentKey$.pipe(take(1)).subscribe(key => {
+      if (key) {
+        this.progressbar = true
+        if (!this.insoles) {
+          this.progressbar = false
+          this.error = 'No insoles to register'
+          this.insoleFacade.updateError(this.error);
+          return;
+        }
+
+        const insoleLogin: RegisterInsoleDto = {
+          key: key,
+          insoles: this.insoles
+        }
+
+        this.insoleFacade.listenForInsoleRegistration(insoleLogin).pipe(take(1)).subscribe(succes => {
+          this.progressbar = false
+          this.insoles = undefined;
+          this.succes = succes;
+        });
+
+
+      } else {
+        this.error = 'Could not get key';
+        this.progressbar = false;
+        throw Error(this.error);
+      }
+
+
+    }, error => {
+      this.error = error.message;
+      this.progressbar = false;
+      throw Error(error);
     });
+
 
   }
 

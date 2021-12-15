@@ -16,7 +16,7 @@ const routes: Routes = [
     loadChildren: () => import('./scraper/scraper.module').then(m => m.ScraperModule)
   },
   {path: 'login', component: LoginComponent},
-  {path: 'saved-logins', component: SavedLoginsComponent},
+  {path: 'saved-logins', canActivate: [AuthGuard], component: SavedLoginsComponent},
   {path: 'register', canActivate: [AuthGuard], component: RegisterComponent},
   {path: 'user-list', canActivate: [AuthGuard], component: UserListComponent},
   {path: 'user-detail/:id', canActivate: [AuthGuard], component: UserDetailComponent},
