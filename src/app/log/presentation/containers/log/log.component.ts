@@ -12,6 +12,7 @@ import {ConfirmDialogFacade} from "../../../../SharedModule/abstraction/confirm-
 import Swal from "sweetalert2";
 import {MatDialog} from "@angular/material/dialog";
 import {EditModalComponent} from "../../components/edit-modal/edit-modal.component";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-log',
@@ -31,7 +32,26 @@ export class LogComponent implements OnInit, OnDestroy {
   showFirstLastButtons = true;
   displayedColumns: string[] = ['OrderNum', 'Process', 'Completed', 'Message', 'CompletedAt', 'Delete'];
 
-  constructor(private formBuilder: FormBuilder, private logFacade: LogFacade, private confirmDialogFacade: ConfirmDialogFacade, public dialog: MatDialog) {
+  constructor(private formBuilder: FormBuilder,
+              private logFacade: LogFacade,
+              private confirmDialogFacade: ConfirmDialogFacade,
+              public dialog: MatDialog,
+              private router: Router,
+              private route: ActivatedRoute,) {
+
+    // override the route reuse strategy
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
+      return false;
+    }
+
+    this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        // trick the Router into believing it's last link wasn't previously loaded
+        this.router.navigated = false;
+        // if you need to scroll back to top, here is the right place
+        window.scrollTo(0, 0);
+      }
+    });
 
   }
 
@@ -136,6 +156,8 @@ export class LogComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(EditModalComponent, {width: '500px', height: '325px', data: {log: logToUpdate}});
     dialogRef.afterClosed().subscribe(result => {
       this.submitQueryForm();
+      this.router.navigateByUrl('/log');
     });
   }
+
 }
