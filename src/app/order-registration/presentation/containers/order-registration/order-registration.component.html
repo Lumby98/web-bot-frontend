@@ -16,8 +16,13 @@
 
           <mat-form-field class="example-full-width">
             <textarea matInput placeholder="Order number splits on new line (enter press)"
-                      formControlName="orderNumbers"></textarea>
+                      formControlName="orderNumbers" cdkTextareaAutosize
+                      #autosize="cdkTextareaAutosize"
+                      cdkAutosizeMinRows="1"
+                      cdkAutosizeMaxRows="20"></textarea>
           </mat-form-field>
+
+          <input type="number" name="dateBuffer" min="0" matInput placeholder="date buffer" formControlName="dateBuffer" (keypress)="keyPressNumbers($event)">
 
         </mat-card-content>
         <mat-card-actions>

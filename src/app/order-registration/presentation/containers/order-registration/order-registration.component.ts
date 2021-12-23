@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Observable, Subject, Subscription} from "rxjs";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
@@ -13,7 +13,7 @@ import {ProcessEnum} from "../../../core/enums/process.enum";
 @Component({
   selector: 'app-order-registration',
   templateUrl: './order-registration.component.html',
-  styleUrls: ['./order-registration.component.scss']
+  styleUrls: ['./order-registration.component.scss'],
 })
 export class OrderRegistrationComponent implements OnInit, OnDestroy {
   public processEnum = ProcessEnum;
@@ -39,13 +39,20 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     this.currentKey$ = this.authFacade.getCurrentKey();
 
     this.orderRegisterForm = this.formBuilder.group({
-      orderNumbers: ['', Validators.required]
+      orderNumbers: ['', Validators.required],
+      dateBuffer: [0, Validators.min(0)]
     })
-
   }
 
+
+
+
   get orderNumbers() {
-    return this.orderRegisterForm.get('orderNumbers')
+    return this.orderRegisterForm.get('orderNumbers');
+  }
+
+  get dateBuffer() {
+    return this.orderRegisterForm.get('dateBuffer');
   }
 
 
@@ -143,7 +150,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
                   .pipe(takeUntil(this.unsubscriber$))
                   .subscribe()
 
-                this.orderRegistrationFacade.startOrderRegistration({orderNumbers: orderNumbersArray, key: key});
+                this.orderRegistrationFacade.startOrderRegistration({orderNumbers: orderNumbersArray, key: key, dateBuffer: this.dateBuffer?.value});
 
 
               } else {
@@ -223,4 +230,14 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   }
 
 
+  keyPressNumbers(event: KeyboardEvent) {
+    var charCode = (event.which) ? event.which : event.keyCode;
+    // Only Numbers 0-9
+    if ((charCode < 48 || charCode > 57)) {
+      event.preventDefault();
+      return false;
+    } else {
+      return true;
+    }
+  }
 }
