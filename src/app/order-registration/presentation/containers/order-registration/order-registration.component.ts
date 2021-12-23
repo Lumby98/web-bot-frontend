@@ -40,7 +40,7 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
 
     this.orderRegisterForm = this.formBuilder.group({
       orderNumbers: ['', Validators.required],
-      dateBuffer: [0, Validators.min(0)]
+      dateBuffer: [ Validators.min(0)]
     })
   }
 
