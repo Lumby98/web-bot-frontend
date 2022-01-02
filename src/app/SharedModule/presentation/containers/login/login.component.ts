@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthFacade} from "../../../abstraction/auth.facade";
 import {Observable} from "rxjs";
@@ -14,15 +14,23 @@ export class LoginComponent {
   loginForm: FormGroup;
 
 
-
+  /**
+   * returns what is written in the form named username
+   */
   get username() {
     return this.loginForm.get('username');
   }
 
+  /**
+   * returns what is written in the form named password
+   */
   get password() {
     return this.loginForm.get('password');
   }
 
+  /**
+   * returns what is written in the form named key
+   */
   get key() {
     return this.loginForm.get('key');
   }
@@ -90,7 +98,9 @@ export class LoginComponent {
   }
 
 
-
+  /**
+   * clears the current error
+   */
   clearError() {
     //this.error = undefined;
     this.authFacade.clearError();

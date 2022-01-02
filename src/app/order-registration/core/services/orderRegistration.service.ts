@@ -14,21 +14,30 @@ export class OrderRegistrationService {
   constructor(private http: HttpClient, private socket: Socket) {
   }
 
-
+  /**
+   * starts order registration from the given order registration DTO
+   * @param orderRegistrationDto
+   */
   public startOrderRegistration(orderRegistrationDto: OrderRegistrationDto) {
     this.socket.emit('startOrderRegistration', orderRegistrationDto);
   }
 
+  /**
+   * socket event listening for entries being added to the log
+   */
   public listenForOrderLogEvent(): Observable<LogEntryDto[]>{
     return this.socket.fromEvent<LogEntryDto[]>('orderLogEvent');
   }
 
+  /**
+   * socket event listening for process step events
+   */
   public listenForProcessStepEvent(): Observable<ProcessStepDto> {
     return this.socket.fromEvent<ProcessStepDto>('processStepEvent');
   }
 
   /**
-   * socket event listing for error messages
+   * socket event listening for error messages
    */
   public listenForError(): Observable<string> {
     return this.socket.fromEvent<string>('error')

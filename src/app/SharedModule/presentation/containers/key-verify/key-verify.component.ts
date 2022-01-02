@@ -23,15 +23,24 @@ export class KeyVerifyComponent implements OnInit {
     this.error$ = this.authFacade.getErrorObservable();
   }
 
+  /**
+   * returns what is written in the form named key
+   */
   get key() {
     return this.keyVerifyForm.get('key');
   }
 
+  /**
+   * clears the current error
+   */
   clearError() {
     //this.error = undefined;
     this.authFacade.clearError();
   }
 
+  /**
+   * verifies the given key, gives error if unsuccessful
+   */
   verifyKey(){
     this.authFacade.verify({password: this.key?.value}).pipe(take(1)).subscribe( success => {},err => {
       this.authFacade.updateError(err);

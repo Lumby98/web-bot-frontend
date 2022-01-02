@@ -1,6 +1,5 @@
 import {Component, OnInit,} from '@angular/core';
 import {UserDto} from "../../../core/models/user.dto";
-import {UserService} from "../../../core/services/user.service";
 import {UserFacade} from "../../../abstraction/user.facade";
 import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
 import {Observable} from "rxjs";
@@ -17,6 +16,9 @@ export class UserListComponent implements OnInit {
   constructor( private userFacade: UserFacade, private auth: AuthFacade) {
   }
 
+  /**
+   * gets users from backend, gets and sorts them by username, and gets the current user by getting the local user
+   */
   ngOnInit(): void {
     this.userFacade.getUsersFromApi();
 

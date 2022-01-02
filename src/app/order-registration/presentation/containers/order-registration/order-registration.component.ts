@@ -45,12 +45,16 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
   }
 
 
-
-
+  /**
+   * gets what is written in the form called orderNumbers
+   */
   get orderNumbers() {
     return this.orderRegisterForm.get('orderNumbers');
   }
 
+  /**
+   * gets what is written in the form called dateBuffer
+   */
   get dateBuffer() {
     return this.orderRegisterForm.get('dateBuffer');
   }
@@ -96,6 +100,9 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     this.orderRegistrationFacade.clearProcessSteps();
   }
 
+  /**
+   * checks first if the order number is blank or if it is already started, then trims the order numbers and splits them on line breaks and makes an array out of that, to use for registration
+   */
   startOrderRegistration() {
     try {
       this.registrationComplete = false;
@@ -174,6 +181,9 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * halts and resets order registration, if it is not already stopped
+   */
   stopOrderRegistration() {
     if (!this.startedRegistration) {
       this.orderRegistrationFacade.updateError('Order registration is already stopped!');
@@ -197,7 +207,10 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     this.orderRegistrationFacade.clearError();
   }
 
-
+  /**
+   * gets the enumerator value and converts it into a string, for outputting
+   * @param process
+   */
   processStepToString(process: ProcessStepEnum): string {
     switch (process) {
 
@@ -210,11 +223,14 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
       case ProcessStepEnum.ALOCATEORDER:
         return 'Allocate order';
 
-
     }
 
   }
 
+  /**
+   * handles order processing, given an error.
+   * @param error
+   */
   handleOrderProcessing(error: boolean){
     this.currentOrderProcesses[this.orderProcessCount].process = error ? ProcessEnum.FAIL : ProcessEnum.COMPLETE;
     this.orderProcessCount++
@@ -229,7 +245,10 @@ export class OrderRegistrationComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  /**
+   * prevents the user from putting anything that is not numbers in the date buffer field
+   * @param event
+   */
   keyPressNumbers(event: KeyboardEvent) {
     var charCode = (event.which) ? event.which : event.keyCode;
     // Only Numbers 0-9

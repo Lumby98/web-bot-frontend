@@ -44,7 +44,7 @@ export class AuthService {
 
   /**
    * used to check if the user has a cookie
-   * since the cookie is httpOnly the is achived be trying to change it
+   * since the cookie is httpOnly the is achieved be trying to change it
    * @param cookieName
    */
   doesHttpOnlyCookieExist(cookieName: string) {
@@ -129,6 +129,10 @@ export class AuthService {
 
   }
 
+  /**
+   * gets the current user from local storage
+   * @constructor
+   */
   GetCurrentUserFromLocalStorage() : UserDto | undefined{
     const user = localStorage.getItem('currentUser')
     if (user) {
@@ -139,6 +143,10 @@ export class AuthService {
     return undefined;
   }
 
+  /**
+   * inserts the given saved login information
+   * @param insertSavedLoginDto
+   */
   insertSavedLogin(insertSavedLoginDto: InsertSavedLoginDto): Observable<boolean> {
     return this.http
       .post<any>(
@@ -156,6 +164,10 @@ export class AuthService {
   }
 
 
+  /**
+   * verifies the given key
+   * @param key
+   */
   verify(key: KeyDto): Observable<boolean> {
     console.log("gets called" + key.password)
     return this.http
@@ -173,6 +185,10 @@ export class AuthService {
         }));
   }
 
+  /**
+   * changes the given key, if the user changed their key
+   * @param key
+   */
   changeKey(key: InsertKeyDto): Observable<boolean>{
     return this.http
       .post<any>(environment.apiUrl + '/saved-login/changeKey',

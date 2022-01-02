@@ -29,18 +29,31 @@ export class SavedLoginsComponent implements OnInit {
   @ViewChild('keyChangeSuccessSwal')
   public readonly keyChangeSuccessSwal!: SwalComponent;
 
+  /**
+   * returns what is written in the form named username
+   */
   get username() {
     return this.loginInsertForm.get('username');
   }
 
+  /**
+   * returns what is written in the form named password
+   */
   get password() {
     return this.loginInsertForm.get('password');
   }
 
+  /**
+   * returns what is written in the form named newKey
+   */
   get newKey() {
     return this.keyChangeForm.get('newKey');
   }
 
+  /**
+   * gets the chosen login type
+   * @private
+   */
   private  get  selectedLoginType():LoginTypeEnum {
     return this.selectedType ? this.selectedType.value: null;
   }
@@ -60,6 +73,9 @@ export class SavedLoginsComponent implements OnInit {
     });
   }
 
+  /**
+   * disables the form fields at start of runtime
+   */
   ngOnInit(): void {
     this.loginInsertForm.controls.username.disable();
     this.loginInsertForm.controls.password.disable();
@@ -77,6 +93,9 @@ export class SavedLoginsComponent implements OnInit {
     this.loginInsertForm.controls.password.enable();
   }
 
+  /**
+   * this method is called if one wants to save their login info in the DB, returns error if the form is blank, then shows a toast if successful
+   */
   insertLogin() {
     if (this.loginInsertForm.invalid) {
       this.authFacade.updateError('Type, username and password cannot be blank!');
@@ -92,6 +111,9 @@ export class SavedLoginsComponent implements OnInit {
     }
   }
 
+  /**
+   * allows the user to change their key, shows a notification if successful or if the key is blank
+   */
   changeKey(){
     this.currentKey$.pipe(take(1)).subscribe(key => {
 
@@ -111,11 +133,11 @@ export class SavedLoginsComponent implements OnInit {
       }
     });
 
-
-
-
   }
 
+  /**
+   * clears the current error
+   */
   clearError() {
     //this.error = undefined;
     this.authFacade.clearError();
