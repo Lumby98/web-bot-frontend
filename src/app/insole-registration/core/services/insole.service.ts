@@ -22,6 +22,11 @@ export class InsoleService {
     return this.http.post(environment.apiUrl + '/insole', insoles, {responseType: "text"});
   }
 
+  /**
+   * starts insole registration and listens for completeInsoleRegistration events.
+   * registerInsoleDto contains a username, password and a list of insoles
+   * @param dto
+   */
   public listenForInsoleRegistration(dto: RegisterInsoleDto): Observable<string> {
     this.socket.emit('startInsoleRegistration', dto);
 

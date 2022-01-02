@@ -6,7 +6,6 @@ import {take} from "rxjs/operators";
 import {Observable, Subscription} from "rxjs";
 import {insoleRegistrationFacade} from "../../../abstraction/insoleRegistrationFacade";
 import {AuthFacade} from "../../../../SharedModule/abstraction/auth.facade";
-import {ScrapeDto} from "../../../../scraper/core/models/scrape.dto";
 
 @Component({
   selector: 'app-insole-registration',
@@ -31,6 +30,9 @@ export class InsoleRegistrationComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * gets called on startup. starts listening of errors.
+   */
   ngOnInit(): void {
 
     this.errorSubscription = this.insoleFacade.listenForError().subscribe(err => {
@@ -113,6 +115,9 @@ export class InsoleRegistrationComponent implements OnInit, OnDestroy {
     this.succes = undefined
   }
 
+  /**
+   * Get called when component gets destroyed.
+   */
   ngOnDestroy(): void {
     this.errorSubscription?.unsubscribe()
   }

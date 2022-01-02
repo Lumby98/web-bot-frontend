@@ -24,7 +24,10 @@ export class LogFacade {
   /*
   LogEntries *****
    */
-
+  /**
+   * gets paginated logEntries from backend. Clears current log entries. Add the new entries to the store, updates the count in the store.
+   * @param query
+   */
   findAllFromApiPaginated(query: QueryDto){
     this.logService.findAll(query).pipe(take(1), ).subscribe(paginatedLogEntries => {
   if(paginatedLogEntries){
