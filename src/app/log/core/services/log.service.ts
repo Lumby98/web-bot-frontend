@@ -15,6 +15,10 @@ export class LogService {
   constructor(private http: HttpClient) {
   }
 
+  /**
+   * calls the backend to get a list of paginated logEntries.
+   * @param query
+   */
   findAll(query: QueryDto): Observable<PaginationDto<LogEntryDto>> {
    let url = environment.apiUrl + '/log' + '?'
     if (query && query.take > 0 && query.page > 0)
@@ -33,7 +37,10 @@ export class LogService {
 
   }
 
-
+  /**
+   * calls the backend to delete a logEntry
+   * @param id
+   */
   remove(id: number) {
     return this.http
       .delete(
@@ -41,6 +48,9 @@ export class LogService {
         {withCredentials: true});
   }
 
+  /**
+   * calls the backend to delete all logEntries.
+   */
   removeAll() {
     return this.http
       .delete(
@@ -48,6 +58,10 @@ export class LogService {
         {withCredentials: true});
   }
 
+  /**
+   * calls the backend to update a logEntry
+   * @param log
+   */
   update(log: UpdateLogDto) {
     return this.http.patch(environment.apiUrl + '/log', log, {withCredentials: true})
   }

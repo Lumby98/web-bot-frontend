@@ -55,6 +55,12 @@ export class LogComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * gets called on component startup.
+   * listens for changes in the queryForm
+   * get observables
+   * get logEntries.
+   */
   ngOnInit(): void {
     this.queryForm.valueChanges
       .pipe(takeUntil(this.unsubscriber$), debounceTime(500), distinctUntilChanged())
@@ -79,12 +85,19 @@ export class LogComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * changes the pagination
+   * @param event
+   */
   handlePageEvent(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.submitQueryForm();
   }
 
+  /**
+   * calls findAllFromApiPaginated with pagination data.
+   */
   submitQueryForm() {
     try {
       this.findAllFromApiPaginated({page: this.pageIndex + 1, take: this.pageSize, keyword: this.queryForm.value})
@@ -93,14 +106,26 @@ export class LogComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   *Calls the logFacade to get the paginated logEntries
+   * @param query
+   */
   findAllFromApiPaginated(query: QueryDto) {
     this.logFacade.findAllFromApiPaginated(query);
   }
 
+  /**
+   * calls the logFacade to remove a logEntry
+   * @param logEntry
+   */
   removeLogEntry(logEntry: LogEntryDto) {
     this.logFacade.removeLogEntry(logEntry);
   }
 
+  /**
+   * opens a dialog asking the user if they want to remove all logs.
+   * calls the logFacade to remove all logs if they click yes
+   */
   removeAllLogEntries() {
     const options = {
       title: 'Remove all logs?',
@@ -120,21 +145,33 @@ export class LogComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Calls the Facade to clear error from store.
+   * calls the logFacade to clear error from store.
    */
   clearError() {
     this.logFacade.clearError();
   }
 
+  /**
+   * calls the logFacade to update the error
+   * @param error
+   */
   updateError(error: any) {
     this.logFacade.updateError(error);
   }
 
+  /**
+   * gets called when the component gets destroyed.
+   * calls complete() on the unsubscriber$ to close its observables.
+   */
   ngOnDestroy(): void {
     this.unsubscriber$.next();
     this.unsubscriber$.complete();
   }
 
+  /**
+   * convert the ProcessStepEnum to the appropriate string
+   * @param process
+   */
   processStepToString(process: ProcessStepEnum): string {
     switch (process) {
 
@@ -152,6 +189,11 @@ export class LogComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * opens the EditModalComponent to edit an error message on a log
+   * resends the query to update the list of logs.
+   * @param logToUpdate
+   */
   updateLogEntry(logToUpdate: LogEntryDto) {
     const dialogRef = this.dialog.open(EditModalComponent, {width: '500px', height: '325px', data: {log: logToUpdate}});
     dialogRef.afterClosed().subscribe(result => {
