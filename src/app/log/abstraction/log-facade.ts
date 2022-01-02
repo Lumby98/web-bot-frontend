@@ -42,14 +42,24 @@ export class LogFacade {
     });
   }
 
+  /**
+   * gets the observable for the paginated logentries from the store.
+   */
   getPaginatedLogEntries() : Observable<PaginationDto<LogEntryDto>>{
     return this.store.select<PaginationDto<LogEntryDto>>(logEntryState.paginatedLogEntries);
   }
 
+  /**
+   * get the logEntries observable from the store.
+   */
   getLogEntries() : Observable<LogEntryDto[]>{
     return this.store.select<LogEntryDto[]>(logEntryState.logEntries);
   }
 
+  /**
+   * Removes a single logEntry from the store.
+   * @param logEntry
+   */
   removeLogEntry(logEntry: LogEntryDto){
     this.getCountObservable().pipe(take(1)).subscribe(count => {
       const newCount = count-1
@@ -68,7 +78,11 @@ export class LogFacade {
 
     }
 
-    updateLogEntry(updatedLogEntry: LogEntryDto) {
+  /**
+   * Updates the logEntry in the store if it exists.
+   * @param updatedLogEntry
+   */
+  updateLogEntry(updatedLogEntry: LogEntryDto) {
     const l = this.store.selectOnce(logEntryState.logEntry(updatedLogEntry.id)).subscribe(orignalLogEntry => {
       if (orignalLogEntry) {
         this.store.dispatch(new InsertOrUpdateLogEntry(updatedLogEntry));
@@ -94,8 +108,9 @@ export class LogFacade {
   }
 
 
-
-
+  /**
+   * Removes all logEntries from the store.
+   */
   removeAllLogEntries(){
     let logEntries: LogEntryDto[] = [];
     this.store.selectOnce(logEntryState.logEntries).subscribe( logEntriesSub => {
@@ -114,19 +129,31 @@ export class LogFacade {
   /*
   Error *****
    */
-
+  /**
+   * get the logEntryState error observable from the store.
+   */
   getErrorObservable(): Observable<any> {
     return this.store.select(logEntryState.errorSelector)
   }
 
+  /**
+   * clears the error from the store.
+   */
   clearError(){
     this.store.dispatch(new ClearLogEntryError);
   }
 
+  /**
+   * updates the error in the store.
+   * @param error
+   */
   updateError(error: any){
     this.store.dispatch(new UpdateLogEntryError(error));
   }
 
+  /**
+   * gets the observable for the count.
+   */
   getCountObservable(): Observable<number>{
     return this.store.select(logEntryState.count)
   }

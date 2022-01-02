@@ -23,15 +23,23 @@ export class EditModalComponent implements OnInit {
   ) {
   }
 
+  /**
+   * gets called on component startup. Sets the value of the editErrorForm
+   */
   ngOnInit(): void {
     this.editErrorForm.setValue(this.data.log.error?.displayErrorMessage);
   }
 
+  /**
+   * closes the modal
+   */
   onCancelClick(): void {
     this.dialogRef.close();
   }
 
-
+  /**
+   * updates the error message on the log and closes the modal.
+   */
   onOkClick() {
     let logEntryToUpdate: LogEntryDto;
     if (this.data.log.error) {
