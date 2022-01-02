@@ -9,14 +9,24 @@ export class ConfirmDialogFacade{
   constructor(private confirmDialogService: ConfirmDialogService) {
   }
 
+  /**
+   * shows a dialog message with the given options
+   * @param options
+   */
   open(options: { title: any; message: any; cancelText: any; confirmText: any; }){
     this.confirmDialogService.open(options);
   }
 
+  /**
+   * returns if the dialog has been confirmed
+   */
   confirmed(): Observable<any>{
     return this.confirmDialogService.confirmed();
   }
 
+  /**
+   * returns the dialog reference
+   */
   getDialogRef() : MatDialogRef<ConfirmDialogComponent> | undefined{
     return this.confirmDialogService.dialogRef;
   }

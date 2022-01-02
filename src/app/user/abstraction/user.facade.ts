@@ -13,7 +13,7 @@ import {
 } from "../core/state/users.actions";
 import {UserState} from "../core/state/users.state";
 import {map, take, tap} from "rxjs/operators";
-import {Observable, Subscription} from "rxjs";
+import {Observable} from "rxjs";
 import {UserDto} from "../core/models/user.dto";
 import {EditUserDto} from "../core/models/edit-user.dto";
 
@@ -22,6 +22,10 @@ export class UserFacade {
   constructor(private userService: UserService,private auth: AuthService, private store: Store, private router: Router) {
   }
 
+  /**
+   * tries to make a call to the API to register the given user
+   * @param dto
+   */
   register(dto: RegisterDto) {
     this.auth.register(dto).subscribe(success => {
       this.router.navigate(['/user-list']);
@@ -31,18 +35,32 @@ export class UserFacade {
     });
   }
 
+  /**
+   * calls the errorSelector to get the current value of the error of UserState
+   */
   getError(): any {
     return this.store.selectOnce(UserState.errorSelector);
   }
 
+  /**
+   * calls ClearUserError to clear all user errors
+   */
   clearError(){
     this.store.dispatch(new ClearUserError());
   }
 
+  /**
+   * updates the current error
+   * @param error
+   */
   updateError(error: any){
     this.store.dispatch(new UpdateUserError(error));
   }
 
+  /**
+   * calls the API to try to get a user by the given id
+   * @param id
+   */
   getUserByIdFromApi(id: number) : Observable<UserDto>{
     return this.userService.userById(id).pipe(tap(u => {
       if (u) {
@@ -56,10 +74,17 @@ export class UserFacade {
     }))
 }
 
+  /**
+   * gets a user by given id from store
+   * @param id
+   */
   getUserById(id: number): Observable<UserDto | undefined> {
     return this.store.select(UserState.user(id))
   }
 
+  /**
+   * gets all users sorted alphabetically by username
+   */
   getUsersSortedByUsername(): Observable<UserDto[]>{
     return this.store.select<UserDto[]>(UserState.users).pipe(map( value => {
       return value.slice().sort((a, b) => {
@@ -73,10 +98,12 @@ export class UserFacade {
       });
     }))
 
-    //return this.store.select<UserDto[]>(UserState.usersSortedByUsername);
 
   }
 
+  /**
+   * gets all users from API
+   */
   getUsersFromApi() {
     this.userService.getUsers().pipe(take(1),tap(users =>  {
       if (users){
@@ -93,6 +120,10 @@ export class UserFacade {
   }
 
 
+  /**
+   * deletes the given user
+   * @param user
+   */
   deleteUser(user: UserDto) {
     this.store.dispatch(new DeleteUser(user))
     this.userService.removeUser(user).subscribe(succes => {
@@ -103,6 +134,11 @@ export class UserFacade {
 
   }
 
+  /**
+   * updates the given user
+   * @param user
+   * @param editedUser
+   */
   updateUser(user: UserDto, editedUser: EditUserDto) {
     this.store.dispatch(new InsertOrUpdateUser({id: user.id, admin: editedUser.admin, username: editedUser.username}))
     this.userService.editUser(user.username, editedUser).subscribe(succes => {

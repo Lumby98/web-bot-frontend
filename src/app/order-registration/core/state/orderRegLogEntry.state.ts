@@ -40,6 +40,11 @@ export class orderRegLogEntryState {
     return state.orderRegLogEntries;
   }
 
+  /**
+   * gets an order registration log entry from the given id
+   * @param id
+   * @constructor
+   */
   static OrderRegLogEntry(id: number): (state: OrderRegLogEntryStateModel) => LogEntryDto | undefined{
     return createSelector([orderRegLogEntryState], (state: OrderRegLogEntryStateModel) => {
       return state.orderRegLogEntries.find(logEntry => logEntry.id === id);
@@ -52,6 +57,10 @@ export class orderRegLogEntryState {
   }
 
 
+  /**
+   * gets a process step from the given enumerator
+   * @param type
+   */
   static processStep(type: ProcessStepEnum): (state: OrderRegLogEntryStateModel) => ProcessStepDto | undefined{
     return createSelector([orderRegLogEntryState], (state: OrderRegLogEntryStateModel) => {
       switch(type) {
@@ -70,6 +79,11 @@ export class orderRegLogEntryState {
     });
   }
 
+  /**
+   * this action calls the update order registration log entry store method
+   * @param ctx
+   * @param action
+   */
   @Action(UpdateOrderRegLogEntryStore)
   updateOrderRegLogEntryStore(ctx: StateContext<OrderRegLogEntryStateModel>, action: UpdateOrderRegLogEntryStore): void {
     const state = ctx.getState();
@@ -80,6 +94,10 @@ export class orderRegLogEntryState {
     ctx.setState(newState);
   }
 
+  /**
+   * this action calls the clear order registration log entry store method
+   * @param ctx
+   */
   @Action(ClearOrderRegLogEntryStore)
   clearOrderRegLogEntryStore(ctx: StateContext<OrderRegLogEntryStateModel>): void {
     const state = ctx.getState();
@@ -89,14 +107,21 @@ export class orderRegLogEntryState {
     ctx.setState(newState);
   }
 
+  /**
+   * this action calls the insert or update order registration log entry store method
+   * @param ctx
+   * @param action
+   */
   @Action(InsertOrUpdateOrderRegLogEntry)
   insertOrUpdateOrderRegLogEntry(ctx: StateContext<OrderRegLogEntryStateModel>, action: InsertOrUpdateOrderRegLogEntry): void {
-    /*ctx.setState(patch({users: updateItem<UserDto>(user => user.id === action.user.id, action.user)}));
-  */
     ctx.setState(patch({orderRegLogEntries: this.insertOrUpdateOrderRegLogEntryMethod(action.logEntry.id,action.logEntry)}));
   }
 
-
+  /**
+   * this action calls the delete order registration log entry store method
+   * @param ctx
+   * @param action
+   */
   @Action(DeleteOrderRegLogEntry)
   deleteOrderRegLogEntry(ctx: StateContext<OrderRegLogEntryStateModel>, action: DeleteOrderRegLogEntry): void{
     const state = ctx.getState();
@@ -108,6 +133,11 @@ export class orderRegLogEntryState {
 
   }
 
+  /**
+   * this action calls the update order registration log entry error method
+   * @param ctx
+   * @param action
+   */
   @Action(UpdateOrderRegLogEntryError)
   updateOrderRegLogEntryError(ctx: StateContext<OrderRegLogEntryStateModel>, action: UpdateOrderRegLogEntryError): void {
     const state = ctx.getState();
@@ -118,6 +148,10 @@ export class orderRegLogEntryState {
     ctx.setState(newState);
   }
 
+  /**
+   * this action calls the clear order registration log entry error method
+   * @param ctx
+   */
   @Action(ClearOrderRegLogEntryError)
   clearOrderRegLogEntryError(ctx: StateContext<OrderRegLogEntryStateModel>): void {
     const state = ctx.getState();
@@ -128,6 +162,10 @@ export class orderRegLogEntryState {
     ctx.setState(newState);
   }
 
+  /**
+   * this action calls the clear process steps method
+   * @param ctx
+   */
   @Action(ClearProcessSteps)
   clearProcessSteps(ctx: StateContext<OrderRegLogEntryStateModel>){
     const state = ctx.getState();
@@ -140,6 +178,11 @@ export class orderRegLogEntryState {
     ctx.setState(newState);
   }
 
+  /**
+   * this action calls the update process steps method
+   * @param ctx
+   * @param action
+   */
   @Action(UpdateProcessStep)
   updateProcessStep(ctx: StateContext<OrderRegLogEntryStateModel>, action: UpdateProcessStep){
     const state = ctx.getState();
@@ -172,6 +215,11 @@ export class orderRegLogEntryState {
 
   }
 
+  /**
+   * inserts the given order registration log entry or updates it if it already exists
+   * @param id
+   * @param loadedLogEntry
+   */
   insertOrUpdateOrderRegLogEntryMethod(id: number, loadedLogEntry: LogEntryDto) {
     return iif<LogEntryDto[]>(
       (logEntries => {
@@ -183,10 +231,5 @@ export class orderRegLogEntryState {
       updateItem(logEntry => logEntry?.id === id, patch(loadedLogEntry)),
       insertItem(loadedLogEntry)
     );
-
-
   }
-
-
-
 }

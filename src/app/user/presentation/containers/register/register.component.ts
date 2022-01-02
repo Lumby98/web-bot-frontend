@@ -10,14 +10,23 @@ import {UserFacade} from "../../../abstraction/user.facade";
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
 
+  /**
+   * gets what is written in the username form
+   */
   get username() {
     return this.registerForm.get('username');
   }
 
+  /**
+   * gets what is written in the password form
+   */
   get password() {
     return this.registerForm.get('password');
   }
 
+  /**
+   * gets what is written in the role form
+   */
   get role() {
     return this.registerForm.get('role');
   }

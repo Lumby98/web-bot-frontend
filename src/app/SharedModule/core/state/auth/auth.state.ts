@@ -18,6 +18,11 @@ export interface AuthStateModel{
 
 @Injectable()
 export class AuthState{
+
+  /**
+   * this action calls the clear error method
+   * @param ctx
+   */
   @Action(ClearError)
   clearError(ctx: StateContext<AuthStateModel>): void {
     const state = ctx.getState();
@@ -33,6 +38,11 @@ export class AuthState{
     return state.error;
   }
 
+  /**
+   * this action calls the update error method
+   * @param ctx
+   * @param action
+   */
   @Action(UpdateError)
   updateError(ctx: StateContext<AuthStateModel>, action: UpdateError): void {
     const state = ctx.getState();
@@ -43,7 +53,10 @@ export class AuthState{
     ctx.setState(newState);
   }
 
-
+  /**
+   * this action calls the clear key method
+   * @param ctx
+   */
   @Action(ClearKey)
   clearKey(ctx: StateContext<AuthStateModel>): void {
     const state = ctx.getState();
@@ -59,6 +72,11 @@ export class AuthState{
     return state.key;
   }
 
+  /**
+   * this action calls the update key method
+   * @param ctx
+   * @param action
+   */
   @Action(UpdateKey)
   updateKey(ctx: StateContext<AuthStateModel>, action: UpdateKey): void {
     const state = ctx.getState();

@@ -46,6 +46,10 @@ export class UserService {
       {withCredentials: true})
   }
 
+  /**
+   * returns a userDTO from the given id (makes a GET request on one user)
+   * @param id
+   */
   userById(id: number): Observable<UserDto> {
     return this.http.get<UserDto>(environment.apiUrl + /user/ + id, {withCredentials: true})
   }

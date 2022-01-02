@@ -21,10 +21,17 @@ export class orderRegistrationFacade{
 
   }
 
+  /**
+   * start registering orders
+   * @param order
+   */
   startOrderRegistration(order: OrderRegistrationDto){
     this.orderRegistrationService.startOrderRegistration(order);
   }
 
+  /**
+   * listens for an order log event
+   */
   listenForOrderLogEvent(): Observable<LogEntryDto[]>{
     return this.orderRegistrationService.listenForOrderLogEvent().pipe(tap(logEntries => {
       this.store.dispatch(new UpdateOrderRegLogEntryStore(logEntries));
@@ -34,6 +41,9 @@ export class orderRegistrationFacade{
     );
   }
 
+  /**
+   * listens for a process step event
+   */
   listenForProcessStepEvent(): Observable<ProcessStepDto>{
     return this.orderRegistrationService.listenForProcessStepEvent().pipe(tap(processStep => {
         this.store.dispatch(new UpdateProcessStep(processStep));
@@ -43,6 +53,9 @@ export class orderRegistrationFacade{
     );
   }
 
+  /**
+   * listens for an error
+   */
   listenForError(): Observable<string>{
     return this.orderRegistrationService.listenForError().pipe(tap(err => {
         this.updateError(err)
@@ -52,30 +65,53 @@ export class orderRegistrationFacade{
     );
   }
 
+  /**
+   * gets the observable for the error
+   */
   getErrorObservable(): Observable<any>{
     return this.store.select(orderRegLogEntryState.errorSelector);
   }
 
+  /**
+   * clears errors using the ClearOrderRegLogEntryError method
+   */
   clearError(){
     this.store.dispatch(new ClearOrderRegLogEntryError());
   }
 
+  /**
+   * gets the given enumerator value as an observable value of ProcessStepDto
+   * @param type
+   */
   getProcessStep(type: ProcessStepEnum): Observable<ProcessStepDto | undefined> {
     return this.store.select(orderRegLogEntryState.processStep(type));
   }
 
+  /**
+   * gets order log entries
+   */
   getOrderLogEntries(): Observable<LogEntryDto[]> {
     return this.store.select<LogEntryDto[]>(orderRegLogEntryState.orderRegLogEntries);
   }
 
+  /**
+   * clears process steps
+   */
   clearProcessSteps(){
     this.store.dispatch(new ClearProcessSteps());
   }
 
+  /**
+   * clears log entries
+   */
   clearLogEntries(){
     this.store.dispatch(new ClearOrderRegLogEntryStore());
   }
 
+  /**
+   * updates the error with the given value
+   * @param err
+   */
   updateError(err: any){
     this.store.dispatch(new UpdateOrderRegLogEntryError(err));
   }

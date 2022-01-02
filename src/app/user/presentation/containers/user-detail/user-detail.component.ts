@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ConfirmDialogService} from "../../../../SharedModule/presentation/components/confirm-dialog/confirm-dialog.service";
-import {UserService} from "../../../core/services/user.service";
 import {UserDto} from "../../../core/models/user.dto";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
@@ -22,15 +20,23 @@ export class UserDetailComponent implements OnInit {
   edit: boolean = false;
   editForm: FormGroup;
 
-
+  /**
+   * gets what is written in the username form
+   */
   get username() {
     return this.editForm.get('username');
   }
 
+  /**
+   * gets what is written in the password form
+   */
   get password() {
     return this.editForm.get('password');
   }
 
+  /**
+   * gets what is written in the role form
+   */
   get role() {
     return this.editForm.get('role');
   }
@@ -55,7 +61,7 @@ export class UserDetailComponent implements OnInit {
 
     this.router.events.subscribe((evt) => {
       if (evt instanceof NavigationEnd) {
-        // trick the Router into believing it's last link wasn't previously loaded
+        // trick the Router into believing its last link wasn't previously loaded
         this.router.navigated = false;
         // if you need to scroll back to top, here is the right place
         window.scrollTo(0, 0);
@@ -70,6 +76,9 @@ export class UserDetailComponent implements OnInit {
     });
   }
 
+  /**
+   * gets the id from the URL and gets the matching user from the DB, checks if it is admin and sets the role accordingly
+   */
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
